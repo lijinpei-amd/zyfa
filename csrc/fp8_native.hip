@@ -140,6 +140,32 @@ __device__ __forceinline__ uint32_t scalar_min(uint32_t a, uint32_t b) {
     return r;
 }
 
+// A register holding a constant. The one-instruction asm hides the value from LLVM, so instruction
+// selection cannot rematerialize the constant at each use inside a loop; like the assembly's setup
+// registers, it is defined once and stays live without relying on LICM.
+template <uint32_t Bits>
+__device__ __forceinline__ uint32_t vgpr_constant() {
+    uint32_t r;
+    asm volatile("v_mov_b32 %0, %1" : "=v"(r) : "n"(Bits));
+    return r;
+}
+
+template <uint32_t Bits>
+__device__ __forceinline__ uint32_t sgpr_constant() {
+    uint32_t r;
+    asm volatile("s_mov_b32 %0, %1" : "=s"(r) : "n"(Bits));
+    return r;
+}
+
+// Constants the loops use as register operands (no inline encoding exists for them there).
+struct LoopConstants {
+    int scale_one;    // E8M0 1.0 (0x7f), the MFMA A-scale operand; VGPR, as V_127
+    float neg_eight;  // -8.0, a VOP3 operand; VGPR, as V_M8
+    float neg_127;    // -127.0, a VOP3 operand; SGPR, as S_M127
+    float vote;       // 0.125, the rescale threshold; the assembly uses a VOPC literal
+    float ninf;       // -inf for masking; VGPR, as V_NINF
+};
+
 __device__ __forceinline__ void phase_barrier() {
     SCHED_FENCE();
     __builtin_amdgcn_s_barrier();
@@ -158,8 +184,8 @@ __device__ __forceinline__ fx16 mma(i8 a, i8 b, fx16 c) {
     return r;
 }
 
-__device__ __forceinline__ fx16 mma_scaled(i8 a, i8 b, fx16 c, int sb) {
-    const fx16 r = __builtin_amdgcn_mfma_scale_f32_32x32x64_f8f6f4(a, b, c, 0, 0, 0, 127, 0, sb);
+__device__ __forceinline__ fx16 mma_scaled(i8 a, i8 b, fx16 c, int sa, int sb) {
+    const fx16 r = __builtin_amdgcn_mfma_scale_f32_32x32x64_f8f6f4(a, b, c, 0, 0, 0, sa, 0, sb);
     SCHED_FENCE();
     return r;
 }
@@ -353,12 +379,12 @@ __device__ __forceinline__ float lane_max(fx16 s) {
 }
 
 template <int D, int Block>
-__device__ __forceinline__ void mask(fx16 &s, int q_start, int tile) {
+__device__ __forceinline__ void mask(fx16 &s, int q_start, int tile, float ninf) {
     const int delta = scalar_mask_sub<Block * 32>(scalar_sub((uint32_t)q_start, (uint32_t)tile * keys<D>));
     if (delta >= 32)
         return;
     if (delta < 0) {
-        s = fx16{} + neg_inf();
+        s = fx16{} + ninf;
         return;
     }
     const int threshold = delta + (laneid() & 31) - (laneid() >> 5) * 4;
@@ -368,18 +394,19 @@ __device__ __forceinline__ void mask(fx16 &s, int q_start, int tile) {
         for (int i = 0; i < 4; ++i)
             {
                 const uint64_t visible = __builtin_amdgcn_sicmp(8 * j + i, threshold, 38);
-                s[4 * j + i] = select_wave_mask(visible, s[4 * j + i], neg_inf());
+                s[4 * j + i] = select_wave_mask(visible, s[4 * j + i], ninf);
                 SCHED_FENCE();
             }
 }
 
-__device__ __forceinline__ float fma_negative_eight(float x, float bias) {
-    return __builtin_fmaf(-x, 8.f, bias);
+// neg_eight is -8.0: fma(x, -8, bias) == fma(-x, 8, bias) exactly.
+__device__ __forceinline__ float fma_negative_eight(float x, float bias, float neg_eight) {
+    return __builtin_fmaf(x, neg_eight, bias);
 }
 
-__device__ __forceinline__ float block_offset(float raw, float scale, float m) {
+__device__ __forceinline__ float block_offset(float raw, float scale, float m, float neg_127) {
     const float x = __builtin_fmaf(raw, scale, -m);
-    return __builtin_amdgcn_fmed3f(floorf(x), -127.f, 0.f);
+    return __builtin_amdgcn_fmed3f(floorf(x), neg_127, 0.f);
 }
 
 __device__ __forceinline__ float code_bias(float m, float off) {
@@ -460,34 +487,34 @@ __device__ __forceinline__ Probability<D> softmax(const Scores<D> &s, const Para
 }
 
 template <int D, typename Prefetch>
-__device__ __forceinline__ void pv(byte_lds vbase, const Probability<D> &p,
-                                    const Params &params, o_tile &o, Prefetch prefetch) {
+__device__ __forceinline__ void pv(byte_lds vbase, const Probability<D> &p, const Params &params,
+                                    o_tile &o, int scale_one, Prefetch prefetch) {
     i8 a = read_v_fragment<0, 0>(vbase);
     i8 b = read_v_fragment<0, 1>(vbase);
     i8 c = read_v_fragment<0, 2>(vbase);
     wait_lds_fragments<4>();
-    o.a = mma_scaled(a, p.a, o.a, params.sb_lo);
+    o.a = mma_scaled(a, p.a, o.a, scale_one, params.sb_lo);
     a = read_v_fragment<0, 3>(vbase);
-    o.b = mma_scaled(b, p.a, o.b, params.sb_lo);
+    o.b = mma_scaled(b, p.a, o.b, scale_one, params.sb_lo);
     if constexpr (D == 128)
         b = read_v_fragment<1, 0>(vbase);
     else
         prefetch();
     wait_lds_fragments<D == 128 ? 4 : 0>();
-    o.c = mma_scaled(c, p.a, o.c, params.sb_lo);
+    o.c = mma_scaled(c, p.a, o.c, scale_one, params.sb_lo);
     if constexpr (D == 128)
         c = read_v_fragment<1, 1>(vbase);
-    o.d = mma_scaled(a, p.a, o.d, params.sb_lo);
+    o.d = mma_scaled(a, p.a, o.d, scale_one, params.sb_lo);
     if constexpr (D == 128) {
         a = read_v_fragment<1, 2>(vbase);
         wait_lds_fragments<4>();
-        o.a = mma_scaled(b, p.b, o.a, params.sb_hi);
+        o.a = mma_scaled(b, p.b, o.a, scale_one, params.sb_hi);
         b = read_v_fragment<1, 3>(vbase);
-        o.b = mma_scaled(c, p.b, o.b, params.sb_hi);
+        o.b = mma_scaled(c, p.b, o.b, scale_one, params.sb_hi);
         prefetch();
         wait_lds_fragments<0>();
-        o.c = mma_scaled(a, p.b, o.c, params.sb_hi);
-        o.d = mma_scaled(b, p.b, o.d, params.sb_hi);
+        o.c = mma_scaled(a, p.b, o.c, scale_one, params.sb_hi);
+        o.d = mma_scaled(b, p.b, o.d, scale_one, params.sb_hi);
     }
 }
 
@@ -647,13 +674,13 @@ do { \
         FP8_MAX16(mc, s.c); \
         FP8_SCHEDULE_POINT(__float_as_int(mc)); \
         FP8_LDS_WAIT(4); \
-        o.a = mma_scaled(r3, p.a, o.a, params.sb_lo); \
+        o.a = mma_scaled(r3, p.a, o.a, kc.scale_one, params.sb_lo); \
         r1 = read_v<D, 0, 3, Cur, true>(sm, Cur); \
         r2 = read_v<D, 1, 0, Cur, true>(sm, Cur); \
         FP8_SCHEDULE_POINT(o.a, r1, r2); \
         FP8_MAX16(md, s.d); \
         FP8_SCHEDULE_POINT(__float_as_int(md)); \
-        o.b = mma_scaled(r4, p.a, o.b, params.sb_lo); \
+        o.b = mma_scaled(r4, p.a, o.b, kc.scale_one, params.sb_lo); \
         const float lo_raw = fmaxf(ma, mb); \
         const float hi_pair_max = fmaxf(mc, md); \
         FP8_SCHEDULE_POINT(__float_as_int(lo_raw), __float_as_int(hi_pair_max)); \
@@ -664,41 +691,41 @@ do { \
         const float hi = fmaxf(__int_as_float(hi_swap[0]), __int_as_float(hi_swap[1])); \
         FP8_SCHEDULE_POINT(o.b, __float_as_int(lo), __float_as_int(hi)); \
         FP8_LDS_WAIT(4); \
-        o.c = mma_scaled(r0, p.a, o.c, params.sb_lo); \
+        o.c = mma_scaled(r0, p.a, o.c, kc.scale_one, params.sb_lo); \
         r3 = read_v<D, 1, 1, Cur, true>(sm, Cur); \
         r4 = read_v<D, 1, 2, Cur, true>(sm, Cur); \
         FP8_SCHEDULE_POINT(o.c, r3, r4); \
         const float m = fmaxf(params.m, fmaxf(lo, hi) * scale); \
-        np.rescale = __builtin_amdgcn_ballot_w64(m - params.m > 0.125f) != 0; \
+        np.rescale = __builtin_amdgcn_ballot_w64(m - params.m > kc.vote) != 0; \
         const uint64_t rescale_mask = np.rescale ? -1ULL : 0ULL; \
         FP8_ANCHOR1(rescale_mask); \
         FP8_SCHEDULE_POINT(__float_as_int(m), np.rescale); \
-        o.d = mma_scaled(r1, p.a, o.d, params.sb_lo); \
+        o.d = mma_scaled(r1, p.a, o.d, kc.scale_one, params.sb_lo); \
         np.m = select_wave_mask(rescale_mask, params.m, m); \
-        const float off_lo = block_offset(lo, scale, np.m); \
+        const float off_lo = block_offset(lo, scale, np.m, kc.neg_127); \
         np.sb_lo = 127 + (int)off_lo; \
         np.sum_scale_lo = __int_as_float(np.sb_lo << 23); \
         FP8_SCHEDULE_POINT(o.d, __float_as_int(np.m), np.sb_lo, __float_as_int(np.sum_scale_lo)); \
         const float hi_raw = __builtin_fmaf(hi, scale, -np.m); \
         FP8_SCHEDULE_POINT(__float_as_int(hi_raw)); \
         FP8_LDS_WAIT(4); \
-        o.a = mma_scaled(r2, p.b, o.a, params.sb_hi); \
+        o.a = mma_scaled(r2, p.b, o.a, kc.scale_one, params.sb_hi); \
         r0 = read_v<D, 1, 3, Cur, true>(sm, Cur); \
         FP8_SCHEDULE_POINT(o.a, r0); \
-        const float off_hi = __builtin_amdgcn_fmed3f(floorf(hi_raw), -127.f, 0.f); \
+        const float off_hi = __builtin_amdgcn_fmed3f(floorf(hi_raw), kc.neg_127, 0.f); \
         np.sb_hi = 127 + (int)off_hi; \
         np.sum_scale_hi = __int_as_float(np.sb_hi << 23); \
         FP8_SCHEDULE_POINT(np.sb_hi, __float_as_int(np.sum_scale_hi)); \
-        const float bias = fma_negative_eight(np.m, b8k); \
-        np.bias_lo = fma_negative_eight(off_lo, bias); \
-        np.bias_hi = fma_negative_eight(off_hi, bias); \
+        const float bias = fma_negative_eight(np.m, b8k, kc.neg_eight); \
+        np.bias_lo = fma_negative_eight(off_lo, bias, kc.neg_eight); \
+        np.bias_hi = fma_negative_eight(off_hi, bias, kc.neg_eight); \
         FP8_SCHEDULE_POINT(__float_as_int(np.bias_lo), __float_as_int(np.bias_hi)); \
-        o.b = mma_scaled(r3, p.b, o.b, params.sb_hi); \
+        o.b = mma_scaled(r3, p.b, o.b, kc.scale_one, params.sb_hi); \
         FP8_SCHEDULE_POINT(o.b); \
         FP8_LDS_WAIT(0); \
-        o.c = mma_scaled(r4, p.b, o.c, params.sb_hi); \
+        o.c = mma_scaled(r4, p.b, o.c, kc.scale_one, params.sb_hi); \
         FP8_SCHEDULE_POINT(o.c); \
-        o.d = mma_scaled(r0, p.b, o.d, params.sb_hi); \
+        o.d = mma_scaled(r0, p.b, o.d, kc.scale_one, params.sb_hi); \
         FP8_SCHEDULE_POINT(o.d); \
     } else { \
         r2 = data.head.c; \
@@ -743,28 +770,28 @@ do { \
         FP8_MAX16(ma, s.a); \
         FP8_SCHEDULE_POINT(__float_as_int(ma)); \
         FP8_LDS_WAIT(4); \
-        o.a = mma_scaled(r0, p.a, o.a, params.sb_lo); \
+        o.a = mma_scaled(r0, p.a, o.a, kc.scale_one, params.sb_lo); \
         r3 = read_v<D, 0, 3, Cur, true>(sm, Cur); \
         FP8_SCHEDULE_POINT(o.a, r3); \
         FP8_MAX16(mb, s.b); \
         FP8_SCHEDULE_POINT(__float_as_int(mb)); \
-        o.b = mma_scaled(r1, p.a, o.b, params.sb_lo); \
+        o.b = mma_scaled(r1, p.a, o.b, kc.scale_one, params.sb_lo); \
         const float lo = xor32_max(fmaxf(ma, mb)); \
         const float m = fmaxf(params.m, lo * scale); \
-        const bool vote_pred = m - params.m > 0.125f; \
+        const bool vote_pred = m - params.m > kc.vote; \
         FP8_SCHEDULE_POINT(o.b, __float_as_int(lo), __float_as_int(m), b1{vote_pred}); \
         FP8_LDS_WAIT(0); \
-        o.c = mma_scaled(r2, p.a, o.c, params.sb_lo); \
+        o.c = mma_scaled(r2, p.a, o.c, kc.scale_one, params.sb_lo); \
         FP8_SCHEDULE_POINT(o.c); \
         np.rescale = __builtin_amdgcn_ballot_w64(vote_pred) != 0; \
         const uint64_t rescale_mask = np.rescale ? -1ULL : 0ULL; \
         FP8_ANCHOR1(rescale_mask); \
         FP8_SCHEDULE_POINT(np.rescale, rescale_mask); \
         np.m = select_wave_mask(rescale_mask, params.m, m); \
-        const float off_lo = block_offset(lo, scale, np.m); \
+        const float off_lo = block_offset(lo, scale, np.m, kc.neg_127); \
         const int offset_int = (int)off_lo; \
         FP8_SCHEDULE_POINT(__float_as_int(np.m), offset_int); \
-        o.d = mma_scaled(r3, p.a, o.d, params.sb_lo); \
+        o.d = mma_scaled(r3, p.a, o.d, kc.scale_one, params.sb_lo); \
         FP8_SCHEDULE_POINT(o.d); \
         np.sb_lo = 127 + offset_int; \
         np.sb_hi = np.sb_lo; \
@@ -1364,28 +1391,28 @@ do { \
     } else { \
         const float m = fmaxf(params.m, next_m); \
         FP8_SCHEDULE_POINT(__float_as_int(m)); \
-        (OUT).rescale = __builtin_amdgcn_ballot_w64(m - params.m > 0.125f) != 0; \
+        (OUT).rescale = __builtin_amdgcn_ballot_w64(m - params.m > kc.vote) != 0; \
         FP8_SCHEDULE_POINT((OUT).rescale); \
         const uint64_t rescale_mask = (OUT).rescale ? -1ULL : 0ULL; \
         FP8_SCHEDULE_POINT(rescale_mask); \
         (OUT).m = select_wave_mask(rescale_mask, params.m, m); \
     } \
     FP8_SCHEDULE_POINT(__float_as_int((OUT).m)); \
-    const float off_lo = block_offset(lo, scale, (OUT).m); \
+    const float off_lo = block_offset(lo, scale, (OUT).m, kc.neg_127); \
     FP8_SCHEDULE_POINT(__float_as_int(off_lo)); \
     (OUT).sb_lo = 127 + (int)off_lo; \
     (OUT).sum_scale_lo = __int_as_float((OUT).sb_lo << 23); \
     FP8_SCHEDULE_POINT((OUT).sb_lo, __float_as_int((OUT).sum_scale_lo)); \
     if constexpr (D == 128) { \
-        const float off_hi = block_offset(hi, scale, (OUT).m); \
+        const float off_hi = block_offset(hi, scale, (OUT).m, kc.neg_127); \
         FP8_SCHEDULE_POINT(__float_as_int(off_hi)); \
         (OUT).sb_hi = 127 + (int)off_hi; \
         (OUT).sum_scale_hi = __int_as_float((OUT).sb_hi << 23); \
         FP8_SCHEDULE_POINT((OUT).sb_hi, __float_as_int((OUT).sum_scale_hi)); \
-        const float bias = fma_negative_eight((OUT).m, b8k); \
+        const float bias = fma_negative_eight((OUT).m, b8k, kc.neg_eight); \
         FP8_SCHEDULE_POINT(__float_as_int(bias)); \
-        (OUT).bias_lo = fma_negative_eight(off_lo, bias); \
-        (OUT).bias_hi = fma_negative_eight(off_hi, bias); \
+        (OUT).bias_lo = fma_negative_eight(off_lo, bias, kc.neg_eight); \
+        (OUT).bias_hi = fma_negative_eight(off_hi, bias, kc.neg_eight); \
     } else { \
         (OUT).sb_hi = (OUT).sb_lo; \
         (OUT).sum_scale_hi = (OUT).sum_scale_lo; \
@@ -1424,23 +1451,23 @@ do { \
         [[clang::nomerge]] phase_use(s.d); \
     } \
     SCHED_FENCE(); \
-    mask<D, 0>(s.a, q_start, sk + 1u); \
+    mask<D, 0>(s.a, q_start, sk + 1u, kc.ninf); \
     [[clang::nomerge]] phase_use(s.a); \
     SCHED_FENCE(); \
-    mask<D, 1>(s.b, q_start, sk + 1u); \
+    mask<D, 1>(s.b, q_start, sk + 1u, kc.ninf); \
     [[clang::nomerge]] phase_use(s.b); \
     SCHED_FENCE(); \
     if constexpr (D == 128) { \
-        mask<D, 2>(s.c, q_start, sk + 1u); \
+        mask<D, 2>(s.c, q_start, sk + 1u, kc.ninf); \
         [[clang::nomerge]] phase_use(s.c); \
         SCHED_FENCE(); \
-        mask<D, 3>(s.d, q_start, sk + 1u); \
+        mask<D, 3>(s.d, q_start, sk + 1u, kc.ninf); \
         [[clang::nomerge]] phase_use(s.d); \
         SCHED_FENCE(); \
     } \
     Params np; \
     FP8_COMPUTE_STATS(np, false); \
-    pv<D>(tail_vbase, data.p, params, o, [&]() { if constexpr (D == 192) prefetch(); }); \
+    pv<D>(tail_vbase, data.p, params, o, kc.scale_one, [&]() { if constexpr (D == 192) prefetch(); }); \
     prepare_scores<D>(s, np, p_scale); \
     if constexpr (D == 192) { FP8_SCHEDULE_POINT(s.a, s.b); } \
     if (np.rescale) { \
@@ -1493,6 +1520,9 @@ __global__ __launch_bounds__(512, 1) void attend(Args<D> kernel_args) {
         p_scale = args.c8 * qk_descale;
     const float v_scale = vd * args.v_scale;
     const float b8k = [&]() { if constexpr (D == 128) return args.b8k; else return 0.f; }();
+    const LoopConstants kc{(int)vgpr_constant<0x7fu>(), __uint_as_float(vgpr_constant<0xc1000000u>()),
+                           __uint_as_float(sgpr_constant<0xc2fe0000u>()), __uint_as_float(sgpr_constant<0x3e000000u>()),
+                           __uint_as_float(vgpr_constant<0xff800000u>())};
     int k_stride, v_stride;
     if constexpr (D == 128) {
         k_stride = args.kv_ss;
@@ -1617,7 +1647,9 @@ __global__ __launch_bounds__(512, 1) void attend(Args<D> kernel_args) {
         oh = (global_byte)args.o + oo + (size_t)paired_head * args.o_sh2;
         // Host validation bounds the complete LSE span below 4 GiB.
         const uint32_t lse_byte_offset = (lse_offset + paired_head * args.l_sh2) * 4u;
-        lh = args.lse ? (global_float)((global_byte)args.lse + lse_byte_offset) : nullptr;
+        // Both arms are computed, so the choice is a select rather than a branch on a long-lived flag.
+        const global_float lse_row = (global_float)((global_byte)args.lse + lse_byte_offset);
+        lh = args.lse ? lse_row : nullptr;
         kr = make_srsrc((const void *)(uintptr_t)kh, args.n_keys * k_stride);
         vr = make_srsrc((const void *)(uintptr_t)vh, args.n_keys * v_stride);
 
@@ -1689,17 +1721,17 @@ pass_start:
             [[clang::nomerge]] phase_use(s.d);
         }
         SCHED_FENCE();
-        mask<D, 0>(s.a, q_start, 0);
+        mask<D, 0>(s.a, q_start, 0, kc.ninf);
         [[clang::nomerge]] phase_use(s.a);
         SCHED_FENCE();
-        mask<D, 1>(s.b, q_start, 0);
+        mask<D, 1>(s.b, q_start, 0, kc.ninf);
         [[clang::nomerge]] phase_use(s.b);
         SCHED_FENCE();
         if constexpr (D == 128) {
-            mask<D, 2>(s.c, q_start, 0);
+            mask<D, 2>(s.c, q_start, 0, kc.ninf);
             [[clang::nomerge]] phase_use(s.c);
             SCHED_FENCE();
-            mask<D, 3>(s.d, q_start, 0);
+            mask<D, 3>(s.d, q_start, 0, kc.ninf);
             [[clang::nomerge]] phase_use(s.d);
             SCHED_FENCE();
         }
@@ -1782,7 +1814,7 @@ tail:
             wait_dma();
             l = add_tail_sum<D>(l, row_sum(p.a, sel), D == 128 ? params.sum_scale_lo : __int_as_float(params.sb_lo << 23));
             if constexpr (D == 128) l = add_tail_sum<D>(l, row_sum(p.b, sel), params.sum_scale_hi);
-            pv<D>(tail_vbase, p, params, o, [&]() {
+            pv<D>(tail_vbase, p, params, o, kc.scale_one, [&]() {
                 if (k + 4 < n) load_k<D>(sm, kr, (base + k) & 3, k + 4, k_stride, tid);
                 if (k + 2 < n) load_v<D>(sm, vr, (base + k + 2) & 3, k + 2, v_stride, tid);
             });
@@ -1834,7 +1866,7 @@ finished_last0:
             [[clang::nomerge]] __builtin_amdgcn_s_setprio(1);
             l = add_tail_sum<D>(l, row_sum(p.a, sel), D == 128 ? params.sum_scale_lo : __int_as_float(params.sb_lo << 23));
             if constexpr (D == 128) l = add_tail_sum<D>(l, row_sum(p.b, sel), params.sum_scale_hi);
-            pv<D>(tail_vbase, p, params, o, []() {});
+            pv<D>(tail_vbase, p, params, o, kc.scale_one, []() {});
             goto pass_done0;
         }
         dead_last0: {
@@ -1889,7 +1921,7 @@ finished_dead_last0:
             wait_dma();
             l = add_tail_sum<D>(l, row_sum(p.a, sel), D == 128 ? params.sum_scale_lo : __int_as_float(params.sb_lo << 23));
             if constexpr (D == 128) l = add_tail_sum<D>(l, row_sum(p.b, sel), params.sum_scale_hi);
-            pv<D>(tail_vbase, p, params, o, [&]() {
+            pv<D>(tail_vbase, p, params, o, kc.scale_one, [&]() {
                 if (k + 4 < n) load_k<D>(sm, kr, (base + k) & 3, k + 4, k_stride, tid);
                 if (k + 2 < n) load_v<D>(sm, vr, (base + k + 2) & 3, k + 2, v_stride, tid);
             });
@@ -1941,7 +1973,7 @@ finished_last1:
             [[clang::nomerge]] __builtin_amdgcn_s_setprio(1);
             l = add_tail_sum<D>(l, row_sum(p.a, sel), D == 128 ? params.sum_scale_lo : __int_as_float(params.sb_lo << 23));
             if constexpr (D == 128) l = add_tail_sum<D>(l, row_sum(p.b, sel), params.sum_scale_hi);
-            pv<D>(tail_vbase, p, params, o, []() {});
+            pv<D>(tail_vbase, p, params, o, kc.scale_one, []() {});
             goto pass_done1;
         }
         dead_last1: {
