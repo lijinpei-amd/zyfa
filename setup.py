@@ -56,7 +56,10 @@ class BuildExt(BuildExtension):
                             "-Xarch_device", "-mllvm=-amdgpu-preserve-uniform-irreducible",
                             "-Xarch_device", "-mllvm=-amdgpu-shrink-late-compare-mask",
                             "-Xarch_device", "-mllvm=-amdgpu-prefer-unsigned-add",
-                            "-Xarch_device", "-mllvm=-amdgpu-prefer-ge-scalar-bounds"]
+                            "-Xarch_device", "-mllvm=-amdgpu-prefer-ge-scalar-bounds",
+                            # The source defines loop constants once at entry; keep
+                            # MachineLICM from hoisting per-pass values to entry.
+                            "-Xarch_device", "-mllvm=-disable-machine-licm"]
             subprocess.run([str(compiler), *native_flags, "-c", str(ROOT / "csrc/fp8_native.hip"),
                             "-o", str(NATIVE_OBJECT)], check=True)
         super().run()

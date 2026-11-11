@@ -56,6 +56,7 @@ def native_codegen(tmp_path_factory):
                                  "-amdgpu-shrink-late-compare-mask",
                                  "-amdgpu-prefer-unsigned-add",
                                  "-amdgpu-prefer-ge-scalar-bounds",
+                                 "-disable-machine-licm",
                                  str(ir), "-o", str(output)],
                                 capture_output=True, text=True)
         assert result.returncode == 0, result.stderr
