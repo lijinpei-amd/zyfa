@@ -316,6 +316,14 @@ __device__ __forceinline__ i8 read_v(Lds<D> sm, int runtime_slot) {
 }
 
 
+// Pending counts LGKM events: two per K fragment and four per V fragment.
+template <int Pending>
+__device__ __forceinline__ void wait_lds_fragments() {
+    SCHED_FENCE();
+    __builtin_amdgcn_s_waitcnt(0xc07f | (Pending << 8));
+    SCHED_FENCE();
+}
+
 template <int D, int Slot, typename Prefetch>
 __device__ __forceinline__ Scores<D> qk(Lds<D> sm, int runtime_slot, const Query<D> &q,
                                          Head<D> h, Prefetch prefetch) {
@@ -323,20 +331,25 @@ __device__ __forceinline__ Scores<D> qk(Lds<D> sm, int runtime_slot, const Query
     if constexpr (D == 128) {
         i8 c = read_k<D, 2, 0, Slot>(sm, runtime_slot);
         i8 d = read_k<D, 3, 0, Slot>(sm, runtime_slot);
+        wait_lds_fragments<4>();
         s.a = mma(h.a, q.a, fx16{});
         h.a = read_k<D, 0, 1, Slot>(sm, runtime_slot);
         s.b = mma(h.b, q.a, fx16{});
         h.b = read_k<D, 1, 1, Slot>(sm, runtime_slot);
+        wait_lds_fragments<4>();
         s.c = mma(c, q.a, fx16{});
         c = read_k<D, 2, 1, Slot>(sm, runtime_slot);
         s.d = mma(d, q.a, fx16{});
         d = read_k<D, 3, 1, Slot>(sm, runtime_slot);
         prefetch();
+        wait_lds_fragments<4>();
         s.a = mma(h.a, q.b, s.a);
         s.b = mma(h.b, q.b, s.b);
+        wait_lds_fragments<0>();
         s.c = mma(c, q.b, s.c);
         s.d = mma(d, q.b, s.d);
     } else {
+        wait_lds_fragments<0>();
         s.a = mma(h.a, q.a, fx16{});
         h.a = read_k<D, 0, 2, Slot>(sm, runtime_slot);
         s.b = mma(h.b, q.a, fx16{});
@@ -344,6 +357,7 @@ __device__ __forceinline__ Scores<D> qk(Lds<D> sm, int runtime_slot, const Query
         prefetch();
         s.a = mma(h.c, q.b, s.a);
         s.b = mma(h.d, q.b, s.b);
+        wait_lds_fragments<0>();
         s.a = mma(h.a, q.c, s.a);
         s.b = mma(h.b, q.c, s.b);
     }
@@ -470,23 +484,28 @@ __device__ __forceinline__ void pv(Lds<D> sm, int runtime_slot, const Probabilit
                                     const Params &params, o_tile &o, Prefetch prefetch) {
     i8 a = read_v<D, 0, 0, Slot>(sm, runtime_slot);
     i8 b = read_v<D, 0, 1, Slot>(sm, runtime_slot);
+    i8 c = read_v<D, 0, 2, Slot>(sm, runtime_slot);
+    wait_lds_fragments<4>();
     o.a = mma_scaled(a, p.a, o.a, params.sb_lo);
-    a = read_v<D, 0, 2, Slot>(sm, runtime_slot);
+    a = read_v<D, 0, 3, Slot>(sm, runtime_slot);
     o.b = mma_scaled(b, p.a, o.b, params.sb_lo);
-    b = read_v<D, 0, 3, Slot>(sm, runtime_slot);
-    if constexpr (D == 192)
-        prefetch();
-    o.c = mma_scaled(a, p.a, o.c, params.sb_lo);
     if constexpr (D == 128)
-        a = read_v<D, 1, 0, Slot>(sm, runtime_slot);
-    o.d = mma_scaled(b, p.a, o.d, params.sb_lo);
-    if constexpr (D == 128) {
-        b = read_v<D, 1, 1, Slot>(sm, runtime_slot);
-        o.a = mma_scaled(a, p.b, o.a, params.sb_hi);
-        a = read_v<D, 1, 2, Slot>(sm, runtime_slot);
-        o.b = mma_scaled(b, p.b, o.b, params.sb_hi);
-        b = read_v<D, 1, 3, Slot>(sm, runtime_slot);
+        b = read_v<D, 1, 0, Slot>(sm, runtime_slot);
+    else
         prefetch();
+    wait_lds_fragments<D == 128 ? 4 : 0>();
+    o.c = mma_scaled(c, p.a, o.c, params.sb_lo);
+    if constexpr (D == 128)
+        c = read_v<D, 1, 1, Slot>(sm, runtime_slot);
+    o.d = mma_scaled(a, p.a, o.d, params.sb_lo);
+    if constexpr (D == 128) {
+        a = read_v<D, 1, 2, Slot>(sm, runtime_slot);
+        wait_lds_fragments<4>();
+        o.a = mma_scaled(b, p.b, o.a, params.sb_hi);
+        b = read_v<D, 1, 3, Slot>(sm, runtime_slot);
+        o.b = mma_scaled(c, p.b, o.b, params.sb_hi);
+        prefetch();
+        wait_lds_fragments<0>();
         o.c = mma_scaled(a, p.b, o.c, params.sb_hi);
         o.d = mma_scaled(b, p.b, o.d, params.sb_hi);
     }
