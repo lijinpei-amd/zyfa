@@ -1678,11 +1678,11 @@ __global__ __launch_bounds__(512, 1) void attend(Args<D> kernel_args) {
     wait_dma();
     phase_barrier();
     if (group == 1) phase_barrier();
-    goto pass_start;
 
-pass_top:
-    FP8_OUTPUT();
-pass_start:
+    // The persistent pass loop. The source already places every value as the assembly does, so LICM
+    // must not hoist pass-local work out of it to the kernel entry.
+#pragma clang loop licm(disable)
+    for (;;) {
     fm = __builtin_amdgcn_readfirstlane(fm);
     n = __builtin_amdgcn_readfirstlane(n);
     base = __builtin_amdgcn_readfirstlane(base);
@@ -2021,7 +2021,9 @@ pass_done1:
     SCHED_FENCE();
 pass_done:
     phase_use(have_next);
-    if (have_next) goto pass_top;
+    if (!have_next) break;
+    FP8_OUTPUT();
+    }
     FP8_OUTPUT();
     if (group == 0) phase_barrier();
 kernel_end:
