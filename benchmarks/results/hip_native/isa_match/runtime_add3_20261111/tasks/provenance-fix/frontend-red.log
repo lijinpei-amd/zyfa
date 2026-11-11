@@ -1,0 +1,2 @@
+Expected frontend-IR regression failure: invariant_vbase is a pointer, dimension 128 
+Expected frontend-IR regression failure: invariant_vbase is a pointer, dimension 192 

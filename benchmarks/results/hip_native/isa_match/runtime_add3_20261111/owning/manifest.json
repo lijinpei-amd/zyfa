@@ -1,0 +1,12 @@
+{
+  "native_source_sha256": "8ba78b70f82e232c8aef20f339078f6a10f915a57b61cef614bb844cfa31eed5",
+  "object_sha256": "8da2d6f6b62615638f0d879ec7c33001e9af1d47e2e7b27c22d2d737215b48cf",
+  "code_object_sha256": "a02316e07af396e87cd28c115d74427dda0e404ab8fcbe6d9d2ab2975832ba69",
+  "object": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/native/fp8_native.o",
+  "assembly_origin": "disassembly of the selected object's embedded code object",
+  "inspection_tool_version": "AMD LLVM version 22.0.0git\n  Optimized build.\n\n\n  Registered Targets:\n    amdgcn - AMD GCN GPUs\n    r600   - AMD GPUs HD2XXX-HD6XXX\n    x86    - 32-bit X86: Pentium-Pro and above\n    x86-64 - 64-bit X86: EM64T and AMD64",
+  "lds_bytes_per_block": {
+    "d128": 163840,
+    "d192": 131072
+  }
+}

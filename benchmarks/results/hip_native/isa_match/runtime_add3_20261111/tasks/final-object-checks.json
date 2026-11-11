@@ -1,0 +1,22 @@
+{
+  "test_hip_whole_kernel_has_no_three_input_address_adds[128]": "passed",
+  "test_hip_runtime_pv_reuses_one_v_address[128]": "passed",
+  "test_hip_whole_memory_mnemonic_counts_match_reference[128]": "passed",
+  "test_hip_whole_float_mnemonic_counts_match_reference[128]": "passed",
+  "test_hip_whole_qk_mfma_count_matches_reference[128]": "passed",
+  "test_hip_whole_barrier_count_matches_reference[128]": "passed",
+  "test_hip_whole_priority_count_matches_reference[128]": "passed",
+  "test_hip_setup_offsets_fuse_to_u24_mads[128]": "passed",
+  "test_hip_steady_disassembled_mnemonics_match[128]": "passed",
+  "test_hip_whole_kernel_has_no_three_input_address_adds[192]": "passed",
+  "test_hip_runtime_pv_reuses_one_v_address[192]": "passed",
+  "test_hip_whole_memory_mnemonic_counts_match_reference[192]": "passed",
+  "test_hip_whole_float_mnemonic_counts_match_reference[192]": "passed",
+  "test_hip_whole_qk_mfma_count_matches_reference[192]": "passed",
+  "test_hip_whole_barrier_count_matches_reference[192]": "passed",
+  "test_hip_whole_priority_count_matches_reference[192]": "passed",
+  "test_hip_setup_offsets_fuse_to_u24_mads[192]": "passed",
+  "test_hip_steady_disassembled_mnemonics_match[192]": "passed",
+  "final_source_matches_fat_object_snapshot": "passed",
+  "resource_metadata_exactly_matches_current_baseline": "passed"
+}

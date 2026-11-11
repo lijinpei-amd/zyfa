@@ -1,0 +1,140 @@
+FFFF                                                                     [100%]
+=================================== FAILURES ===================================
+__________ test_hip_whole_kernel_has_no_three_input_address_adds[128] __________
+
+disassembled_kernels = ['\n/tmp/pytest-of-jinpli/pytest-76/native_objects0/native.o:\tfile format elf64-amdgpu\n\t.amdgcn_target "amdgpu-amd-...  // 000000006B44: BF8C0F70\n\ts_endpgm                                                   // 000000006B48: BF810000\n']
+dim = 128
+
+    @pytest.mark.parametrize("dim", [128, 192])
+    def test_hip_whole_kernel_has_no_three_input_address_adds(disassembled_kernels, dim):
+        from benchmarks.compare_isa import parse_disassembly, select_function
+    
+        code = select_function(parse_disassembly(disassembled_kernels[0]), dim)
+>       assert not [i for i in code if i.mnemonic == "v_add3_u32"]
+E       AssertionError: assert not [Instruction(mnemonic='v_add3_u32', operands='v128, s17, v245, v244', address=19284, line=3101, branch_target=None), I...ne), Instruction(mnemonic='v_add3_u32', operands='v80, s23, v245, v244', address=33496, line=5301, branch_target=None)]
+
+tests/test_fp8_hip_codegen.py:178: AssertionError
+__________ test_hip_whole_kernel_has_no_three_input_address_adds[192] __________
+
+disassembled_kernels = ['\n/tmp/pytest-of-jinpli/pytest-76/native_objects0/native.o:\tfile format elf64-amdgpu\n\t.amdgcn_target "amdgpu-amd-...  // 000000006B44: BF8C0F70\n\ts_endpgm                                                   // 000000006B48: BF810000\n']
+dim = 192
+
+    @pytest.mark.parametrize("dim", [128, 192])
+    def test_hip_whole_kernel_has_no_three_input_address_adds(disassembled_kernels, dim):
+        from benchmarks.compare_isa import parse_disassembly, select_function
+    
+        code = select_function(parse_disassembly(disassembled_kernels[0]), dim)
+>       assert not [i for i in code if i.mnemonic == "v_add3_u32"]
+E       AssertionError: assert not [Instruction(mnemonic='v_add3_u32', operands='v80, s20, v173, v172', address=11564, line=7800, branch_target=None), In...ne), Instruction(mnemonic='v_add3_u32', operands='v65, s23, v173, v172', address=19620, line=9265, branch_target=None)]
+
+tests/test_fp8_hip_codegen.py:178: AssertionError
+________________ test_hip_runtime_pv_reuses_one_v_address[128] _________________
+
+disassembled_kernels = ['\n/tmp/pytest-of-jinpli/pytest-76/native_objects0/native.o:\tfile format elf64-amdgpu\n\t.amdgcn_target "amdgpu-amd-...  // 000000006B44: BF8C0F70\n\ts_endpgm                                                   // 000000006B48: BF810000\n']
+dim = 128
+
+    @pytest.mark.parametrize("dim", [128, 192])
+    def test_hip_runtime_pv_reuses_one_v_address(disassembled_kernels, dim):
+        from benchmarks.compare_isa import parse_disassembly, select_function, steady_loop
+    
+        code = select_function(parse_disassembly(disassembled_kernels[0]), dim)
+        loop_end = max(i.address for i in steady_loop(code, 72 if dim == 128 else 44))
+        tail = [i for i in code if i.address > loop_end]
+        reads = [i for i in tail if i.mnemonic == "ds_read_b64_tr_b8"]
+        definitions = {}
+        origins = {}
+        for instruction in tail:
+            operands = instruction.operands.split(",")
+            if instruction.mnemonic == "ds_read_b64_tr_b8":
+                address = operands[1].strip().split()[0]
+                assert address in definitions, instruction
+                origins[instruction.address] = definitions[address]
+            destination = operands[0].strip()
+            origin = instruction.address
+            if instruction.mnemonic in ("v_mov_b32_e32", "v_mov_b32_e64"):
+                origin = definitions.get(operands[1].strip(), origin)
+            if re.fullmatch(r"v\d+", destination):
+                definitions[destination] = origin
+            elif m := re.fullmatch(r"v\[(\d+):(\d+)\]", destination):
+                for register in range(int(m[1]), int(m[2]) + 1):
+                    definitions[f"v{register}"] = origin
+        per_site = 32 if dim == 128 else 16
+        expected_offsets = [4096 * half + 256 * fragment + 1024 * word
+                            for half in range(2 if dim == 128 else 1)
+                            for fragment in range(4) for word in range(4)]
+        assert len(reads) == 6 * per_site
+        updates = set()
+        for site in range(6):
+            fragment_reads = reads[site * per_site:(site + 1) * per_site]
+            offsets = [int(m[1]) if (m := re.search(r"offset:(\d+)", i.operands)) else 0
+                       for i in fragment_reads]
+            assert offsets == expected_offsets, (site, offsets)
+            constructions = {origins[i.address] for i in fragment_reads}
+            assert len(constructions) == 1, (site, sorted(constructions))
+            updates.update(constructions)
+        producers = {i.address: i for i in code}
+>       assert all(producers[address].mnemonic in ("v_add_u32_e32", "v_add_u32_e64")
+                   for address in updates), [producers[address] for address in sorted(updates)]
+E       AssertionError: [Instruction(mnemonic='v_add3_u32', operands='v128, s17, v245, v244', address=19284, line=3101, branch_target=None), I...ne), Instruction(mnemonic='v_add3_u32', operands='v80, s23, v245, v244', address=33496, line=5301, branch_target=None)]
+E       assert False
+E        +  where False = all(<generator object test_hip_runtime_pv_reuses_one_v_address.<locals>.<genexpr> at 0x7f811d9dcba0>)
+
+tests/test_fp8_hip_codegen.py:221: AssertionError
+________________ test_hip_runtime_pv_reuses_one_v_address[192] _________________
+
+disassembled_kernels = ['\n/tmp/pytest-of-jinpli/pytest-76/native_objects0/native.o:\tfile format elf64-amdgpu\n\t.amdgcn_target "amdgpu-amd-...  // 000000006B44: BF8C0F70\n\ts_endpgm                                                   // 000000006B48: BF810000\n']
+dim = 192
+
+    @pytest.mark.parametrize("dim", [128, 192])
+    def test_hip_runtime_pv_reuses_one_v_address(disassembled_kernels, dim):
+        from benchmarks.compare_isa import parse_disassembly, select_function, steady_loop
+    
+        code = select_function(parse_disassembly(disassembled_kernels[0]), dim)
+        loop_end = max(i.address for i in steady_loop(code, 72 if dim == 128 else 44))
+        tail = [i for i in code if i.address > loop_end]
+        reads = [i for i in tail if i.mnemonic == "ds_read_b64_tr_b8"]
+        definitions = {}
+        origins = {}
+        for instruction in tail:
+            operands = instruction.operands.split(",")
+            if instruction.mnemonic == "ds_read_b64_tr_b8":
+                address = operands[1].strip().split()[0]
+                assert address in definitions, instruction
+                origins[instruction.address] = definitions[address]
+            destination = operands[0].strip()
+            origin = instruction.address
+            if instruction.mnemonic in ("v_mov_b32_e32", "v_mov_b32_e64"):
+                origin = definitions.get(operands[1].strip(), origin)
+            if re.fullmatch(r"v\d+", destination):
+                definitions[destination] = origin
+            elif m := re.fullmatch(r"v\[(\d+):(\d+)\]", destination):
+                for register in range(int(m[1]), int(m[2]) + 1):
+                    definitions[f"v{register}"] = origin
+        per_site = 32 if dim == 128 else 16
+        expected_offsets = [4096 * half + 256 * fragment + 1024 * word
+                            for half in range(2 if dim == 128 else 1)
+                            for fragment in range(4) for word in range(4)]
+        assert len(reads) == 6 * per_site
+        updates = set()
+        for site in range(6):
+            fragment_reads = reads[site * per_site:(site + 1) * per_site]
+            offsets = [int(m[1]) if (m := re.search(r"offset:(\d+)", i.operands)) else 0
+                       for i in fragment_reads]
+            assert offsets == expected_offsets, (site, offsets)
+            constructions = {origins[i.address] for i in fragment_reads}
+            assert len(constructions) == 1, (site, sorted(constructions))
+            updates.update(constructions)
+        producers = {i.address: i for i in code}
+>       assert all(producers[address].mnemonic in ("v_add_u32_e32", "v_add_u32_e64")
+                   for address in updates), [producers[address] for address in sorted(updates)]
+E       AssertionError: [Instruction(mnemonic='v_add3_u32', operands='v80, s20, v173, v172', address=11564, line=7800, branch_target=None), In...ne), Instruction(mnemonic='v_add3_u32', operands='v65, s23, v173, v172', address=19620, line=9265, branch_target=None)]
+E       assert False
+E        +  where False = all(<generator object test_hip_runtime_pv_reuses_one_v_address.<locals>.<genexpr> at 0x7f811d9de180>)
+
+tests/test_fp8_hip_codegen.py:221: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_fp8_hip_codegen.py::test_hip_whole_kernel_has_no_three_input_address_adds[128]
+FAILED tests/test_fp8_hip_codegen.py::test_hip_whole_kernel_has_no_three_input_address_adds[192]
+FAILED tests/test_fp8_hip_codegen.py::test_hip_runtime_pv_reuses_one_v_address[128]
+FAILED tests/test_fp8_hip_codegen.py::test_hip_runtime_pv_reuses_one_v_address[192]
+4 failed, 64 deselected in 53.32s

@@ -1,0 +1,341 @@
+{
+  "128": {
+    "add3": [
+      6,
+      0,
+      0
+    ],
+    "retained": [
+      4955,
+      4929,
+      5302
+    ],
+    "delta": {
+      "s_add_u32": {
+        "reference": 253,
+        "llvm": 247,
+        "delta": -6
+      },
+      "s_addk_i32": {
+        "reference": 5,
+        "llvm": 7,
+        "delta": 2
+      },
+      "s_and_b32": {
+        "reference": 23,
+        "llvm": 17,
+        "delta": -6
+      },
+      "s_lshl_b32": {
+        "reference": 73,
+        "llvm": 65,
+        "delta": -8
+      },
+      "s_nop": {
+        "reference": 308,
+        "llvm": 307,
+        "delta": -1
+      },
+      "s_or_b32": {
+        "reference": 31,
+        "llvm": 23,
+        "delta": -8
+      },
+      "v_add3_u32": {
+        "reference": 6,
+        "llvm": 0,
+        "delta": -6
+      },
+      "v_add_u32_e32": {
+        "reference": 61,
+        "llvm": 63,
+        "delta": 2
+      },
+      "v_and_b32_e32": {
+        "reference": 11,
+        "llvm": 12,
+        "delta": 1
+      },
+      "v_lshl_add_u32": {
+        "reference": 0,
+        "llvm": 2,
+        "delta": 2
+      },
+      "v_lshlrev_b32_e32": {
+        "reference": 33,
+        "llvm": 34,
+        "delta": 1
+      },
+      "v_or3_b32": {
+        "reference": 2,
+        "llvm": 3,
+        "delta": 1
+      }
+    },
+    "loop": [
+      1333,
+      1333,
+      true,
+      true
+    ],
+    "protected": {
+      "memory": true,
+      "float": true,
+      "mfma": true
+    },
+    "updates": {
+      "baseline": [
+        26188,
+        27984,
+        32324,
+        34120,
+        39888,
+        40400
+      ],
+      "candidate": [
+        22624,
+        28700,
+        39768,
+        40272
+      ],
+      "reference": [
+        21488,
+        27116,
+        30752,
+        36380
+      ]
+    },
+    "capture_correction_checks": {
+      "all_entry_roots_inside_extended_setup": true,
+      "extended_setup_net_vector_delta": 3,
+      "all_four_candidate_updates_reach_the_same_entry_definition": true,
+      "all_four_reference_updates_reach_the_same_entry_definition": true,
+      "all_candidate_and_reference_invariant_inputs_have_no_reachable_undefined_path": true,
+      "candidate_consumed_invariant_definition_pc": [
+        7932
+      ],
+      "reference_consumed_invariant_definition_pc": [
+        6012
+      ],
+      "selected_recipe_counts": {
+        "baseline": 6,
+        "candidate": 4,
+        "reference": 4
+      },
+      "six_ds_site_counts": {
+        "baseline": [
+          32,
+          32,
+          32,
+          32,
+          32,
+          32
+        ],
+        "candidate": [
+          32,
+          32,
+          32,
+          32,
+          32,
+          32
+        ],
+        "reference": [
+          32,
+          32,
+          32,
+          32,
+          32,
+          32
+        ]
+      },
+      "complete_reference_tail_state_mnemonics_verified": true,
+      "focused_entry_instruction_counts": {
+        "baseline": 7,
+        "candidate": 6,
+        "reference": 9
+      },
+      "extended_setup_instruction_counts": {
+        "baseline": 1096,
+        "candidate": 1098,
+        "reference": 1130
+      }
+    }
+  },
+  "192": {
+    "add3": [
+      6,
+      0,
+      0
+    ],
+    "retained": [
+      3382,
+      3359,
+      3737
+    ],
+    "delta": {
+      "s_add_u32": {
+        "reference": 202,
+        "llvm": 190,
+        "delta": -12
+      },
+      "s_and_b32": {
+        "reference": 23,
+        "llvm": 17,
+        "delta": -6
+      },
+      "s_cbranch_scc0": {
+        "reference": 17,
+        "llvm": 19,
+        "delta": 2
+      },
+      "s_cbranch_scc1": {
+        "reference": 71,
+        "llvm": 69,
+        "delta": -2
+      },
+      "s_cmp_ge_u32": {
+        "reference": 29,
+        "llvm": 27,
+        "delta": -2
+      },
+      "s_cmp_lt_u32": {
+        "reference": 8,
+        "llvm": 10,
+        "delta": 2
+      },
+      "s_lshl_b32": {
+        "reference": 81,
+        "llvm": 75,
+        "delta": -6
+      },
+      "v_add3_u32": {
+        "reference": 6,
+        "llvm": 0,
+        "delta": -6
+      },
+      "v_and_b32_e32": {
+        "reference": 12,
+        "llvm": 11,
+        "delta": -1
+      },
+      "v_lshl_add_u32": {
+        "reference": 0,
+        "llvm": 4,
+        "delta": 4
+      },
+      "v_lshl_or_b32": {
+        "reference": 5,
+        "llvm": 4,
+        "delta": -1
+      },
+      "v_lshlrev_b32_e32": {
+        "reference": 28,
+        "llvm": 29,
+        "delta": 1
+      },
+      "v_lshrrev_b32_e32": {
+        "reference": 6,
+        "llvm": 7,
+        "delta": 1
+      },
+      "v_or3_b32": {
+        "reference": 2,
+        "llvm": 3,
+        "delta": 1
+      },
+      "v_or_b32_e32": {
+        "reference": 21,
+        "llvm": 23,
+        "delta": 2
+      }
+    },
+    "loop": [
+      825,
+      825,
+      true,
+      true
+    ],
+    "protected": {
+      "memory": true,
+      "float": true,
+      "mfma": true
+    },
+    "updates": {
+      "baseline": [
+        54572,
+        55672,
+        57772,
+        58872,
+        61860,
+        62628
+      ],
+      "candidate": [
+        52992,
+        56144,
+        61764,
+        62524
+      ],
+      "reference": [
+        15888,
+        18676,
+        21176,
+        23964
+      ]
+    },
+    "capture_correction_checks": {
+      "all_entry_roots_inside_extended_setup": true,
+      "extended_setup_net_vector_delta": 3,
+      "all_four_candidate_updates_reach_the_same_entry_definition": true,
+      "all_four_reference_updates_reach_the_same_entry_definition": true,
+      "all_candidate_and_reference_invariant_inputs_have_no_reachable_undefined_path": true,
+      "candidate_consumed_invariant_definition_pc": [
+        43992
+      ],
+      "reference_consumed_invariant_definition_pc": [
+        5624
+      ],
+      "selected_recipe_counts": {
+        "baseline": 6,
+        "candidate": 4,
+        "reference": 4
+      },
+      "six_ds_site_counts": {
+        "baseline": [
+          16,
+          16,
+          16,
+          16,
+          16,
+          16
+        ],
+        "candidate": [
+          16,
+          16,
+          16,
+          16,
+          16,
+          16
+        ],
+        "reference": [
+          16,
+          16,
+          16,
+          16,
+          16,
+          16
+        ]
+      },
+      "complete_reference_tail_state_mnemonics_verified": true,
+      "focused_entry_instruction_counts": {
+        "baseline": 7,
+        "candidate": 9,
+        "reference": 9
+      },
+      "extended_setup_instruction_counts": {
+        "baseline": 843,
+        "candidate": 847,
+        "reference": 943
+      }
+    }
+  }
+}

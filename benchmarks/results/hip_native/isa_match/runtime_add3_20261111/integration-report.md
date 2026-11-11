@@ -1,0 +1,11 @@
+# Final integrated ADD3 validation
+
+Source:9da7f9d+ce02af2, based on39fec40; final isolated fixf401329. Numeric uint32 invariant/selection avoids cross-array source pointer arithmetic and preserves actual-array correction terms. Full covering codegen70passed195.55s, including frontend red/green regression. Scoped final review ImportantADDRESSED; specPASS/qualityPASS, no new material findings. Shared-register-name Minor remains nonblocking and is covered for this binary by linked/audit invariant reaching-definition checks.
+
+Corrected linked extension rebuilt and fresh extracted object verified: exact fatbin occurs once; source/object/code-object/extension hashes recorded in summary.json. .text/.rodata/.note byte-identical to corrected reviewed candidate; all5730/3898 unfiltered instruction addresses/mnemonics/operands match. Container differences isolated to __hip_cuid and four string/hash tables. ZeroADD3, four consumed update definitions from one entry invariant, six exact DS consumer offsets/counts, unchanged MAD_U244/3/MUL_LO7/7, memory/float/resource checks pass. Strict loop1333/825 counts+sequence exactly match assembly. Whole retained4955→4929 and3382→3359. Whole-kernel count/order identity is still unfinished.
+
+Fresh remaining project tests234passed2skipped4.59s on corrected linked extension; combined with covering codegen70, allprojectchecks304passed2skipped. GPU cases include both layouts, GQA1/3/4, changing causal pass tile counts, persistent jobs, padding, graph replay and input validation. Exact log commands and output preserved. Earlier pre-provenance full suite302 and timings are archived, not used as final numeric-address runtime evidence.
+
+Final12case same-process baseline/current/assembly timing replay completed. All before/after HIP output+LSE bitwise equal; sampledFP64RMSmax0.00601438. Medians-2.13%..+3.18%, rangesoverlap11/12. d128GQA4S8192median+3.18%slower with overlapping ranges; sole nonoverlap is d128GQA4S256median-0.44%faster; othercases-2.13%..+0.56%. No overall speedup claimed. Current timing source+extension hashes checked against final owning manifest. Detailed table/protocol in README/performance JSON.
+
+Source, linked/runtime verification and scoped final review complete; authorized branch push remains with root.

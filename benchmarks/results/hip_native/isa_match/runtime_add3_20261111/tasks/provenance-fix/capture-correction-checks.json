@@ -1,0 +1,112 @@
+{
+  "128": {
+    "all_entry_roots_inside_extended_setup": true,
+    "extended_setup_net_vector_delta": 3,
+    "all_four_candidate_updates_reach_the_same_entry_definition": true,
+    "all_four_reference_updates_reach_the_same_entry_definition": true,
+    "all_candidate_and_reference_invariant_inputs_have_no_reachable_undefined_path": true,
+    "candidate_consumed_invariant_definition_pc": [
+      7932
+    ],
+    "reference_consumed_invariant_definition_pc": [
+      6012
+    ],
+    "selected_recipe_counts": {
+      "baseline": 6,
+      "candidate": 4,
+      "reference": 4
+    },
+    "six_ds_site_counts": {
+      "baseline": [
+        32,
+        32,
+        32,
+        32,
+        32,
+        32
+      ],
+      "candidate": [
+        32,
+        32,
+        32,
+        32,
+        32,
+        32
+      ],
+      "reference": [
+        32,
+        32,
+        32,
+        32,
+        32,
+        32
+      ]
+    },
+    "complete_reference_tail_state_mnemonics_verified": true,
+    "focused_entry_instruction_counts": {
+      "baseline": 7,
+      "candidate": 6,
+      "reference": 9
+    },
+    "extended_setup_instruction_counts": {
+      "baseline": 1096,
+      "candidate": 1098,
+      "reference": 1130
+    }
+  },
+  "192": {
+    "all_entry_roots_inside_extended_setup": true,
+    "extended_setup_net_vector_delta": 3,
+    "all_four_candidate_updates_reach_the_same_entry_definition": true,
+    "all_four_reference_updates_reach_the_same_entry_definition": true,
+    "all_candidate_and_reference_invariant_inputs_have_no_reachable_undefined_path": true,
+    "candidate_consumed_invariant_definition_pc": [
+      43992
+    ],
+    "reference_consumed_invariant_definition_pc": [
+      5624
+    ],
+    "selected_recipe_counts": {
+      "baseline": 6,
+      "candidate": 4,
+      "reference": 4
+    },
+    "six_ds_site_counts": {
+      "baseline": [
+        16,
+        16,
+        16,
+        16,
+        16,
+        16
+      ],
+      "candidate": [
+        16,
+        16,
+        16,
+        16,
+        16,
+        16
+      ],
+      "reference": [
+        16,
+        16,
+        16,
+        16,
+        16,
+        16
+      ]
+    },
+    "complete_reference_tail_state_mnemonics_verified": true,
+    "focused_entry_instruction_counts": {
+      "baseline": 7,
+      "candidate": 9,
+      "reference": 9
+    },
+    "extended_setup_instruction_counts": {
+      "baseline": 843,
+      "candidate": 847,
+      "reference": 943
+    }
+  }
+}

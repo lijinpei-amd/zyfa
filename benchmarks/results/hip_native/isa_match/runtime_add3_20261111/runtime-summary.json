@@ -1,0 +1,27 @@
+{
+  "cases": 12,
+  "all_hip_output_lse_bitwise_equal": true,
+  "source_sha256": "8ba78b70f82e232c8aef20f339078f6a10f915a57b61cef614bb844cfa31eed5",
+  "extension_sha256": "dbb3ebfa0fe06a5dcda2ec453bf18d9bbd71336a45a00c0edfd5ace3d02298fb",
+  "change_pct_min": -2.125880600160035,
+  "change_pct_max": 3.1844627733391917,
+  "max_relative_rms": 0.006014382710579072,
+  "nonoverlapping_cases": [
+    {
+      "dim": 128,
+      "group": 4,
+      "length": 256,
+      "change_pct": -0.4368031156868457,
+      "ranges_us": {
+        "before": [
+          40.64772999999998,
+          41.88495999999999
+        ],
+        "after": [
+          40.46373,
+          40.520930000000014
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,458 @@
+{
+  "baseline": {
+    "frontend_ir_path": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/runtime-add3-20261111/provenance_fix/baseline-frontend.ll",
+    "frontend_ir_sha256": "ae9705ff6022f1b512b23d21143ff7ba0c4c48dc58df62dc2b6d4a8f535dc9b4",
+    "kernels": {
+      "128": {
+        "invariant_storage_type": "alloca ptr addrspace(3), align 4, addrspace(5)",
+        "selected_address_chains": [
+          [
+            {
+              "ssa": "%add.ptr11768",
+              "expression": "getelementptr inbounds nuw i8, ptr addrspace(3) %5627, i32 %call11767"
+            }
+          ],
+          [
+            {
+              "ssa": "%add.ptr12388",
+              "expression": "getelementptr inbounds nuw i8, ptr addrspace(3) %5948, i32 %call12387"
+            }
+          ],
+          [
+            {
+              "ssa": "%add.ptr12608",
+              "expression": "getelementptr inbounds nuw i8, ptr addrspace(3) %6083, i32 %call12607"
+            }
+          ],
+          [
+            {
+              "ssa": "%add.ptr13231",
+              "expression": "getelementptr inbounds nuw i8, ptr addrspace(3) %6404, i32 %call13230"
+            }
+          ]
+        ]
+      },
+      "192": {
+        "invariant_storage_type": "alloca ptr addrspace(3), align 4, addrspace(5)",
+        "selected_address_chains": [
+          [
+            {
+              "ssa": "%add.ptr6325",
+              "expression": "getelementptr inbounds nuw i8, ptr addrspace(3) %2856, i32 %call6324"
+            }
+          ],
+          [
+            {
+              "ssa": "%add.ptr6723",
+              "expression": "getelementptr inbounds nuw i8, ptr addrspace(3) %3070, i32 %call6722"
+            }
+          ],
+          [
+            {
+              "ssa": "%add.ptr6995",
+              "expression": "getelementptr inbounds nuw i8, ptr addrspace(3) %3224, i32 %call6994"
+            }
+          ],
+          [
+            {
+              "ssa": "%add.ptr7396",
+              "expression": "getelementptr inbounds nuw i8, ptr addrspace(3) %3438, i32 %call7395"
+            }
+          ]
+        ]
+      }
+    },
+    "optimized_ir_path": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/runtime-add3-20261111/provenance_fix/baseline-optimized.ll",
+    "optimized_ir_sha256": "264dfff0d179bf99c6547a69f806ee0febe91574661a8016af959e616f34a77e",
+    "supporting_optimized_dynamic_noninbounds_v0_rooted_geps": {
+      "128": [
+        {
+          "ssa": "%2600",
+          "gep": [
+            "",
+            "%add.ptr183",
+            "%mul.i20025"
+          ],
+          "root": "@_ZZN15fmha_fp8_native6attendILi128EEEvNSt11conditionalIXeqT_Li128EENS_7Args128ENS_7Args192EE4typeEE2v0"
+        },
+        {
+          "ssa": "%2601",
+          "gep": [
+            "",
+            "%2600",
+            "%mul9.i20028"
+          ],
+          "root": "@_ZZN15fmha_fp8_native6attendILi128EEEvNSt11conditionalIXeqT_Li128EENS_7Args128ENS_7Args192EE4typeEE2v0"
+        },
+        {
+          "ssa": "%add.ptr11768",
+          "gep": [
+            "",
+            "%2601",
+            "%mul14.i20033"
+          ],
+          "root": "@_ZZN15fmha_fp8_native6attendILi128EEEvNSt11conditionalIXeqT_Li128EENS_7Args128ENS_7Args192EE4typeEE2v0"
+        },
+        {
+          "ssa": "%3528",
+          "gep": [
+            "",
+            "%add.ptr183",
+            "%mul.i20008"
+          ],
+          "root": "@_ZZN15fmha_fp8_native6attendILi128EEEvNSt11conditionalIXeqT_Li128EENS_7Args128ENS_7Args192EE4typeEE2v0"
+        },
+        {
+          "ssa": "%3529",
+          "gep": [
+            "",
+            "%3528",
+            "%mul9.i20011"
+          ],
+          "root": "@_ZZN15fmha_fp8_native6attendILi128EEEvNSt11conditionalIXeqT_Li128EENS_7Args128ENS_7Args192EE4typeEE2v0"
+        },
+        {
+          "ssa": "%add.ptr12388",
+          "gep": [
+            "",
+            "%3529",
+            "%mul14.i20016"
+          ],
+          "root": "@_ZZN15fmha_fp8_native6attendILi128EEEvNSt11conditionalIXeqT_Li128EENS_7Args128ENS_7Args192EE4typeEE2v0"
+        },
+        {
+          "ssa": "%3665",
+          "gep": [
+            "",
+            "%add.ptr183",
+            "%mul.i19991"
+          ],
+          "root": "@_ZZN15fmha_fp8_native6attendILi128EEEvNSt11conditionalIXeqT_Li128EENS_7Args128ENS_7Args192EE4typeEE2v0"
+        },
+        {
+          "ssa": "%3666",
+          "gep": [
+            "",
+            "%3665",
+            "%mul9.i19994"
+          ],
+          "root": "@_ZZN15fmha_fp8_native6attendILi128EEEvNSt11conditionalIXeqT_Li128EENS_7Args128ENS_7Args192EE4typeEE2v0"
+        },
+        {
+          "ssa": "%add.ptr12608",
+          "gep": [
+            "",
+            "%3666",
+            "%mul14.i19999"
+          ],
+          "root": "@_ZZN15fmha_fp8_native6attendILi128EEEvNSt11conditionalIXeqT_Li128EENS_7Args128ENS_7Args192EE4typeEE2v0"
+        },
+        {
+          "ssa": "%4593",
+          "gep": [
+            "",
+            "%add.ptr183",
+            "%mul.i19981"
+          ],
+          "root": "@_ZZN15fmha_fp8_native6attendILi128EEEvNSt11conditionalIXeqT_Li128EENS_7Args128ENS_7Args192EE4typeEE2v0"
+        },
+        {
+          "ssa": "%4594",
+          "gep": [
+            "",
+            "%4593",
+            "%mul9.i19982"
+          ],
+          "root": "@_ZZN15fmha_fp8_native6attendILi128EEEvNSt11conditionalIXeqT_Li128EENS_7Args128ENS_7Args192EE4typeEE2v0"
+        },
+        {
+          "ssa": "%add.ptr13231",
+          "gep": [
+            "",
+            "%4594",
+            "%mul14.i"
+          ],
+          "root": "@_ZZN15fmha_fp8_native6attendILi128EEEvNSt11conditionalIXeqT_Li128EENS_7Args128ENS_7Args192EE4typeEE2v0"
+        }
+      ],
+      "192": [
+        {
+          "ssa": "%1408",
+          "gep": [
+            "",
+            "%add.ptr183",
+            "%mul.i12451"
+          ],
+          "root": "@_ZZN15fmha_fp8_native6attendILi192EEEvNSt11conditionalIXeqT_Li128EENS_7Args128ENS_7Args192EE4typeEE2v0"
+        },
+        {
+          "ssa": "%1409",
+          "gep": [
+            "",
+            "%1408",
+            "%mul9.i12454"
+          ],
+          "root": "@_ZZN15fmha_fp8_native6attendILi192EEEvNSt11conditionalIXeqT_Li128EENS_7Args128ENS_7Args192EE4typeEE2v0"
+        },
+        {
+          "ssa": "%add.ptr6325",
+          "gep": [
+            "",
+            "%1409",
+            "%mul14.i12459"
+          ],
+          "root": "@_ZZN15fmha_fp8_native6attendILi192EEEvNSt11conditionalIXeqT_Li128EENS_7Args128ENS_7Args192EE4typeEE2v0"
+        },
+        {
+          "ssa": "%1845",
+          "gep": [
+            "",
+            "%add.ptr183",
+            "%mul.i12434"
+          ],
+          "root": "@_ZZN15fmha_fp8_native6attendILi192EEEvNSt11conditionalIXeqT_Li128EENS_7Args128ENS_7Args192EE4typeEE2v0"
+        },
+        {
+          "ssa": "%1846",
+          "gep": [
+            "",
+            "%1845",
+            "%mul9.i12437"
+          ],
+          "root": "@_ZZN15fmha_fp8_native6attendILi192EEEvNSt11conditionalIXeqT_Li128EENS_7Args128ENS_7Args192EE4typeEE2v0"
+        },
+        {
+          "ssa": "%add.ptr6723",
+          "gep": [
+            "",
+            "%1846",
+            "%mul14.i12442"
+          ],
+          "root": "@_ZZN15fmha_fp8_native6attendILi192EEEvNSt11conditionalIXeqT_Li128EENS_7Args128ENS_7Args192EE4typeEE2v0"
+        },
+        {
+          "ssa": "%1959",
+          "gep": [
+            "",
+            "%add.ptr183",
+            "%mul.i12417"
+          ],
+          "root": "@_ZZN15fmha_fp8_native6attendILi192EEEvNSt11conditionalIXeqT_Li128EENS_7Args128ENS_7Args192EE4typeEE2v0"
+        },
+        {
+          "ssa": "%1960",
+          "gep": [
+            "",
+            "%1959",
+            "%mul9.i12420"
+          ],
+          "root": "@_ZZN15fmha_fp8_native6attendILi192EEEvNSt11conditionalIXeqT_Li128EENS_7Args128ENS_7Args192EE4typeEE2v0"
+        },
+        {
+          "ssa": "%add.ptr6995",
+          "gep": [
+            "",
+            "%1960",
+            "%mul14.i12425"
+          ],
+          "root": "@_ZZN15fmha_fp8_native6attendILi192EEEvNSt11conditionalIXeqT_Li128EENS_7Args128ENS_7Args192EE4typeEE2v0"
+        },
+        {
+          "ssa": "%2396",
+          "gep": [
+            "",
+            "%add.ptr183",
+            "%mul.i12407"
+          ],
+          "root": "@_ZZN15fmha_fp8_native6attendILi192EEEvNSt11conditionalIXeqT_Li128EENS_7Args128ENS_7Args192EE4typeEE2v0"
+        },
+        {
+          "ssa": "%2397",
+          "gep": [
+            "",
+            "%2396",
+            "%mul9.i12408"
+          ],
+          "root": "@_ZZN15fmha_fp8_native6attendILi192EEEvNSt11conditionalIXeqT_Li128EENS_7Args128ENS_7Args192EE4typeEE2v0"
+        },
+        {
+          "ssa": "%add.ptr7396",
+          "gep": [
+            "",
+            "%2397",
+            "%mul14.i"
+          ],
+          "root": "@_ZZN15fmha_fp8_native6attendILi192EEEvNSt11conditionalIXeqT_Li128EENS_7Args128ENS_7Args192EE4typeEE2v0"
+        }
+      ]
+    }
+  },
+  "candidate": {
+    "frontend_ir_path": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/runtime-add3-20261111/provenance_fix/candidate-frontend.ll",
+    "frontend_ir_sha256": "9203f1dbd14c9015301884e5356d311ebfef7d11ccf23cf371b708246cb04391",
+    "kernels": {
+      "128": {
+        "invariant_storage_type": "alloca i32, align 4, addrspace(5)",
+        "selected_address_chains": [
+          [
+            {
+              "ssa": "%5631",
+              "expression": "inttoptr i32 %conv11771 to ptr addrspace(3)"
+            },
+            {
+              "ssa": "%conv11771",
+              "expression": "trunc i64 %conv11770 to i32"
+            },
+            {
+              "ssa": "%conv11770",
+              "expression": "zext i32 %add11769 to i64"
+            },
+            {
+              "ssa": "%add11769",
+              "expression": "add i32 %5628, %call11768"
+            }
+          ],
+          [
+            {
+              "ssa": "%5953",
+              "expression": "inttoptr i32 %conv12393 to ptr addrspace(3)"
+            },
+            {
+              "ssa": "%conv12393",
+              "expression": "trunc i64 %conv12392 to i32"
+            },
+            {
+              "ssa": "%conv12392",
+              "expression": "zext i32 %add12391 to i64"
+            },
+            {
+              "ssa": "%add12391",
+              "expression": "add i32 %5950, %call12390"
+            }
+          ],
+          [
+            {
+              "ssa": "%6089",
+              "expression": "inttoptr i32 %conv12615 to ptr addrspace(3)"
+            },
+            {
+              "ssa": "%conv12615",
+              "expression": "trunc i64 %conv12614 to i32"
+            },
+            {
+              "ssa": "%conv12614",
+              "expression": "zext i32 %add12613 to i64"
+            },
+            {
+              "ssa": "%add12613",
+              "expression": "add i32 %6086, %call12612"
+            }
+          ],
+          [
+            {
+              "ssa": "%6411",
+              "expression": "inttoptr i32 %conv13240 to ptr addrspace(3)"
+            },
+            {
+              "ssa": "%conv13240",
+              "expression": "trunc i64 %conv13239 to i32"
+            },
+            {
+              "ssa": "%conv13239",
+              "expression": "zext i32 %add13238 to i64"
+            },
+            {
+              "ssa": "%add13238",
+              "expression": "add i32 %6408, %call13237"
+            }
+          ]
+        ]
+      },
+      "192": {
+        "invariant_storage_type": "alloca i32, align 4, addrspace(5)",
+        "selected_address_chains": [
+          [
+            {
+              "ssa": "%2860",
+              "expression": "inttoptr i32 %conv6328 to ptr addrspace(3)"
+            },
+            {
+              "ssa": "%conv6328",
+              "expression": "trunc i64 %conv6327 to i32"
+            },
+            {
+              "ssa": "%conv6327",
+              "expression": "zext i32 %add6326 to i64"
+            },
+            {
+              "ssa": "%add6326",
+              "expression": "add i32 %2857, %call6325"
+            }
+          ],
+          [
+            {
+              "ssa": "%3075",
+              "expression": "inttoptr i32 %conv6728 to ptr addrspace(3)"
+            },
+            {
+              "ssa": "%conv6728",
+              "expression": "trunc i64 %conv6727 to i32"
+            },
+            {
+              "ssa": "%conv6727",
+              "expression": "zext i32 %add6726 to i64"
+            },
+            {
+              "ssa": "%add6726",
+              "expression": "add i32 %3072, %call6725"
+            }
+          ],
+          [
+            {
+              "ssa": "%3230",
+              "expression": "inttoptr i32 %conv7002 to ptr addrspace(3)"
+            },
+            {
+              "ssa": "%conv7002",
+              "expression": "trunc i64 %conv7001 to i32"
+            },
+            {
+              "ssa": "%conv7001",
+              "expression": "zext i32 %add7000 to i64"
+            },
+            {
+              "ssa": "%add7000",
+              "expression": "add i32 %3227, %call6999"
+            }
+          ],
+          [
+            {
+              "ssa": "%3445",
+              "expression": "inttoptr i32 %conv7405 to ptr addrspace(3)"
+            },
+            {
+              "ssa": "%conv7405",
+              "expression": "trunc i64 %conv7404 to i32"
+            },
+            {
+              "ssa": "%conv7404",
+              "expression": "zext i32 %add7403 to i64"
+            },
+            {
+              "ssa": "%add7403",
+              "expression": "add i32 %3442, %call7402"
+            }
+          ]
+        ]
+      }
+    },
+    "optimized_ir_path": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/runtime-add3-20261111/provenance_fix/candidate-optimized.ll",
+    "optimized_ir_sha256": "2d105c28699ff23733d158b3e7a034a32811cdc06cc6fb72a6103c489c3d1606",
+    "supporting_optimized_dynamic_noninbounds_v0_rooted_geps": {
+      "128": [],
+      "192": []
+    },
+    "frontend_final_test_original_path": "/tmp/pytest-of-jinpli/pytest-82/native_frontend0/native.ll",
+    "optimized_final_test_original_path": "/tmp/pytest-of-jinpli/pytest-82/native_order0/native.ll"
+  }
+}
