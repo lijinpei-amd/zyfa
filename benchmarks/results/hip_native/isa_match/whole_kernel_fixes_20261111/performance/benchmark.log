@@ -1,0 +1,175 @@
+(null): No such file or directory
+(null): No such file or directory
+(null): No such file or directory
+(null): No such file or directory
+(null): No such file or directory
+(null): No such file or directory
+(null): No such file or directory
+(null): No such file or directory
+(null): No such file or directory
+(null): No such file or directory
+(null): No such file or directory
+(null): No such file or directory
+(null): No such file or directory
+(null): No such file or directory
+(null): No such file or directory
+(null): No such file or directory
+USDT:2026-11-11 10:56:53 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:56:53 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+ dim group      S heads    asm_us    hip_us hip/asm  rel_rms
+USDT:2026-11-11 10:56:54 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:56:54 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:56:54 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:56:54 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:56:54 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:56:54 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:56:54 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:56:54 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:56:54 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:56:54 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:56:54 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:56:54 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+ 128     1   1024   256     53.91     65.15   1.208  0.00594
+USDT:2026-11-11 10:56:54 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:56:54 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:56:54 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:56:54 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:56:54 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:56:54 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:56:54 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:56:54 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:56:54 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:56:54 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:56:54 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:56:54 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+ 128     1   8192    32    283.78    289.04   1.019  0.00512
+USDT:2026-11-11 10:56:54 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:56:55 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:56:55 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:56:55 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:56:56 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:56:56 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:56:56 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:56:56 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:56:57 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:56:57 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:56:57 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:56:58 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+ 128     1  32768    32   4085.50   4134.57   1.012  0.00502
+USDT:2026-11-11 10:56:58 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:56:58 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:56:58 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:56:58 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:56:58 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:56:58 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:56:58 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:56:58 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:56:58 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:56:58 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:56:58 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:56:58 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+ 128     4   1024   256     48.95     60.33   1.232  0.00552
+USDT:2026-11-11 10:56:58 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:56:58 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:56:58 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:56:58 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:56:58 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:56:58 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:56:58 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:56:58 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:56:58 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:56:58 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:56:58 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:56:58 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+ 128     4   8192    32    267.51    306.01   1.144  0.00564
+USDT:2026-11-11 10:56:58 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:56:59 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:56:59 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:56:59 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:57:00 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:57:00 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:57:00 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:57:00 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:57:01 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:57:01 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:57:01 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:57:02 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+ 128     4  32768    32   4085.03   4138.07   1.013  0.00573
+USDT:2026-11-11 10:57:02 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:57:02 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:57:02 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:57:02 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:57:02 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:57:02 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:57:02 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:57:02 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:57:02 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:57:02 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:57:02 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:57:02 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+ 192     1   1024   256     68.21     73.51   1.078  0.00394
+USDT:2026-11-11 10:57:02 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:57:02 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:57:02 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:57:02 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:57:02 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:57:02 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:57:02 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:57:02 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:57:02 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:57:02 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:57:02 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:57:02 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+ 192     1   8192    32    390.26    377.48   0.967  0.00474
+USDT:2026-11-11 10:57:03 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:57:03 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:57:04 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:57:04 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:57:04 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:57:05 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:57:05 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:57:06 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:57:06 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:57:06 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:57:07 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:57:07 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+ 192     1  32768    32   5724.12   5880.85   1.027  0.00523
+USDT:2026-11-11 10:57:07 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:57:07 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:57:07 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:57:07 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:57:07 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:57:07 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:57:07 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:57:07 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:57:07 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:57:07 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:57:07 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:57:07 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+ 192     4   1024   256     63.09     67.94   1.077  0.00473
+USDT:2026-11-11 10:57:07 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:57:07 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:57:07 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:57:08 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:57:08 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:57:08 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:57:08 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:57:08 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:57:08 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:57:08 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:57:08 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:57:08 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+ 192     4   8192    32    354.10    374.83   1.059  0.00469
+USDT:2026-11-11 10:57:08 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:57:09 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:57:09 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:57:09 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:57:10 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:57:10 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:57:11 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:57:11 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:57:12 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:57:12 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-11 10:57:13 538529:538529 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-11 10:57:13 538529:538529 SyncActivityProfilerHandler.cpp:46] profiler_stop
+ 192     4  32768    32   5667.44   5828.01   1.028  0.00499

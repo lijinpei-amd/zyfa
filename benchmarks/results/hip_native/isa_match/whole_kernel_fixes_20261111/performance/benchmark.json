@@ -1,0 +1,382 @@
+{
+  "gpu": "AMD Radeon Graphics",
+  "torch": "2.14.1+rocm7.2",
+  "hip": "7.2.53211",
+  "architecture": "gfx950:sramecc+:xnack-",
+  "compute_units": 256,
+  "device": 0,
+  "git_commit": "5a2bf9761dab9589f11cc0651123211e7e0dc8d6",
+  "native_source_sha256": "9477a7f708f7e62bc9faf7c0522ccd5ee644ea9a0629014464d59bd66239bf8a",
+  "extension_sha256": "953c8f8fe4e0ca5496a2cd5e58a3ec08d0a62512fdc525518fe0a11a7071dbd6",
+  "protocol": {
+    "warmup": 100,
+    "iters": 50,
+    "repeats": 3,
+    "cooldown": 0,
+    "seed": 29,
+    "std": 0.1,
+    "layout": "bshd"
+  },
+  "cases": [
+    {
+      "dim": 128,
+      "group": 1,
+      "seqlen": 1024,
+      "heads": 256,
+      "assembly_us": 53.911120000000004,
+      "hip_us": 65.15129999999998,
+      "hip_over_assembly": 1.208494648228417,
+      "relative_rms": 0.005943745958183383,
+      "samples_us": {
+        "assembly": [
+          53.88152,
+          53.99511999999998,
+          53.911120000000004
+        ],
+        "hip": [
+          65.15129999999998,
+          65.17290000000001,
+          65.00333999999998
+        ]
+      },
+      "kernel_names": {
+        "assembly": [
+          "fmha_fp8pp.kd"
+        ],
+        "hip": [
+          "void fmha_fp8_native::attend<128>(std::conditional<(128)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ]
+      }
+    },
+    {
+      "dim": 128,
+      "group": 1,
+      "seqlen": 8192,
+      "heads": 32,
+      "assembly_us": 283.7768000000001,
+      "hip_us": 289.03921999999994,
+      "hip_over_assembly": 1.01854422207876,
+      "relative_rms": 0.0051225482405337225,
+      "samples_us": {
+        "assembly": [
+          243.65204000000003,
+          283.7768000000001,
+          296.92502
+        ],
+        "hip": [
+          248.86734,
+          289.03921999999994,
+          290.25296
+        ]
+      },
+      "kernel_names": {
+        "assembly": [
+          "fmha_fp8pp.kd"
+        ],
+        "hip": [
+          "void fmha_fp8_native::attend<128>(std::conditional<(128)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ]
+      }
+    },
+    {
+      "dim": 128,
+      "group": 1,
+      "seqlen": 32768,
+      "heads": 32,
+      "assembly_us": 4085.496580000001,
+      "hip_us": 4134.573140000001,
+      "hip_over_assembly": 1.0120123855298884,
+      "relative_rms": 0.005018530835070521,
+      "samples_us": {
+        "assembly": [
+          4065.405959999999,
+          4085.496580000001,
+          4086.77032
+        ],
+        "hip": [
+          4132.205739999999,
+          4134.573140000001,
+          4137.4145800000015
+        ]
+      },
+      "kernel_names": {
+        "assembly": [
+          "fmha_fp8pp.kd"
+        ],
+        "hip": [
+          "void fmha_fp8_native::attend<128>(std::conditional<(128)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ]
+      }
+    },
+    {
+      "dim": 128,
+      "group": 4,
+      "seqlen": 1024,
+      "heads": 256,
+      "assembly_us": 48.95111999999998,
+      "hip_us": 60.33132,
+      "hip_over_assembly": 1.2324808911420213,
+      "relative_rms": 0.005515820184060077,
+      "samples_us": {
+        "assembly": [
+          53.795999999999964,
+          48.95111999999998,
+          48.58628000000003
+        ],
+        "hip": [
+          60.82971999999999,
+          60.33132,
+          60.15371999999998
+        ]
+      },
+      "kernel_names": {
+        "assembly": [
+          "fmha_fp8pp.kd"
+        ],
+        "hip": [
+          "void fmha_fp8_native::attend<128>(std::conditional<(128)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ]
+      }
+    },
+    {
+      "dim": 128,
+      "group": 4,
+      "seqlen": 8192,
+      "heads": 32,
+      "assembly_us": 267.50714000000005,
+      "hip_us": 306.00788000000006,
+      "hip_over_assembly": 1.1439241584355468,
+      "relative_rms": 0.00563995081407651,
+      "samples_us": {
+        "assembly": [
+          267.50714000000005,
+          282.91544000000005,
+          261.00143999999995
+        ],
+        "hip": [
+          280.50178000000005,
+          312.7975800000001,
+          306.00788000000006
+        ]
+      },
+      "kernel_names": {
+        "assembly": [
+          "fmha_fp8pp.kd"
+        ],
+        "hip": [
+          "void fmha_fp8_native::attend<128>(std::conditional<(128)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ]
+      }
+    },
+    {
+      "dim": 128,
+      "group": 4,
+      "seqlen": 32768,
+      "heads": 32,
+      "assembly_us": 4085.02994,
+      "hip_us": 4138.07174,
+      "hip_over_assembly": 1.0129844335975664,
+      "relative_rms": 0.0057331834536974505,
+      "samples_us": {
+        "assembly": [
+          4078.08572,
+          4085.02994,
+          4085.958800000004
+        ],
+        "hip": [
+          4134.80598,
+          4138.07174,
+          4144.137520000001
+        ]
+      },
+      "kernel_names": {
+        "assembly": [
+          "fmha_fp8pp.kd"
+        ],
+        "hip": [
+          "void fmha_fp8_native::attend<128>(std::conditional<(128)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ]
+      }
+    },
+    {
+      "dim": 192,
+      "group": 1,
+      "seqlen": 1024,
+      "heads": 256,
+      "assembly_us": 68.20588,
+      "hip_us": 73.51396000000001,
+      "hip_over_assembly": 1.077824375259142,
+      "relative_rms": 0.003938867972345506,
+      "samples_us": {
+        "assembly": [
+          70.76672000000002,
+          68.15383999999999,
+          68.20588
+        ],
+        "hip": [
+          73.51396000000001,
+          73.52756,
+          73.37635999999999
+        ]
+      },
+      "kernel_names": {
+        "assembly": [
+          "fmha_fp8pp192.kd"
+        ],
+        "hip": [
+          "void fmha_fp8_native::attend<192>(std::conditional<(192)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ]
+      }
+    },
+    {
+      "dim": 192,
+      "group": 1,
+      "seqlen": 8192,
+      "heads": 32,
+      "assembly_us": 390.25504,
+      "hip_us": 377.48040000000003,
+      "hip_over_assembly": 0.9672659192306652,
+      "relative_rms": 0.004741983930983033,
+      "samples_us": {
+        "assembly": [
+          402.94250000000005,
+          349.57586000000003,
+          390.25504
+        ],
+        "hip": [
+          377.48040000000003,
+          372.6250999999998,
+          380.76448
+        ]
+      },
+      "kernel_names": {
+        "assembly": [
+          "fmha_fp8pp192.kd"
+        ],
+        "hip": [
+          "void fmha_fp8_native::attend<192>(std::conditional<(192)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ]
+      }
+    },
+    {
+      "dim": 192,
+      "group": 1,
+      "seqlen": 32768,
+      "heads": 32,
+      "assembly_us": 5724.11588,
+      "hip_us": 5880.849839999998,
+      "hip_over_assembly": 1.0273813394567404,
+      "relative_rms": 0.0052344525565815175,
+      "samples_us": {
+        "assembly": [
+          5695.65836,
+          5730.05754,
+          5724.11588
+        ],
+        "hip": [
+          5880.849839999998,
+          5876.657820000002,
+          5895.791039999999
+        ]
+      },
+      "kernel_names": {
+        "assembly": [
+          "fmha_fp8pp192.kd"
+        ],
+        "hip": [
+          "void fmha_fp8_native::attend<192>(std::conditional<(192)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ]
+      }
+    },
+    {
+      "dim": 192,
+      "group": 4,
+      "seqlen": 1024,
+      "heads": 256,
+      "assembly_us": 63.08578000000001,
+      "hip_us": 67.94106000000001,
+      "hip_over_assembly": 1.076963144467739,
+      "relative_rms": 0.004732300878228324,
+      "samples_us": {
+        "assembly": [
+          70.51230000000001,
+          62.96898,
+          63.08578000000001
+        ],
+        "hip": [
+          70.45308000000001,
+          67.44826000000003,
+          67.94106000000001
+        ]
+      },
+      "kernel_names": {
+        "assembly": [
+          "fmha_fp8pp192.kd"
+        ],
+        "hip": [
+          "void fmha_fp8_native::attend<192>(std::conditional<(192)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ]
+      }
+    },
+    {
+      "dim": 192,
+      "group": 4,
+      "seqlen": 8192,
+      "heads": 32,
+      "assembly_us": 354.1047600000001,
+      "hip_us": 374.8331800000001,
+      "hip_over_assembly": 1.0585375356151665,
+      "relative_rms": 0.0046867044047532915,
+      "samples_us": {
+        "assembly": [
+          396.86638,
+          354.1047600000001,
+          347.2878400000001
+        ],
+        "hip": [
+          374.25076000000007,
+          374.8331800000001,
+          385.65975999999995
+        ]
+      },
+      "kernel_names": {
+        "assembly": [
+          "fmha_fp8pp192.kd"
+        ],
+        "hip": [
+          "void fmha_fp8_native::attend<192>(std::conditional<(192)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ]
+      }
+    },
+    {
+      "dim": 192,
+      "group": 4,
+      "seqlen": 32768,
+      "heads": 32,
+      "assembly_us": 5667.443620000003,
+      "hip_us": 5828.01226,
+      "hip_over_assembly": 1.0283317578022941,
+      "relative_rms": 0.004988094299291862,
+      "samples_us": {
+        "assembly": [
+          5661.701120000001,
+          5667.443620000003,
+          5674.69344
+        ],
+        "hip": [
+          5815.56164,
+          5836.949219999998,
+          5828.01226
+        ]
+      },
+      "kernel_names": {
+        "assembly": [
+          "fmha_fp8pp192.kd"
+        ],
+        "hip": [
+          "void fmha_fp8_native::attend<192>(std::conditional<(192)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ]
+      }
+    }
+  ]
+}

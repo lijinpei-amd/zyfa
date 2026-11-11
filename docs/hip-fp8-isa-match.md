@@ -1,121 +1,131 @@
 # LLVM FP8 ISA matching
 
-Both four-stage steady loops match the assembly backend's complete disassembled
-mnemonic sequence. The whole-kernel count and sequence goals remain incomplete.
-The current packaged build is captured in
-`benchmarks/results/hip_native/isa_match/offsets_owning_20261111/`.
+Both four-stage steady loops retain the assembly backend's exact disassembled
+mnemonic counts and sequence. The whole-kernel counts and sequence still differ.
+The latest continuation is captured in
+[`whole_kernel_fixes_20261111`](../benchmarks/results/hip_native/isa_match/whole_kernel_fixes_20261111/).
+Its compiled source is ZYFA `5a2bf97` and compiler LLVM `72e518a3f02a`.
 
-| Dimension | Scope | Assembly instructions | LLVM instructions | Counts match | Sequence matches |
-| --- | --- | ---: | ---: | --- | --- |
-| 128 | Steady loop | 1333 | 1333 | Yes | Yes |
-| 192 | Steady loop | 825 | 825 | Yes | Yes |
-| 128 | Whole kernel | 5302 | 5187 | No | No |
-| 192 | Whole kernel | 3737 | 3531 | No | No |
+| Dimension | Scope | Assembly | HIP before fixes | HIP after fixes | Count/sequence match after |
+| --- | --- | ---: | ---: | ---: | --- |
+| 128 | Steady loop | 1333 | 1333 | 1333 | Yes / Yes |
+| 192 | Steady loop | 825 | 825 | 825 | Yes / Yes |
+| 128 | Whole kernel | 5302 | 5089 | 5042 | No / No |
+| 192 | Whole kernel | 3737 | 3529 | 3420 | No / No |
 
-The whole-kernel histograms differ for 55 mnemonics in d128 and 53 in d192.
-The sums of absolute per-mnemonic count differences are 1297 and 966. Similar
-instruction totals do not imply matching histograms. Both first sequence
-mismatches are at index 4, immediately after the four kernarg loads.
+Counts exclude scratch operations, register-source MOVs, and SGPR spill
+`v_readlane_b32`/`v_writelane_b32`. Literal initialization, waits, nops, branches,
+arithmetic, memory and meaningful cross-lane operations remain. Encoding
+suffixes are significant. The older capture retained the SGPR lane spills and
+therefore reported HIP whole counts 5187/3531. Under the current policy its
+baseline is 5089/3529. Separate lane-spill inventories and other excluded
+instructions accompany every comparison.
 
-The comparison excludes scratch instructions and register-to-register moves.
-It retains literal initialization, lane transfers, waits, nops, branches,
-arithmetic, and memory instructions. Encoding suffixes remain significant.
-Every excluded instruction is recorded in `comparison.json`.
+Total instruction counts conceal opcode substitutions. The sum of absolute
+per-mnemonic differences fell from 1199 to 972 for d128 and 964 to 791 for d192.
+The sums of positive HIP-minus-assembly differences fell from 493 to 356 and
+378 to 237; negative sums changed from -706/-586 to -616/-554.
+[`whole-mnemonics.csv`](../benchmarks/results/hip_native/isa_match/whole_kernel_fixes_20261111/whole-mnemonics.csv)
+contains every mnemonic, both signs, and before/after counts.
 
-## Address changes
+## Implemented fixes
 
-Startup now reads the initial K fragments once before selecting the masked or
-unmasked QK path. Both kernels match every whole-kernel LDS, raw-buffer, and
-global-memory mnemonic count, as well as every floating-point, BF16, FP8, and
-MFMA mnemonic count.
+- Runtime LDS address interpolation uses a single slot term while preserving
+  both irregular-layout correction terms and all distinct static arrays. The
+  runtime V base uses the existing one-instruction scalar-add helper so its high
+  LDS constant stays outside repeated DS address additions. This is an address
+  selection boundary, with no fixed-register allocation or new assembly block.
+- Generic QK/PV helpers wait for paired LDS consumers and retain PV fragment
+  read-ahead. LLVM's wait insertion and hazard recognizer remain enabled.
+- D128 tail sums reuse the exact binary32 scales already held in `Params`.
+  D192 retains scale reconstruction because reusing it changed the steady loop.
+- Next-pass state uses a 32-bit completion flag and sequential source tests.
+  LSE combines its validated 32-bit element index before shifting to bytes.
+  Existing native host checks require the complete LSE span below 4 GiB.
+- LLVM recognizes uniform one-use low-bit truncates as SCC branch predicates,
+  avoiding an unnecessary select/EXEC-mask round trip. The fix adds no option
+  and preserves divergence and uniform irreducible control flow.
 
-`FP8_LOAD_QUERY` spells out unsigned row/stride arithmetic in the kernel body.
-Each load remains at its source scheduling point through `llvm.fake.use` and
-scheduler fences. Query loads issue in offsets 0, 16, 64, 80, followed by 128,
-144 for d192. All five query batches use a 32-bit VGPR offset and a 64-bit SGPR
-base. Helper-only scheduling fences did not change final assembly; volatile
-loads preserved order but introduced extra waits, so they were not retained.
+Important mnemonic changes in the actual linked kernel:
 
-K/V DMA lane offsets are computed once in the kernel body, following the
-assembly's bit extraction and swizzle calculations. The helpers reuse these
-offsets for full-block loads and the group-0 rounds. Explicit unsigned products
-and source anchors preserve 32-bit offset arithmetic. Output row products and
-LSE byte offsets follow the same approach. Neither kernel contains
-`v_mad_u64_u32` or `v_lshl_add_u64`, and LSE stores use the reference's scalar
-base plus 32-bit vector offset.
+| Mnemonic | d128 before → after | d192 before → after |
+| --- | ---: | ---: |
+| `s_waitcnt` | 168 → 130 | 116 → 90 |
+| `s_bitcmp1_b32` | 28 → 2 | 24 → 2 |
+| `s_cselect_b32` | 55 → 22 | 51 → 20 |
+| `s_and_b64` | 32 → 19 | 40 → 21 |
+| `s_mov_b64` | 12 → 0 | 29 → 9 |
+| `s_lshl_b64` | 6 → 0 | 17 → 10 |
+| `s_or_b32` | 74 → 31 | 71 → 34 |
+| `s_nop` | 310 → 307 | 179 → 182 |
+| `s_add_u32` | 185 → 295 | 174 → 220 |
+| `v_add3_u32` | 0 → 48 | 0 → 24 |
 
-The block tiling, four K/V LDS slots, eight-wave ping-pong phases, four-stage
-unrolling, accumulator semantics, and required memory hazards are preserved.
-These address changes add no instruction inline assembly or fixed-register
-allocation.
+The scalar V-base boundary also repeats some additions. Its complete histogram
+is closer than the lower-instruction-count alternative; that alternative remains
+in the task-2 evidence. Static count improvements alone do not establish a
+performance benefit.
 
-## Remaining work
+## Remaining differences
 
-The largest histogram differences are scalar address/control arithmetic,
-initialization, and waits/nops outside the steady loops. The assembly generator
-also repeats arithmetic that LLVM folds or combines. Whole-kernel counts must
-match before claiming whole-kernel sequence matching.
+Whole-kernel sequence first diverges at retained index 4, after the four kernarg
+loads, in entry lane/address setup. Scalar setup/control arithmetic, literal
+initialization and outside-loop waits/nops still differ. All whole-kernel
+LDS/global/buffer/MFMA and floating-point mnemonic counts remain matched.
 
-| Packaged resource | d128 | d192 |
+The largest remaining positive delta is `s_nop` (+125/+42). The assembly
+reference assumes VCC mask interlocking, while LLVM inserts software delays.
+AMD's CDNA4 ISA guide distinguishes two waits for SGPR/VCC constant inputs from
+zero waits for carry-in, but does not explicitly classify CNDMASK's condition
+mask. The continuation retained LLVM's conservative handling. See
+[`vcc-hazard-evidence.md`](../benchmarks/results/hip_native/isa_match/whole_kernel_fixes_20261111/vcc-hazard-evidence.md)
+for manual pages, quotations and the precise unresolved classification.
+
+| Packaged allocation | d128 | d192 |
 | --- | ---: | ---: |
 | VGPRs | 256 | 231 |
 | SGPRs | 106 | 106 |
 | Scratch bytes per lane | 64 | 0 |
 | LDS bytes per block | 163840 | 131072 |
+| Reported SGPR spills before → after | 22 → 14 | 1 → 1 |
+| Reported VGPR spills before → after | 23 → 23 | 0 → 0 |
 
-The scratch and resource values describe the entire kernel. The steady-loop
-regression also checks that accumulator C/D ranges have no partial overlap.
+Tiling, LDS allocation, four-slot pipeline, wave phases and steady unrolling
+remain unchanged. Allocation values describe the complete kernel; direct spill
+instructions remain recorded separately from retained instruction comparisons.
 
-## Reproduction
+## Validation and reproduction
 
-Set `ROCM_PATH`, `ROCM_HOME`, and `HIP_PATH` to the local ROCm 7.2.3 install.
-Set `LD_LIBRARY_PATH` to include its `lib/compat` directory. The compiler root
-used for the packaged build is
-`/home/jinpli/workspace/home/jinpli/development/workspace/01/llvm-project`.
+The native extension rebuilt successfully, its embedded code object matches the
+reviewed candidate's complete ISA, and all 295 project tests passed (2 skipped).
+The LLVM fix passed 21 focused lit tests with machine verification. The broad
+AMDGPU sweep had 79 remaining shuffle failures, each also reproduced with the
+frozen pre-fix compiler; the suite is not reported as entirely passing.
+
+Use the supplied LLVM checkout and `build/env.sh` for the native build:
 
 ```sh
+source build/env.sh
+export ROCM_HOME="$ROCM_PATH" HIP_PATH="$ROCM_PATH"
+export LLVM_ROOT=/home/jinpli/workspace/home/jinpli/development/workspace/01/llvm-project
 ZYFA_NATIVE_LLVM_ROOT="$LLVM_ROOT" python setup.py build_ext --inplace
-ZYFA_LLVM_ROOT="$LLVM_ROOT" python -m pytest -q
+ZYFA_LLVM_ROOT="$LLVM_ROOT" python -m pytest -q tests
+python benchmarks/inspect_hip.py --output DIR
 python benchmarks/compare_isa.py --llvm DIR/disassembly.s \
   --assembly benchmarks/results/hip_native/isa_match/baseline/assembly_d128.s \
   --dim 128 --scope loop --output DIR/d128-loop
 ```
 
-Repeat the comparison for d192 and for `--scope kernel`. The kernel comparisons
-currently return failure. Use `--allow-mismatch` only to save diagnostic reports.
-The artifact manifest records the build commands, compiler revision, and hashes
-of the source, code object, compiler tools, and AMDGPU shared library.
+Repeat for d192. `--scope kernel` still returns mismatch; use
+`--allow-mismatch` to save diagnostics. The artifact's `compare-candidate.py`
+applies the additional SGPR lane-spill policy used in the current whole counts.
+The owning manifest records source/compiler revisions and hashes, source
+snapshots, native object/code-object/extension identity, and filtering policy.
 
-## Validation and performance
-
-At the recorded capture, the owning source passed all 65 code-generation/comparison
-checks. The packaged extension passed all 285 project tests, and 32 additional
-checks passed against its extracted code object. GPU candidate validation covered
-all 69 native numerical tests. The address audit checked 24,576 K/V calculations,
-including strides above 24 bits.
-
-The final packaging review made native compilation opt-in through
-`ZYFA_NATIVE_LLVM_ROOT` and corrected inspection to use the linked native object.
-Stock ROCm builds pass 167 tests, with 127 native/code-generation checks skipped.
-Native builds pass 292 tests, with two disabled-backend checks skipped. Both
-rebuilt steady loops pass strict count and sequence comparisons, and the native
-code object is byte-identical to the recorded ISA/performance capture. Fresh
-build logs, test results, comparison checks, and hashes are saved in
-`benchmarks/results/hip_native/push_validation_20261111/`.
-
-Twelve benchmark cases passed their sampled FP64 output checks; maximum relative
-RMS was 0.005944. Timings use 500 warmups, 100 profiled launches per sample, and
-three samples with alternating assembly/HIP order. Entries below are HIP divided
-by assembly latency, so values above one indicate slower HIP execution.
-
-| Dimension | GQA group | 1K tokens | 8K tokens | 32K tokens |
-| --- | ---: | ---: | ---: | ---: |
-| 128 | 1 | 1.213 | 1.035 | 1.006 |
-| 128 | 4 | 1.193 | 1.086 | 1.010 |
-| 192 | 1 | 1.071 | 1.038 | 1.032 |
-| 192 | 4 | 1.074 | 1.041 | 1.028 |
-
-The full timings, samples, sampled errors, and extension/source hashes are in
-`offsets_owning_20261111/performance/benchmark.json` and `benchmark.csv`.
-These measurements demonstrate performance proximity for the measured shapes;
-they do not satisfy the remaining whole-kernel ISA matching criteria.
+All 12 benchmark output checks passed. Longer 8K GQA4 repeats put the selected
+build 0.8%/0.5% slower than pre-fix for d128/d192, with overlapping sample ranges.
+The fallback was slightly faster but less close in mnemonic counts, so the
+count-first form remains selected. No general performance improvement is
+claimed. See the continuation README and raw timing samples for details.
+The prior build and its earlier benchmark protocol remain archived in
+`offsets_owning_20261111/` and `push_validation_20261111/`.

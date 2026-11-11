@@ -1,0 +1,24 @@
+{
+  "native_source_sha256": "9477a7f708f7e62bc9faf7c0522ccd5ee644ea9a0629014464d59bd66239bf8a",
+  "object_sha256": "fffcb812d22d6b192f9264b082c230474b28db8a19b24ae85dcf6a0d635a801e",
+  "code_object_sha256": "0ff478bdcb1cc4d37b3e3c344f88377d953f4cc012720833006d6e02368e7ee2",
+  "object": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/native/fp8_native.o",
+  "assembly_origin": "disassembly of the selected object's embedded code object",
+  "inspection_tool_version": "AMD LLVM version 22.0.0git\n  Optimized build.\n\n\n  Registered Targets:\n    amdgcn - AMD GCN GPUs\n    r600   - AMD GPUs HD2XXX-HD6XXX\n    x86    - 32-bit X86: Pentium-Pro and above\n    x86-64 - 64-bit X86: EM64T and AMD64",
+  "lds_bytes_per_block": {
+    "d128": 163840,
+    "d192": 131072
+  },
+  "zyfa_source_commit": "5a2bf9761dab9589f11cc0651123211e7e0dc8d6",
+  "llvm_commit": "72e518a3f02acb5c50f2dc64d7ad844c4694908b",
+  "extension_sha256": "953c8f8fe4e0ca5496a2cd5e58a3ec08d0a62512fdc525518fe0a11a7071dbd6",
+  "native_code_object_embedded_in_extension": true,
+  "source_snapshot_matches_compiled_candidate": true,
+  "build_command": "source build/env.sh; ROCM_HOME=\"$ROCM_PATH\" HIP_PATH=\"$ROCM_PATH\" ZYFA_NATIVE_LLVM_ROOT=/home/jinpli/workspace/home/jinpli/development/workspace/01/llvm-project python setup.py build_ext --inplace",
+  "filter_policy": "exclude scratch, register-source MOVs, and SGPR lane spill read/write; retain literal initializers, waits, nops, branches and meaningful cross-lane operations",
+  "compiler_sha256": {
+    "build/bin/clang": "03a7940dfbf572bec099f832697aa0171ac1885384d14abc4f7ba0ccf54f181f",
+    "build/bin/llc": "96b49882c1f362615b755109156337ee35c02433098d7d5245f5658440d2cb71",
+    "build/lib/libLLVMAMDGPUCodeGen.so.24.0git": "48af185768e3663551edeef5b4a5bf2cb6da6f83307529c100c4958565c48017"
+  }
+}

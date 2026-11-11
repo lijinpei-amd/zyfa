@@ -1,0 +1,145 @@
+{
+  "gpu": "AMD Radeon Graphics",
+  "torch": "2.14.1+rocm7.2",
+  "hip": "7.2.53211",
+  "architecture": "gfx950:sramecc+:xnack-",
+  "compute_units": 256,
+  "device": 0,
+  "git_commit": "c8b37a12a3be434106ced1b2741f8e1b6cb3841e",
+  "native_source_sha256": "a95b74aa50962a06b8fef7aea87c64f98d3d5dff0f25b85f0add4a3b6efea29a",
+  "extension_sha256": "60251a7e0b9f24d1437c67469b2fa571da18399daf0dd1f051e0931d7c731e72",
+  "protocol": {
+    "warmup": 100,
+    "iters": 50,
+    "repeats": 3,
+    "cooldown": 0,
+    "seed": 29,
+    "std": 0.1,
+    "layout": "bshd"
+  },
+  "cases": [
+    {
+      "dim": 128,
+      "group": 1,
+      "seqlen": 32768,
+      "heads": 32,
+      "assembly_us": 4079.6738599999994,
+      "hip_us": 4107.87484,
+      "hip_over_assembly": 1.0069125574660522,
+      "relative_rms": 0.005018530835070521,
+      "samples_us": {
+        "assembly": [
+          4053.99112,
+          4080.0737600000007,
+          4079.6738599999994
+        ],
+        "hip": [
+          4106.618399999999,
+          4107.87484,
+          4114.587520000002
+        ]
+      },
+      "kernel_names": {
+        "assembly": [
+          "fmha_fp8pp.kd"
+        ],
+        "hip": [
+          "void fmha_fp8_native::attend<128>(std::conditional<(128)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ]
+      }
+    },
+    {
+      "dim": 128,
+      "group": 4,
+      "seqlen": 32768,
+      "heads": 32,
+      "assembly_us": 4078.8221800000006,
+      "hip_us": 4111.984319999998,
+      "hip_over_assembly": 1.0081303225628722,
+      "relative_rms": 0.0057331834536974505,
+      "samples_us": {
+        "assembly": [
+          4073.8674999999994,
+          4078.8221800000006,
+          4081.6758600000007
+        ],
+        "hip": [
+          4109.453939999999,
+          4111.984319999998,
+          4118.405380000001
+        ]
+      },
+      "kernel_names": {
+        "assembly": [
+          "fmha_fp8pp.kd"
+        ],
+        "hip": [
+          "void fmha_fp8_native::attend<128>(std::conditional<(128)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ]
+      }
+    },
+    {
+      "dim": 192,
+      "group": 1,
+      "seqlen": 32768,
+      "heads": 32,
+      "assembly_us": 5706.726739999997,
+      "hip_us": 5863.068219999999,
+      "hip_over_assembly": 1.027395998989081,
+      "relative_rms": 0.0052344525565815175,
+      "samples_us": {
+        "assembly": [
+          5692.311180000001,
+          5706.726739999997,
+          5717.349399999999
+        ],
+        "hip": [
+          5855.770379999998,
+          5863.068219999999,
+          5890.40794
+        ]
+      },
+      "kernel_names": {
+        "assembly": [
+          "fmha_fp8pp192.kd"
+        ],
+        "hip": [
+          "void fmha_fp8_native::attend<192>(std::conditional<(192)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ]
+      }
+    },
+    {
+      "dim": 192,
+      "group": 4,
+      "seqlen": 32768,
+      "heads": 32,
+      "assembly_us": 5644.640800000002,
+      "hip_us": 5814.31854,
+      "hip_over_assembly": 1.0300599712208434,
+      "relative_rms": 0.004988094299291862,
+      "samples_us": {
+        "assembly": [
+          5644.640800000002,
+          5643.87118,
+          5661.977160000002
+        ],
+        "hip": [
+          5821.070640000002,
+          5814.31854,
+          5813.728920000001
+        ]
+      },
+      "kernel_names": {
+        "assembly": [
+          "fmha_fp8pp192.kd"
+        ],
+        "hip": [
+          "void fmha_fp8_native::attend<192>(std::conditional<(192)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ]
+      }
+    }
+  ],
+  "source_on_disk_sha256": "9e227d99a6bb71c3f3f4e86ed69444f574a32a24009d7c8a959b0540ecf14171",
+  "native_source_snapshot": "benchmarks/results/hip_native/isa_match/offsets_owning_20261111/fp8_native.hip",
+  "provenance_note": "The long baseline ran the unchanged baseline extension after source candidates were integrated on disk; owning source hash comes from the short baseline, and extension hashes match."
+}

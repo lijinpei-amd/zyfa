@@ -1,0 +1,102 @@
+{
+  "gpu": "AMD Radeon Graphics",
+  "torch": "2.14.1+rocm7.2",
+  "hip": "7.2.53211",
+  "architecture": "gfx950:sramecc+:xnack-",
+  "compute_units": 256,
+  "device": 0,
+  "git_commit": "5a2bf9761dab9589f11cc0651123211e7e0dc8d6",
+  "native_source_sha256": "a95b74aa50962a06b8fef7aea87c64f98d3d5dff0f25b85f0add4a3b6efea29a",
+  "extension_sha256": "e4bd5714a7c925dd1c76c9e426160de96b5a3e4c2f6c41658b51cf2bef93d0c9",
+  "protocol": {
+    "warmup": 500,
+    "iters": 100,
+    "repeats": 7,
+    "cooldown": 0,
+    "seed": 29,
+    "std": 0.1,
+    "layout": "bshd"
+  },
+  "cases": [
+    {
+      "dim": 128,
+      "group": 4,
+      "seqlen": 8192,
+      "heads": 32,
+      "assembly_us": 266.4848700000001,
+      "hip_us": 285.92394999999993,
+      "hip_over_assembly": 1.0729462802147072,
+      "relative_rms": 0.00563995081407651,
+      "samples_us": {
+        "assembly": [
+          255.90778000000006,
+          267.7088799999999,
+          266.4848700000001,
+          264.70211,
+          259.37075,
+          279.30597,
+          276.04630000000014
+        ],
+        "hip": [
+          270.20288,
+          285.92394999999993,
+          286.29639,
+          288.09732000000014,
+          294.63784999999996,
+          284.39646,
+          280.46998
+        ]
+      },
+      "kernel_names": {
+        "assembly": [
+          "fmha_fp8pp.kd"
+        ],
+        "hip": [
+          "void fmha_fp8_native::attend<128>(std::conditional<(128)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ]
+      }
+    },
+    {
+      "dim": 192,
+      "group": 4,
+      "seqlen": 8192,
+      "heads": 32,
+      "assembly_us": 373.7636499999998,
+      "hip_us": 374.9200999999998,
+      "hip_over_assembly": 1.003094067601277,
+      "relative_rms": 0.0046867044047532915,
+      "samples_us": {
+        "assembly": [
+          373.7636499999998,
+          355.94734000000005,
+          373.4172399999999,
+          374.71325999999993,
+          373.4520899999999,
+          384.6458500000003,
+          378.63455999999996
+        ],
+        "hip": [
+          372.5539999999999,
+          385.9538799999999,
+          387.66632999999996,
+          371.06682,
+          372.47885,
+          389.9031599999999,
+          374.9200999999998
+        ]
+      },
+      "kernel_names": {
+        "assembly": [
+          "fmha_fp8pp192.kd"
+        ],
+        "hip": [
+          "void fmha_fp8_native::attend<192>(std::conditional<(192)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ]
+      }
+    }
+  ],
+  "source_on_disk_sha256": "9477a7f708f7e62bc9faf7c0522ccd5ee644ea9a0629014464d59bd66239bf8a",
+  "owning_source": "/home/jinpli/workspace/home/jinpli/development/zyfa/benchmarks/results/hip_native/isa_match/offsets_owning_20261111/fp8_native.hip",
+  "provenance_note": "Relinked an independently compiled native object into the same host wrapper; source hash is the compiled snapshot, not the current on-disk source.",
+  "native_compiler_commit": "18b60c731b48"
+}

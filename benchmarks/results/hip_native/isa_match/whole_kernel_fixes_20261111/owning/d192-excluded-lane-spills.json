@@ -1,0 +1,16 @@
+[
+  {
+    "mnemonic": "v_writelane_b32",
+    "operands": "v230, s17, 0",
+    "address": 44860,
+    "line": 6112,
+    "branch_target": null
+  },
+  {
+    "mnemonic": "v_readlane_b32",
+    "operands": "s18, v230, 0",
+    "address": 47420,
+    "line": 6606,
+    "branch_target": null
+  }
+]

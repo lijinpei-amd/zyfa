@@ -1,0 +1,99 @@
+{
+  "gpu": "AMD Radeon Graphics",
+  "torch": "2.14.1+rocm7.2",
+  "hip": "7.2.53211",
+  "architecture": "gfx950:sramecc+:xnack-",
+  "compute_units": 256,
+  "device": 0,
+  "git_commit": "5a2bf9761dab9589f11cc0651123211e7e0dc8d6",
+  "native_source_sha256": "9477a7f708f7e62bc9faf7c0522ccd5ee644ea9a0629014464d59bd66239bf8a",
+  "extension_sha256": "953c8f8fe4e0ca5496a2cd5e58a3ec08d0a62512fdc525518fe0a11a7071dbd6",
+  "protocol": {
+    "warmup": 500,
+    "iters": 100,
+    "repeats": 7,
+    "cooldown": 0,
+    "seed": 29,
+    "std": 0.1,
+    "layout": "bshd"
+  },
+  "cases": [
+    {
+      "dim": 128,
+      "group": 4,
+      "seqlen": 8192,
+      "heads": 32,
+      "assembly_us": 267.16533,
+      "hip_us": 288.1212099999999,
+      "hip_over_assembly": 1.0784378721595347,
+      "relative_rms": 0.00563995081407651,
+      "samples_us": {
+        "assembly": [
+          256.76458999999994,
+          277.8766899999999,
+          272.09258,
+          266.16291000000007,
+          266.99773,
+          267.16533,
+          275.5979
+        ],
+        "hip": [
+          288.22190999999987,
+          288.1212099999999,
+          276.63988000000006,
+          279.23994000000016,
+          293.46941000000015,
+          281.8548000000001,
+          288.63213
+        ]
+      },
+      "kernel_names": {
+        "assembly": [
+          "fmha_fp8pp.kd"
+        ],
+        "hip": [
+          "void fmha_fp8_native::attend<128>(std::conditional<(128)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ]
+      }
+    },
+    {
+      "dim": 192,
+      "group": 4,
+      "seqlen": 8192,
+      "heads": 32,
+      "assembly_us": 371.97043999999994,
+      "hip_us": 376.8589199999999,
+      "hip_over_assembly": 1.0131421195727273,
+      "relative_rms": 0.0046867044047532915,
+      "samples_us": {
+        "assembly": [
+          368.8187699999999,
+          373.05846,
+          379.23456999999996,
+          365.75433,
+          373.02047000000016,
+          370.20881,
+          371.97043999999994
+        ],
+        "hip": [
+          386.8007,
+          364.8351,
+          364.26153999999985,
+          376.8589199999999,
+          375.1932800000001,
+          378.54776000000015,
+          379.4205899999998
+        ]
+      },
+      "kernel_names": {
+        "assembly": [
+          "fmha_fp8pp192.kd"
+        ],
+        "hip": [
+          "void fmha_fp8_native::attend<192>(std::conditional<(192)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ]
+      }
+    }
+  ],
+  "native_compiler_commit": "72e518a3f02a"
+}

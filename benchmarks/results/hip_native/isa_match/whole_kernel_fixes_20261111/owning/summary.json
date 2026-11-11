@@ -1,0 +1,317 @@
+{
+  "128": {
+    "reference": 5302,
+    "hip": 5042,
+    "owning_baseline": 5089,
+    "positive_delta_sum": 356,
+    "negative_delta_sum": -616,
+    "changed_vs_baseline": {
+      "s_add_u32": {
+        "reference": 185,
+        "llvm": 295,
+        "delta": 110
+      },
+      "s_addc_u32": {
+        "reference": 31,
+        "llvm": 29,
+        "delta": -2
+      },
+      "s_and_b32": {
+        "reference": 35,
+        "llvm": 23,
+        "delta": -12
+      },
+      "s_and_b64": {
+        "reference": 32,
+        "llvm": 19,
+        "delta": -13
+      },
+      "s_andn2_b32": {
+        "reference": 3,
+        "llvm": 0,
+        "delta": -3
+      },
+      "s_bfe_u32": {
+        "reference": 7,
+        "llvm": 5,
+        "delta": -2
+      },
+      "s_bitcmp1_b32": {
+        "reference": 28,
+        "llvm": 2,
+        "delta": -26
+      },
+      "s_cbranch_scc0": {
+        "reference": 23,
+        "llvm": 19,
+        "delta": -4
+      },
+      "s_cbranch_vccnz": {
+        "reference": 1,
+        "llvm": 0,
+        "delta": -1
+      },
+      "s_cmp_eq_u32": {
+        "reference": 15,
+        "llvm": 17,
+        "delta": 2
+      },
+      "s_cselect_b32": {
+        "reference": 55,
+        "llvm": 22,
+        "delta": -33
+      },
+      "s_cselect_b64": {
+        "reference": 19,
+        "llvm": 16,
+        "delta": -3
+      },
+      "s_lshl_b32": {
+        "reference": 68,
+        "llvm": 73,
+        "delta": 5
+      },
+      "s_lshl_b64": {
+        "reference": 6,
+        "llvm": 0,
+        "delta": -6
+      },
+      "s_mov_b32": {
+        "reference": 44,
+        "llvm": 54,
+        "delta": 10
+      },
+      "s_mov_b64": {
+        "reference": 12,
+        "llvm": 0,
+        "delta": -12
+      },
+      "s_nop": {
+        "reference": 310,
+        "llvm": 307,
+        "delta": -3
+      },
+      "s_not_b32": {
+        "reference": 13,
+        "llvm": 9,
+        "delta": -4
+      },
+      "s_or_b32": {
+        "reference": 74,
+        "llvm": 31,
+        "delta": -43
+      },
+      "s_waitcnt": {
+        "reference": 168,
+        "llvm": 130,
+        "delta": -38
+      },
+      "s_xor_b32": {
+        "reference": 0,
+        "llvm": 7,
+        "delta": 7
+      },
+      "v_add3_u32": {
+        "reference": 0,
+        "llvm": 48,
+        "delta": 48
+      },
+      "v_add_u32_e32": {
+        "reference": 71,
+        "llvm": 65,
+        "delta": -6
+      },
+      "v_lshlrev_b32_e32": {
+        "reference": 45,
+        "llvm": 33,
+        "delta": -12
+      },
+      "v_or_b32_e32": {
+        "reference": 30,
+        "llvm": 24,
+        "delta": -6
+      }
+    },
+    "loop_counts_match": true,
+    "loop_sequence_match": true,
+    "loop_first_mismatch": null,
+    "whole_first_mismatch": {
+      "index": 4,
+      "reference": {
+        "mnemonic": "v_lshrrev_b32_e32",
+        "operands": "v255, 6, v216",
+        "address": 5412,
+        "line": 13,
+        "branch_target": null
+      },
+      "llvm": {
+        "mnemonic": "v_bfe_u32",
+        "operands": "v1, v0, 5, 1",
+        "address": 6944,
+        "line": 11,
+        "branch_target": null
+      }
+    },
+    "excluded_lane_spills": 73
+  },
+  "192": {
+    "reference": 3737,
+    "hip": 3420,
+    "owning_baseline": 3529,
+    "positive_delta_sum": 237,
+    "negative_delta_sum": -554,
+    "changed_vs_baseline": {
+      "s_add_u32": {
+        "reference": 174,
+        "llvm": 220,
+        "delta": 46
+      },
+      "s_addc_u32": {
+        "reference": 31,
+        "llvm": 29,
+        "delta": -2
+      },
+      "s_and_b32": {
+        "reference": 25,
+        "llvm": 23,
+        "delta": -2
+      },
+      "s_and_b64": {
+        "reference": 40,
+        "llvm": 21,
+        "delta": -19
+      },
+      "s_andn2_b32": {
+        "reference": 1,
+        "llvm": 0,
+        "delta": -1
+      },
+      "s_bfe_u32": {
+        "reference": 9,
+        "llvm": 5,
+        "delta": -4
+      },
+      "s_bitcmp1_b32": {
+        "reference": 24,
+        "llvm": 2,
+        "delta": -22
+      },
+      "s_cbranch_scc0": {
+        "reference": 21,
+        "llvm": 17,
+        "delta": -4
+      },
+      "s_cbranch_scc1": {
+        "reference": 73,
+        "llvm": 71,
+        "delta": -2
+      },
+      "s_cbranch_vccnz": {
+        "reference": 2,
+        "llvm": 1,
+        "delta": -1
+      },
+      "s_cmp_eq_u32": {
+        "reference": 11,
+        "llvm": 13,
+        "delta": 2
+      },
+      "s_cselect_b32": {
+        "reference": 51,
+        "llvm": 20,
+        "delta": -31
+      },
+      "s_cselect_b64": {
+        "reference": 16,
+        "llvm": 11,
+        "delta": -5
+      },
+      "s_lshl_b32": {
+        "reference": 76,
+        "llvm": 81,
+        "delta": 5
+      },
+      "s_lshl_b64": {
+        "reference": 17,
+        "llvm": 10,
+        "delta": -7
+      },
+      "s_lshr_b32": {
+        "reference": 13,
+        "llvm": 9,
+        "delta": -4
+      },
+      "s_mov_b32": {
+        "reference": 38,
+        "llvm": 47,
+        "delta": 9
+      },
+      "s_mov_b64": {
+        "reference": 29,
+        "llvm": 9,
+        "delta": -20
+      },
+      "s_nop": {
+        "reference": 179,
+        "llvm": 182,
+        "delta": 3
+      },
+      "s_not_b32": {
+        "reference": 11,
+        "llvm": 9,
+        "delta": -2
+      },
+      "s_or_b32": {
+        "reference": 71,
+        "llvm": 34,
+        "delta": -37
+      },
+      "s_waitcnt": {
+        "reference": 116,
+        "llvm": 90,
+        "delta": -26
+      },
+      "s_xor_b32": {
+        "reference": 4,
+        "llvm": 7,
+        "delta": 3
+      },
+      "v_add3_u32": {
+        "reference": 0,
+        "llvm": 24,
+        "delta": 24
+      },
+      "v_add_u32_e32": {
+        "reference": 56,
+        "llvm": 50,
+        "delta": -6
+      },
+      "v_or_b32_e32": {
+        "reference": 27,
+        "llvm": 21,
+        "delta": -6
+      }
+    },
+    "loop_counts_match": true,
+    "loop_sequence_match": true,
+    "loop_first_mismatch": null,
+    "whole_first_mismatch": {
+      "index": 4,
+      "reference": {
+        "mnemonic": "v_lshrrev_b32_e32",
+        "operands": "v213, 6, v188",
+        "address": 5412,
+        "line": 13,
+        "branch_target": null
+      },
+      "llvm": {
+        "mnemonic": "v_and_b32_e32",
+        "operands": "v2, 63, v0",
+        "address": 43552,
+        "line": 5857,
+        "branch_target": null
+      }
+    },
+    "excluded_lane_spills": 2
+  }
+}

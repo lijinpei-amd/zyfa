@@ -1,0 +1,2 @@
+# Format-patch context prefixes are significant.
+llvm-uniform-truncate.patch -whitespace
