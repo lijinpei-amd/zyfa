@@ -384,8 +384,10 @@ __device__ __forceinline__ void mask(fx16 &s, int q_start, int tile, float ninf)
     if (delta >= 32)
         return;
     // The elementwise path comes first, so it is the fall-through of the delta < 0 branch, as in
-    // the assembly.
-    if (delta >= 0) {
+    // the assembly. For d128 the 0.85 weight lets block placement fall from it into the merge and
+    // move the -inf fill out of line; at the default 62.5/37.5 the fill competes for the merge and
+    // placement puts the pvo stage between the elementwise path and the fill.
+    if (D == 128 ? __builtin_expect_with_probability(delta >= 0, 1, 0.85) : delta >= 0) {
         const int threshold = delta + (laneid() & 31) - (laneid() >> 5) * 4;
 #pragma unroll
         for (int j = 0; j < 4; ++j)
