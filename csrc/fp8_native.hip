@@ -908,8 +908,8 @@ do { \
     FP8_CODE_PIPE(s.c, params.bias_hi, (P).a, 4, s.b); \
     FP8_CODE_PIPE(s.d, params.bias_hi, (P).b, 0, s.c); \
     FP8_CODE_END((P).b, 4, s.d); \
-    phase_use(f2{params.bias_lo, params.bias_lo}); \
-    phase_use(f2{params.bias_hi, params.bias_hi}); \
+    phase_use(__float_as_int(params.bias_lo)); \
+    phase_use(__float_as_int(params.bias_hi)); \
 } while (false)
 
 #define FP8_CODE_EXP(V, I) do { \
