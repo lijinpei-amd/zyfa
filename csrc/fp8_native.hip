@@ -157,6 +157,17 @@ __device__ __forceinline__ uint32_t sgpr_constant() {
     return r;
 }
 
+// A zero tile written as one v_mov_b32 per register, as the assembly clears O at each pass top.
+// A zero splat is a single value that reaches all four O phis at each steady-loop entry, so PHI
+// elimination copies it into three of the four tiles on every entry edge.
+__device__ __forceinline__ fx16 zero_fx16() {
+    fx16 z;
+#pragma unroll
+    for (int i = 0; i < 16; ++i)
+        z[i] = __uint_as_float(vgpr_constant<0u>());
+    return z;
+}
+
 // Constants the loops use as register operands (no inline encoding exists for them there).
 struct LoopConstants {
     int scale_one;    // E8M0 1.0 (0x7f), the MFMA A-scale operand; VGPR, as V_127
@@ -1755,7 +1766,7 @@ __global__ __launch_bounds__(512, 1) void attend(Args<D> kernel_args) {
         }
     }
     wait_dma();
-    o = o_tile{};
+    o = o_tile{zero_fx16(), zero_fx16(), zero_fx16(), zero_fx16()};
     l = 0.f;
     if (group == 0) {
         if (n > 1) load_v_group0<D>(sm, vr, (base + 1) & 3, 1, v_stride, tid);
