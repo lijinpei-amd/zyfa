@@ -43,6 +43,8 @@ template <int D> constexpr int ring_bytes = 65536 + 4 * vslot_bytes<D>;
 template <int D> constexpr int lds_bytes = ring_bytes<D> + 32768;
 template <int D> using Args = std::conditional_t<D == 128, Args128, Args192>;
 
+__device__ __forceinline__ uint32_t scalar_add(uint32_t a, uint32_t b);
+
 template <int D> struct Lds {
     byte_lds k0, k1, k2, k3, v0, v1, v2, v3, out;
     int dma_base;
@@ -62,7 +64,8 @@ template <int D> struct Lds {
         const uint32_t low = bits & 1, high = bits >> 1;
         const uint32_t p0 = (uint32_t)(uintptr_t)k0, p1 = (uint32_t)(uintptr_t)k1;
         const uint32_t p2 = (uint32_t)(uintptr_t)k2, p3 = (uint32_t)(uintptr_t)k3;
-        return (byte_lds)(uintptr_t)(p0 + low * (p1 - p0) + high * (p2 - p0)
+        const uint32_t step = p1 - p0;
+        return (byte_lds)(uintptr_t)(p0 + bits * step + high * (p2 - p0 - 2 * step)
                                     + (low & high) * (p3 - p2 - p1 + p0));
     }
 
@@ -79,8 +82,10 @@ template <int D> struct Lds {
         const uint32_t low = bits & 1, high = bits >> 1;
         const uint32_t p0 = (uint32_t)(uintptr_t)v0, p1 = (uint32_t)(uintptr_t)v1;
         const uint32_t p2 = (uint32_t)(uintptr_t)v2, p3 = (uint32_t)(uintptr_t)v3;
-        return (byte_lds)(uintptr_t)(p0 + low * (p1 - p0) + high * (p2 - p0)
-                                    + (low & high) * (p3 - p2 - p1 + p0));
+        const uint32_t step = p1 - p0;
+        const uint32_t offset = bits * step + high * (p2 - p0 - 2 * step)
+                                           + (low & high) * (p3 - p2 - p1 + p0);
+        return (byte_lds)(uintptr_t)scalar_add(p0, offset);
     }
 };
 
