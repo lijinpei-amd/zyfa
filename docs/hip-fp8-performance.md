@@ -109,6 +109,14 @@ Loop-invariant code motion is disabled for the persistent pass loop:
   so LLVM sees them as irreducible cycles, not natural loops. All hoisting
   therefore crosses the pass loop.
 
+The O tile is cleared at each pass start with 64 `vgpr_constant<0>` moves, as
+the assembly kernels do. An `o_tile{}` zero would become an SGPR splat whose
+PHI copies are repeated on every steady-loop entry edge. The compiler adds no
+MFMA hazard padding around inline asm; the nearest MFMA touching a cleared
+register is far outside the hazard window. The low half of each FP8
+probability pack takes an unspecified "old" operand, because the high-half pack
+overwrites it. Passing a live value there would force a copy before every pack.
+
 The masked tail tests the elementwise path first, as the assembly kernels do.
 d128 weights that path at 0.85 so block placement keeps the −inf fill out of
 line; this avoids a duplicated score tile.
@@ -129,13 +137,13 @@ source uses one static LDS array for the reasons above.
 ## Generated code and remaining differences
 
 Current resources, from the
-[`lds_licm_mask_20261111`](../benchmarks/results/hip_native/isa_match/lds_licm_mask_20261111/README.md)
+[`copies_20261112`](../benchmarks/results/hip_native/isa_match/copies_20261112/README.md)
 capture:
 
 | Resource | HIP d128 | Assembly d128 | HIP d192 | Assembly d192 |
 | --- | ---: | ---: | ---: | ---: |
 | VGPRs per wave | 244 | 256 | 206 | 256 |
-| SGPRs | 88 | 102 | 90 | 102 |
+| SGPRs | 77 | 102 | 79 | 102 |
 | AGPRs | 0 | 0 | 0 | 0 |
 | VGPR / SGPR spills | 0 / 0 | 0 / 0 | 0 / 0 | 0 / 0 |
 | Scratch frame bytes per lane | 0 | 0 | 0 | 0 |

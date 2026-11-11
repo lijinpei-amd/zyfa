@@ -3,7 +3,62 @@
 Both four-stage steady loops retain the assembly backend's exact disassembled
 mnemonic counts and sequence. The whole-kernel counts and sequence still differ.
 
-## Current capture: single LDS array, LICM control, masked-tail fill
+## Current capture: register copies
+
+[`copies_20261112`](../benchmarks/results/hip_native/isa_match/copies_20261112/README.md)
+adds source commits `0ddab6a`–`292d02a` to the single-LDS capture below. The
+compiler and flags are unchanged. The ISA comparison excludes register-source
+copies, but they still issue. These commits remove copies that had no
+counterpart in the assembly kernels:
+
+| Copies (d128 / d192) | Assembly | Before | After |
+| --- | ---: | ---: | ---: |
+| Strict steady loop | 12 / 12 | 16 / 36 | **8 / 4** |
+| Whole kernel | 319 / 223 | 609 / 443 | 348 / 158 |
+
+- **d192 FP8 pack:** the low half of the d192 FP8 probability pack now takes an
+  unspecified "old" operand. Passing the E8M0 scale there forced a copy before
+  each of the eight packs per stage.
+- **d128 code biases:** anchored by scalar fake uses instead of a register
+  pair.
+- **O tile:** cleared with 64 one-instruction `v_mov_b32 v, 0` helpers, as the
+  assembly does, instead of an SGPR zero splat. The splat's PHI copies are gone
+  and SGPRs drop from 88/90 to 77/79.
+- **Epilogue:** permlane results are anchored individually.
+
+| Measurement (d128 / d192) | Before → after |
+| --- | ---: |
+| Strict loop | exact → exact |
+| Retained whole-kernel instructions | 4910 / 3398 → 4974 / 3463 |
+| Positive mnemonic delta sum | 261 / 203 → 259 / 204 |
+| Sum of absolute differences (L1) | 914 / 745 → 846 / 682 |
+| VGPR / SGPR spills | 0 / 0 → 0 / 0 |
+
+Retained instructions rise by 64 because the explicit O-clear moves are
+retained (assembly `v_mov_b32` count: 133).
+
+ATT traces from one CU, one dispatch, length 8192, measure cycles per steady
+loop iteration:
+
+| | Assembly | Before | After |
+| --- | ---: | ---: | ---: |
+| d128 | 10142 | 10132 | 10106 |
+| d192 | 7473 | 7896 (+5.7%) | **7474** |
+
+Outputs are bitwise-identical to the two preceding captures over 795,516
+launches. The full suite passes.
+
+Same-process timing compared with `ac8512a`:
+
+- **d192 at length 8192:** 1.8–2.0% faster.
+- **Short shapes:** 0.5–1.3% slower. d128 GQA4 at 256 is +1.3%.
+
+Compared with `4dd38ce`, d128 is 11–15% faster at 256 and 1024.
+
+The O-clear asm gets no compiler hazard padding. Its nearest MFMA is 102/67
+wait states away, against a window of about 19.
+
+## Single LDS array, LICM control, masked-tail fill
 
 [`lds_licm_mask_20261111`](../benchmarks/results/hip_native/isa_match/lds_licm_mask_20261111/README.md)
 captures source commits `3ff0230`–`ebddf9d` with the production LLVM
@@ -143,7 +198,7 @@ loads, in entry lane/address setup. Scalar setup/control arithmetic, literal
 initialization and outside-loop waits/nops still differ. All whole-kernel
 LDS/global/buffer/MFMA and floating-point mnemonic counts remain matched.
 
-The largest remaining positive delta is `s_nop`: +104/+49 in the current
+The largest remaining positive delta is `s_nop`: +104/+50 in the current
 capture, down from +125/+43. The assembly
 reference assumes VCC mask interlocking, while LLVM inserts software delays.
 AMD's CDNA4 ISA guide distinguishes two waits for SGPR/VCC constant inputs from
@@ -155,7 +210,7 @@ for manual pages, quotations and the precise unresolved classification.
 | Packaged allocation, current capture | d128 | d192 |
 | --- | ---: | ---: |
 | VGPRs | 244 | 206 |
-| SGPRs | 88 | 90 |
+| SGPRs | 77 | 79 |
 | Scratch bytes per lane | 0 | 0 |
 | LDS bytes per block | 163840 | 131072 |
 | Reported SGPR spills | 0 | 0 |
