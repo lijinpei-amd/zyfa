@@ -33,7 +33,7 @@ cross-pass scheduling differences, rather than a claim of equal performance.
 | K LDS slots | 4 × 16 KiB | 4 × 16 KiB |
 | V LDS slots | 4 × 16 KiB | 4 × 8 KiB |
 | Output staging | 32 KiB | 32 KiB |
-| Total dynamic LDS | 160 KiB | 128 KiB |
+| Total LDS (one static array) | 160 KiB | 128 KiB |
 | Key steps per steady-loop iteration | 4 | 4 |
 | QK / PV / row-sum MFMAs per steady loop, per wave | 32 / 32 / 8 | 24 / 16 / 4 |
 
@@ -66,10 +66,52 @@ on the device, so captured graphs observe updates.
 ## Compiler and scheduling choices
 
 The kernels use HIP/LLVM builtins for MFMAs, transpose LDS reads, probability
-conversion, waits, priorities, barriers, and BF16 packing. Two external symbol
-aliases name `llvm.amdgcn.raw.buffer.load.lds` and `llvm.fake.use`; neither
-contains instruction assembly. There are no fixed-register declarations or
-instruction inline assembly in the native dependency path.
+conversion, waits, priorities, barriers, and BF16 packing. External symbol
+aliases name `llvm.amdgcn.raw.buffer.load.lds`, `llvm.fake.use` and a few
+AMDGPU intrinsics; none of them contains instruction assembly. There are no
+fixed-register declarations.
+
+The native path does contain single-instruction inline assembly. Each
+statement emits one named instruction with compiler-allocated registers:
+
+- **Scalar arithmetic:** `scalar_add`, `scalar_add_imm<N>`, `scalar_sub`,
+  `scalar_mask_sub<N>`, `scalar_increment` and `scalar_min` emit `s_add_u32`,
+  `s_sub_u32`, `s_sub_i32` or `s_min_u32`.
+  - They pin the mnemonic of uniform address and control arithmetic. Without
+    them, LLVM turns disjoint adds into `s_or_b32`.
+  - The `volatile` forms keep each DMA address add at its use, so LLVM cannot
+    fold the per-DMA sums together or hoist them.
+  - `scalar_add_imm<N>` takes the LDS offset as an `"n"` immediate, so DMA M0
+    values are `s_add_u32 m0, base, literal`, as in the assembly kernels.
+- **Wave-mask select:** `select_wave_mask` emits `v_cndmask_b32_e64`.
+- **Loop constants:** `vgpr_constant<Bits>` and `sgpr_constant<Bits>` emit
+  `v_mov_b32` or `s_mov_b32`. The constants are the E8M0 MFMA scale `0x7f`,
+  the 0.125 rescale threshold, −127.0, d128's −8.0, and −inf.
+  - Each is defined once at kernel entry and stays in a register, like the
+    assembly's setup registers.
+  - A plain C++ constant would be materialized at every use by instruction
+    selection, and only MachineLICM would move it out of the loop.
+
+All LDS buffers live in one static `__shared__` array per kernel, at the
+offsets listed above. Because each LDS offset is a compile-time integer, it
+can be encoded as an instruction immediate. A `__restrict__` V-fragment base
+restores the alias scopes that `SIInsertWaitcnts` needs to avoid waiting on
+unrelated LDS DMA.
+
+Loop-invariant code motion is disabled for the persistent pass loop:
+
+- **IR LICM:** `#pragma clang loop licm(disable)` turns it off for that loop.
+- **MachineLICM:** `setup.py` passes `-mllvm=-disable-machine-licm`.
+- **Why:** without this, LLVM hoists per-pass and per-use values (epilogue
+  addresses, stride multiples, LDS literals) to the kernel entry, which caused
+  the earlier register spills. The source already places these values the way
+  the assembly kernels do. The steady and tail loops have several entry blocks,
+  so LLVM sees them as irreducible cycles, not natural loops. All hoisting
+  therefore crosses the pass loop.
+
+The masked tail tests the elementwise path first, as the assembly kernels do.
+d128 weights that path at 0.85 so block placement keeps the −inf fill out of
+line; this avoids a duplicated score tile.
 
 The DMA LDS base is made wave-uniform before computing its address, matching
 m0's hardware semantics and reducing register pressure. Output lane indices
@@ -79,30 +121,34 @@ SM side of the barrier; LLVM otherwise sinks their conversion into MM.
 Timing selected DMA placement after the last PV fragment reads for steady
 stages and d192. The masked d128 tail retains earlier DMA placement during QK.
 This preserves the same four-slot prefetch distances while reducing waits
-around current-tile LDS reads. Plain ternary masking, additional scheduler
-fences, static LDS declarations, output outlining, and alternate output
-staging were also investigated; the final source uses the measured schedule.
+around current-tile LDS reads. For the earlier schedule, plain ternary
+masking, additional scheduler fences, static LDS declarations, output
+outlining, and alternate output staging were also investigated. The current
+source uses one static LDS array for the reasons above.
 
 ## Generated code and remaining differences
 
+Current resources, from the
+[`lds_licm_mask_20261111`](../benchmarks/results/hip_native/isa_match/lds_licm_mask_20261111/README.md)
+capture:
+
 | Resource | HIP d128 | Assembly d128 | HIP d192 | Assembly d192 |
 | --- | ---: | ---: | ---: | ---: |
-| VGPRs per wave | 256 | 256 | 256 | 256 |
-| SGPRs | 106 | 102 | 106 | 102 |
+| VGPRs per wave | 244 | 256 | 206 | 256 |
+| SGPRs | 88 | 102 | 90 | 102 |
 | AGPRs | 0 | 0 | 0 | 0 |
-| Scratch frame bytes per lane | 396 | 0 | 212 | 0 |
+| VGPR / SGPR spills | 0 / 0 | 0 / 0 | 0 / 0 | 0 / 0 |
+| Scratch frame bytes per lane | 0 | 0 | 0 | 0 |
 | Total LDS bytes per block | 163840 | 163840 | 131072 | 131072 |
 
-LLVM reports register-limited occupancy of two waves per SIMD. The eight-wave
-block and LDS allocation permit one resident block per CU. LDS is allocated
-at launch, so the native code-object metadata reports zero **fixed** LDS;
-the launch supplies the total shown above.
+The eight-wave block and LDS allocation permit one resident block per CU, with
+two waves per SIMD. The single static LDS array is reported as fixed group
+segment size in the code-object metadata.
 
-The d128 steady loop has four eight-byte scratch reload instructions per
-four-step iteration. The d192 steady loop has no scratch instructions. Both
-kernels still spill around startup, masked tails, and the epilogue; these
-costs matter most for short sequences. The scratch-frame sizes describe the
-compiled kernel, not just its steady loop.
+Neither kernel spills or uses scratch. The earlier capture described below had
+396/212-byte scratch frames, plus four eight-byte scratch reloads per d128
+steady-loop iteration. Those spills came from LLVM hoisting per-pass values to
+the kernel entry, and from a duplicated score tile in the masked tail.
 
 The HIP implementation restarts its ring and startup loads on each mirrored
 pass. It does not reproduce the assembly's next-pass prefetch, cross-pass ring

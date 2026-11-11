@@ -2,7 +2,66 @@
 
 Both four-stage steady loops retain the assembly backend's exact disassembled
 mnemonic counts and sequence. The whole-kernel counts and sequence still differ.
-The latest vector fixes reuse one runtime V address per PV site and restore
+
+## Current capture: single LDS array, LICM control, masked-tail fill
+
+[`lds_licm_mask_20261111`](../benchmarks/results/hip_native/isa_match/lds_licm_mask_20261111/README.md)
+captures source commits `3ff0230`–`ebddf9d` with the production LLVM
+(`72e518a3f02a`) and the new `-mllvm=-disable-machine-licm` device flag.
+Before is the zero-ADD3 capture
+[`runtime_add3_20261111`](../benchmarks/results/hip_native/isa_match/runtime_add3_20261111/README.md)
+(`4dd38ce`).
+
+| Measurement | d128 before → after | d192 before → after |
+| --- | ---: | ---: |
+| Strict steady loop | 1333 → 1333, exact | 825 → 825, exact |
+| Retained whole-kernel instructions (assembly 5302 / 3737) | 4929 → 4910 | 3359 → 3398 |
+| Positive whole-kernel mnemonic delta sum | 301 → 261 | 214 → 203 |
+| Sum of absolute mnemonic differences | 975 → 914 | 806 → 745 |
+| Positive scalar delta sum | 272 → 221 | 179 → 160 |
+| Positive vector delta sum | 29 → 40 | 35 → 43 |
+| VGPRs / SGPRs | 256 / 106 → 244 / 88 | 231 / 106 → 206 / 90 |
+| VGPR / SGPR spills | 23 / 14 → 0 / 0 | 0 / 1 → 0 / 0 |
+| Scratch bytes per lane | 64 → 0 | 0 → 0 |
+
+The investigation found that the HIP source already matches the assembly's
+register pressure in the steady loop: d128 carries 3 VGPR / 46 SGPR through
+the loop unused, against the assembly's 2 / 47. The excess came from LLVM
+moving values the source computes per pass or at use to the kernel entry:
+
+- **IR LICM, EarlyCSE and GVN:** epilogue addresses, stride multiples and
+  head bases.
+- **Early MachineLICM:** literal and constant moves, and V-ring bases.
+- **The `"s"` inline-asm constraint:** it forced every LDS address literal
+  into an SGPR.
+- **Masked tail:** a duplicated score tile, created because the fully masked
+  fill folded into the mask test block.
+
+The source changes:
+
+- **One static LDS array** in the reference layout. M0 offsets are `"n"`
+  immediates, and a `__restrict__` V base keeps the LDS-DMA wait scopes.
+- **Loop constants** are defined once at entry through one-instruction moves,
+  and the `lse` pointer is a select.
+- **LICM:** `#pragma clang loop licm(disable)` covers the persistent pass loop,
+  and `-disable-machine-licm` disables early MachineLICM.
+- **Masked tail:** the elementwise path is tested first, and d128 uses a 0.85
+  placement weight.
+
+Recomputing per-pass address terms adds some vector arithmetic and d192
+scalar adds, so d192 retains more instructions than before. The other
+measures above improve or stay exact.
+
+Outputs are bitwise-identical to `4dd38ce` across 792,716 tail-focused
+launches. The full suite passes. Same-process timing improves d128 by
+10.9–16.2% at lengths 256 and 1024, and d192 by 1.5–3.0%. Length 8192 is
+within run-to-run noise. A MachineLICM patch honouring `llvm.licm.disable`
+produces byte-identical code without the global flag; it is archived as an
+alternative.
+
+## Earlier captures
+
+The vector fixes reuse one runtime V address per PV site and restore
 four/three setup MAD_U24s with HIP `__umul24` and validated native stride bounds.
 The linked kernels retain 4955/3382 instructions, down from 5042/3420, with
 unchanged steady sequences and resources. See
@@ -84,7 +143,8 @@ loads, in entry lane/address setup. Scalar setup/control arithmetic, literal
 initialization and outside-loop waits/nops still differ. All whole-kernel
 LDS/global/buffer/MFMA and floating-point mnemonic counts remain matched.
 
-The largest remaining positive delta is `s_nop` (+125/+42). The assembly
+The largest remaining positive delta is `s_nop`: +104/+49 in the current
+capture, down from +125/+43. The assembly
 reference assumes VCC mask interlocking, while LLVM inserts software delays.
 AMD's CDNA4 ISA guide distinguishes two waits for SGPR/VCC constant inputs from
 zero waits for carry-in, but does not explicitly classify CNDMASK's condition
@@ -92,16 +152,20 @@ mask. The continuation retained LLVM's conservative handling. See
 [`vcc-hazard-evidence.md`](../benchmarks/results/hip_native/isa_match/whole_kernel_fixes_20261111/vcc-hazard-evidence.md)
 for manual pages, quotations and the precise unresolved classification.
 
-| Packaged allocation | d128 | d192 |
+| Packaged allocation, current capture | d128 | d192 |
 | --- | ---: | ---: |
-| VGPRs | 256 | 231 |
-| SGPRs | 106 | 106 |
-| Scratch bytes per lane | 64 | 0 |
+| VGPRs | 244 | 206 |
+| SGPRs | 88 | 90 |
+| Scratch bytes per lane | 0 | 0 |
 | LDS bytes per block | 163840 | 131072 |
-| Reported SGPR spills before → after | 22 → 14 | 1 → 1 |
-| Reported VGPR spills before → after | 23 → 23 | 0 → 0 |
+| Reported SGPR spills | 0 | 0 |
+| Reported VGPR spills | 0 | 0 |
 
-Tiling, LDS allocation, four-slot pipeline, wave phases and steady unrolling
+The whole-kernel fixes capture had 256/231 VGPRs, 106/106 SGPRs and 64/0
+scratch bytes. Its d128 kernel spilled 23 VGPRs and 14 SGPRs, and its d192
+kernel 1 SGPR.
+
+Tiling, LDS sizes and slot offsets, the four-slot pipeline, wave phases and steady unrolling
 remain unchanged. Allocation values describe the complete kernel; direct spill
 instructions remain recorded separately from retained instruction comparisons.
 
