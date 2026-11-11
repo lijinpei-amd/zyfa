@@ -38,58 +38,31 @@ extern "C" __device__ __attribute__((convergent)) float pipeline_rcp(float) __as
 extern "C" __device__ __attribute__((convergent)) float pipeline_log(float) __asm("llvm.amdgcn.log.f32");
 
 template <int D> constexpr int keys = D == 128 ? 128 : 64;
-template <int D> constexpr int vslot_bytes = keys<D> * 128;
-template <int D> constexpr int ring_bytes = 65536 + 4 * vslot_bytes<D>;
-template <int D> constexpr int lds_bytes = ring_bytes<D> + 32768;
+// One LDS array per kernel with the csrc/asm/d*.py layout: four K slots, four V slots, then
+// the output staging buffer.
+constexpr uint32_t kslot_bytes = 16384;
+constexpr uint32_t vring_offset = 4 * kslot_bytes;
+template <int D> constexpr uint32_t vslot_bytes = keys<D> * 128;
+template <int D> constexpr uint32_t ring_bytes = vring_offset + 4 * vslot_bytes<D>;
+template <int D> constexpr uint32_t lds_bytes = ring_bytes<D> + 32768;
 template <int D> using Args = std::conditional_t<D == 128, Args128, Args192>;
 
-__device__ __forceinline__ uint32_t scalar_add(uint32_t a, uint32_t b);
-
 template <int D> struct Lds {
-    byte_lds k0, k1, k2, k3, v0, v1, v2, v3, out;
-    int dma_base;
+    byte_lds base;
+    // This lane's V fragment address in slot 0. Like the assembly's V_VA, it includes the V ring
+    // base, so slot and fragment offsets fit the DS offset field.
+    byte_lds vlane;
+    // This wave's DMA M0 bases of the K and V rings, like the assembly's S_M0K and S_M0V.
+    uint32_t kdma, vdma;
     int kaddr0, kaddr1, kaddr2;
     uint32_t kvoff0, kvoff1, vvoff0, vvoff1;
 
-    __device__ __forceinline__ byte_lds key(int slot) const {
-        if (__builtin_constant_p(slot)) {
-            switch (slot & 3) {
-            case 0: return k0;
-            case 1: return k1;
-            case 2: return k2;
-            default: return k3;
-            }
-        }
-        const uint32_t bits = (uint32_t)slot & 3;
-        const uint32_t low = bits & 1, high = bits >> 1;
-        const uint32_t p0 = (uint32_t)(uintptr_t)k0, p1 = (uint32_t)(uintptr_t)k1;
-        const uint32_t p2 = (uint32_t)(uintptr_t)k2, p3 = (uint32_t)(uintptr_t)k3;
-        const uint32_t step = p1 - p0;
-        return (byte_lds)(uintptr_t)(p0 + bits * step + high * (p2 - p0 - 2 * step)
-                                    + (low & high) * (p3 - p2 - p1 + p0));
-    }
+    static constexpr uint32_t key_offset(int slot) { return kslot_bytes * ((uint32_t)slot & 3); }
+    static constexpr uint32_t value_offset(int slot) { return vslot_bytes<D> * ((uint32_t)slot & 3); }
 
-    __device__ __forceinline__ uint32_t value_offset(int slot) const {
-        const uint32_t bits = (uint32_t)slot & 3;
-        const uint32_t low = bits & 1, high = bits >> 1;
-        const uint32_t p0 = (uint32_t)(uintptr_t)v0, p1 = (uint32_t)(uintptr_t)v1;
-        const uint32_t p2 = (uint32_t)(uintptr_t)v2, p3 = (uint32_t)(uintptr_t)v3;
-        const uint32_t step = p1 - p0;
-        return bits * step + high * (p2 - p0 - 2 * step)
-                           + (low & high) * (p3 - p2 - p1 + p0);
-    }
+    __device__ __forceinline__ byte_lds key(int slot) const { return base + key_offset(slot); }
 
-    __device__ __forceinline__ byte_lds value(int slot) const {
-        if (__builtin_constant_p(slot)) {
-            switch (slot & 3) {
-            case 0: return v0;
-            case 1: return v1;
-            case 2: return v2;
-            default: return v3;
-            }
-        }
-        return (byte_lds)(uintptr_t)scalar_add((uint32_t)(uintptr_t)v0, value_offset(slot));
-    }
+    __device__ __forceinline__ byte_lds out() const { return base + ring_bytes<D>; }
 };
 
 struct Scores128 { fx16 a, b, c, d; };
@@ -148,6 +121,13 @@ __device__ __forceinline__ uint32_t scalar_add(uint32_t a, uint32_t b) {
     return r;
 }
 
+template <uint32_t B>
+__device__ __forceinline__ uint32_t scalar_add_imm(uint32_t a) {
+    uint32_t r;
+    asm volatile("s_add_u32 %0, %1, %2" : "=s"(r) : "s"(a), "n"(B) : "scc");
+    return r;
+}
+
 __device__ __forceinline__ uint32_t scalar_increment(uint32_t a) {
     uint32_t r;
     asm volatile("s_add_u32 %0, %1, 1" : "=s"(r) : "s"(a) : "scc");
@@ -200,51 +180,37 @@ __device__ __forceinline__ float row_sum(i8 p, i8 sel) {
     return row_sum_vector(p, sel)[0];
 }
 
-template <int D, int Chunk, bool ByteOffset = false, bool Group0Round = false>
+// m0 holds the wave's LDS base; hardware adds the lane's 16-byte displacement. As in the
+// assembly, m0 is a slot base plus an immediate added with s_add_u32.
+template <uint32_t Offset>
+__device__ __forceinline__ g2s_as3 dma_address(uint32_t slot_base) {
+    return (g2s_as3)(uintptr_t)scalar_add_imm<Offset>(slot_base);
+}
+
+// Slot >= 0 is the steady-loop form: the slot offset is part of the immediate and tile is a
+// byte offset. Otherwise the slot base is computed from the runtime slot.
+template <int D, int Chunk, int Slot = -1, bool Group0Round = false>
 __device__ __forceinline__ void load_k_chunk(Lds<D> sm, g2s_i32x4 rsrc, int slot, int tile,
                                              int stride, int tid) {
     constexpr int round_key = Group0Round ? Chunk / (D == 128 ? 8 : 16) : 0;
     const uint32_t voff = Group0Round || Chunk == 0 ? sm.kvoff0 : sm.kvoff1;
-    // m0 holds the wave's LDS base; hardware adds the lane's 16-byte displacement.
-    byte_lds dest = sm.key(slot) + sm.dma_base + Chunk * 16;
-    if constexpr (ByteOffset) {
-        uint32_t address;
-        asm volatile("s_add_u32 %0, %1, %2" : "=s"(address) : "s"(sm.dma_base), "s"((uint32_t)(uintptr_t)(sm.key(slot) + Chunk * 16)) : "scc");
-        dest = (byte_lds)(uintptr_t)address;
-#pragma unroll
-        for (int other = 0; other < 4; ++other) {
-            if (other != slot)
-                __builtin_assume_separate_storage((void *)dest, (void *)sm.key(other));
-            if (true)
-                __builtin_assume_separate_storage((void *)dest, (void *)sm.value(other));
-        }
-    }
-    llvm_amdgcn_raw_buffer_load_lds(rsrc, (g2s_as3)dest,
-                                   16, voff, ByteOffset ? tile : (tile * keys<D> + round_key) * stride, 0, 0);
+    const uint32_t slot_base = Slot >= 0 ? sm.kdma : sm.kdma + Lds<D>::key_offset(slot);
+    constexpr uint32_t offset = (Slot >= 0 ? Lds<D>::key_offset(Slot) : 0) + Chunk * 16;
+    llvm_amdgcn_raw_buffer_load_lds(rsrc, dma_address<offset>(slot_base),
+                                   16, voff, Slot >= 0 ? tile : (tile * keys<D> + round_key) * stride, 0, 0);
 }
 
-template <int D, int Chunk, bool ByteOffset = false, bool Group0Round = false>
+template <int D, int Chunk, int Slot = -1, bool Group0Round = false>
 __device__ __forceinline__ void load_v_chunk(Lds<D> sm, g2s_i32x4 rsrc, int slot, int tile,
                                              int stride, int tid) {
     constexpr int round_key = !Group0Round ? 0 : D == 128
         ? ((Chunk >> 7) & 3) * 32 + ((Chunk >> 9) & 1) * 4
         : ((Chunk >> 8) & 1) * 4;
     const uint32_t voff = Group0Round || Chunk == 0 ? sm.vvoff0 : sm.vvoff1;
-    byte_lds dest = sm.value(slot) + sm.dma_base + Chunk * 16;
-    if constexpr (ByteOffset) {
-        uint32_t address;
-        asm volatile("s_add_u32 %0, %1, %2" : "=s"(address) : "s"(sm.dma_base), "s"((uint32_t)(uintptr_t)(sm.value(slot) + Chunk * 16)) : "scc");
-        dest = (byte_lds)(uintptr_t)address;
-#pragma unroll
-        for (int other = 0; other < 4; ++other) {
-            if (true)
-                __builtin_assume_separate_storage((void *)dest, (void *)sm.key(other));
-            if (other != slot)
-                __builtin_assume_separate_storage((void *)dest, (void *)sm.value(other));
-        }
-    }
-    llvm_amdgcn_raw_buffer_load_lds(rsrc, (g2s_as3)dest,
-                                   16, voff, ByteOffset ? tile : (tile * keys<D> + round_key) * stride, 0, 0);
+    const uint32_t slot_base = Slot >= 0 ? sm.vdma : sm.vdma + Lds<D>::value_offset(slot);
+    constexpr uint32_t offset = (Slot >= 0 ? Lds<D>::value_offset(Slot) : 0) + Chunk * 16;
+    llvm_amdgcn_raw_buffer_load_lds(rsrc, dma_address<offset>(slot_base),
+                                   16, voff, Slot >= 0 ? tile : (tile * keys<D> + round_key) * stride, 0, 0);
 }
 
 template <int D>
@@ -263,20 +229,20 @@ __device__ __forceinline__ void load_v(Lds<D> sm, g2s_i32x4 rsrc, int slot, int 
 template <int D>
 __device__ __forceinline__ void load_k_group0(Lds<D> sm, g2s_i32x4 rsrc, int slot, int tile,
                                               int stride, int tid) {
-    load_k_chunk<D, 0, false, true>(sm, rsrc, slot, tile, stride, tid);
-    load_k_chunk<D, 256, false, true>(sm, rsrc, slot, tile, stride, tid);
-    load_k_chunk<D, 512, false, true>(sm, rsrc, slot, tile, stride, tid);
-    load_k_chunk<D, 768, false, true>(sm, rsrc, slot, tile, stride, tid);
+    load_k_chunk<D, 0, -1, true>(sm, rsrc, slot, tile, stride, tid);
+    load_k_chunk<D, 256, -1, true>(sm, rsrc, slot, tile, stride, tid);
+    load_k_chunk<D, 512, -1, true>(sm, rsrc, slot, tile, stride, tid);
+    load_k_chunk<D, 768, -1, true>(sm, rsrc, slot, tile, stride, tid);
 }
 
 template <int D>
 __device__ __forceinline__ void load_v_group0(Lds<D> sm, g2s_i32x4 rsrc, int slot, int tile,
                                               int stride, int tid) {
-    load_v_chunk<D, 0, false, true>(sm, rsrc, slot, tile, stride, tid);
-    load_v_chunk<D, 256, false, true>(sm, rsrc, slot, tile, stride, tid);
+    load_v_chunk<D, 0, -1, true>(sm, rsrc, slot, tile, stride, tid);
+    load_v_chunk<D, 256, -1, true>(sm, rsrc, slot, tile, stride, tid);
     if constexpr (D == 128) {
-        load_v_chunk<D, 512, false, true>(sm, rsrc, slot, tile, stride, tid);
-        load_v_chunk<D, 768, false, true>(sm, rsrc, slot, tile, stride, tid);
+        load_v_chunk<D, 512, -1, true>(sm, rsrc, slot, tile, stride, tid);
+        load_v_chunk<D, 768, -1, true>(sm, rsrc, slot, tile, stride, tid);
     }
 }
 
@@ -306,8 +272,11 @@ __device__ __forceinline__ Head<D> read_head(Lds<D> sm, int runtime_slot) {
     return h;
 }
 
+// With one LDS array, LDS lowering adds no alias scopes. The restrict parameter gives the
+// transposed reads scope metadata after inlining; SIInsertWaitcnts waits on every outstanding
+// LDS DMA before a DS read that has no alias information.
 template <int Half, int J, bool Ordered = false>
-__device__ __forceinline__ i8 read_v_fragment(byte_lds base) {
+__device__ __forceinline__ i8 read_v_fragment(byte_lds __restrict__ base) {
     const auto p = base + 4096 * Half + 256 * J;
     const i2 a = __builtin_amdgcn_ds_read_tr8_b64_v2i32((i2_lds)(p));
     if constexpr (Ordered) SCHED_FENCE();
@@ -323,9 +292,7 @@ __device__ __forceinline__ i8 read_v_fragment(byte_lds base) {
 template <int D, int Half, int J, int Slot, bool Ordered = false>
 __device__ __forceinline__ i8 read_v(Lds<D> sm, int runtime_slot) {
     const int slot = Slot < 0 ? runtime_slot : Slot;
-    const int c = laneid() & 31, gb = laneid() >> 5;
-    const int laneoff = (gb * (keys<D> / 2) + (c >> 4)) * 128 + (c & 15) * 8;
-    return read_v_fragment<Half, J, Ordered>(sm.value(slot) + laneoff);
+    return read_v_fragment<Half, J, Ordered>(sm.vlane + Lds<D>::value_offset(slot));
 }
 
 
@@ -640,7 +607,7 @@ do { \
         FP8_SCHEDULE_POINT(s.c, r1); \
         const uint32_t k_offset = scalar_min(k_future, k_max); \
         FP8_SCHEDULE_POINT(k_offset); \
-        load_k_chunk<D, 0, true>(sm, kr, Cur, k_offset, k_stride, tid); \
+        load_k_chunk<D, 0, Cur>(sm, kr, Cur, k_offset, k_stride, tid); \
         SCHED_FENCE(); \
         l = add_scaled_sum_float(l, rs_lo, params.sum_scale_lo); \
         FP8_SCHEDULE_POINT(__float_as_int(l)); \
@@ -650,7 +617,7 @@ do { \
         s.d = mma(r3, q.a, fx16{}); \
         r2 = read_k<D, 3, 1, Next>(sm, Next); \
         FP8_SCHEDULE_POINT(s.d, r2); \
-        load_k_chunk<D, 512, true>(sm, kr, Cur, k_offset, k_stride, tid); \
+        load_k_chunk<D, 512, Cur>(sm, kr, Cur, k_offset, k_stride, tid); \
         SCHED_FENCE(); \
         FP8_LDS_WAIT(4); \
         s.a = mma(r4, q.b, s.a); \
@@ -658,12 +625,12 @@ do { \
         FP8_SCHEDULE_POINT(s.a, r3); \
         const uint32_t v_offset = scalar_min(v_future, v_max); \
         FP8_SCHEDULE_POINT(v_offset); \
-        load_v_chunk<D, 0, true>(sm, vr, (Cur + 2) & 3, v_offset, v_stride, tid); \
+        load_v_chunk<D, 0, (Cur + 2) & 3>(sm, vr, (Cur + 2) & 3, v_offset, v_stride, tid); \
         SCHED_FENCE(); \
         s.b = mma(r0, q.b, s.b); \
         r4 = read_v<D, 0, 1, Cur, true>(sm, Cur); \
         FP8_SCHEDULE_POINT(s.b, r4); \
-        load_v_chunk<D, 512, true>(sm, vr, (Cur + 2) & 3, v_offset, v_stride, tid); \
+        load_v_chunk<D, 512, (Cur + 2) & 3>(sm, vr, (Cur + 2) & 3, v_offset, v_stride, tid); \
         k_future = scalar_add(k_future, k_step); \
         v_future = scalar_add(v_future, v_step); \
         SCHED_FENCE(); \
@@ -747,7 +714,7 @@ do { \
         FP8_SCHEDULE_POINT(s.b, r0); \
         const uint32_t k_offset = scalar_min(k_future, k_max); \
         FP8_SCHEDULE_POINT(k_offset); \
-        load_k_chunk<D, 0, true>(sm, kr, Cur, k_offset, k_stride, tid); \
+        load_k_chunk<D, 0, Cur>(sm, kr, Cur, k_offset, k_stride, tid); \
         SCHED_FENCE(); \
         const float old_l = l; \
         l = __builtin_fmaf(rs_lo, __int_as_float(params.sb_lo << 23), old_l); \
@@ -757,13 +724,13 @@ do { \
         s.a = mma(r2, q.b, s.a); \
         r1 = read_v<D, 0, 1, Cur, true>(sm, Cur); \
         FP8_SCHEDULE_POINT(s.a, r1); \
-        load_k_chunk<D, 512, true>(sm, kr, Cur, k_offset, k_stride, tid); \
+        load_k_chunk<D, 512, Cur>(sm, kr, Cur, k_offset, k_stride, tid); \
         SCHED_FENCE(); \
         s.b = mma(r3, q.b, s.b); \
         FP8_SCHEDULE_POINT(s.b); \
         const uint32_t v_offset = scalar_min(v_future, v_max); \
         FP8_SCHEDULE_POINT(v_offset); \
-        load_v_chunk<D, 0, true>(sm, vr, (Cur + 2) & 3, v_offset, v_stride, tid); \
+        load_v_chunk<D, 0, (Cur + 2) & 3>(sm, vr, (Cur + 2) & 3, v_offset, v_stride, tid); \
         k_future = scalar_add(k_future, k_step); \
         v_future = scalar_add(v_future, v_step); \
         SCHED_FENCE(); \
@@ -1260,7 +1227,7 @@ do { \
     const uint32_t lane = (uint32_t)tid & 63u; \
     const uint32_t row = lane & 31u; \
     const uint32_t half = (lane >> 5) & 1u; \
-    const uint32_t base_write = (uint32_t)(uintptr_t)sm.out + wave_offset + (row << 8); \
+    const uint32_t base_write = (uint32_t)(uintptr_t)sm.out() + wave_offset + (row << 8); \
     const uint32_t write_address = base_write | ((half ^ (row & 15u)) << 4); \
     *(volatile_i4_lds)(uintptr_t)(write_address ^ 0u) = __builtin_bit_cast(i4, (u4)pa.s0123); \
     SCHED_FENCE(); \
@@ -1281,7 +1248,7 @@ do { \
     __builtin_amdgcn_wave_barrier(); \
     const uint32_t first_row = (lane >> 4) & 3u; \
     const uint32_t column = lane & 15u; \
-    const uint32_t base_read = (uint32_t)(uintptr_t)sm.out + wave_offset + (first_row << 8); \
+    const uint32_t base_read = (uint32_t)(uintptr_t)sm.out() + wave_offset + (first_row << 8); \
     const uint32_t read_address = base_read | ((column ^ first_row) << 4); \
     const i4 read0 = *(volatile_i4_lds)(uintptr_t)((read_address ^ 0u) + 0u); \
     SCHED_FENCE(); \
@@ -1499,10 +1466,7 @@ __global__ __launch_bounds__(512, 1) void attend(Args<D> kernel_args) {
     const u2 d = *(kernarg_u2)(ap + 144);
     FP8_SCHEDULE_POINT(a, b, c, d);
     const Args<D> args = __builtin_bit_cast(Args<D>, RawArgs{a, b, c, d});
-    __shared__ __align__(128) unsigned char k0[16384], k1[16384], k2[16384], k3[16384];
-    __shared__ __align__(128) unsigned char v0[vslot_bytes<D>], v1[vslot_bytes<D>],
-                                                 v2[vslot_bytes<D>], v3[vslot_bytes<D>];
-    __shared__ __align__(16) unsigned char output_storage[32768];
+    __shared__ __align__(128) unsigned char lds[lds_bytes<D>];
     const int tid = threadIdx.x;
     const int wave = __builtin_amdgcn_readfirstlane(tid >> 6);
     const int lc = laneid() & 31, lgb = laneid() >> 5;
@@ -1601,11 +1565,13 @@ __global__ __launch_bounds__(512, 1) void attend(Args<D> kernel_args) {
         voffsets[pass_index] = __umul24(key, (uint32_t)v_stride) + chunk;
         FP8_SCHEDULE_POINT(voffsets[pass_index]);
     }
-    const Lds<D> sm{(byte_lds)k0, (byte_lds)k1, (byte_lds)k2, (byte_lds)k3,
-                   (byte_lds)v0, (byte_lds)v1, (byte_lds)v2, (byte_lds)v3, (byte_lds)output_storage,
-                   wave * 1024, klane0, klane1, klane2, koffsets[0], koffsets[1], voffsets[0], voffsets[1]};
     const int vlane = (lgb * (keys<D> / 2) + (lc >> 4)) * 128 + (lc & 15) * 8;
-    const uint32_t invariant_vbase = (uint32_t)(uintptr_t)sm.v0 + (uint32_t)vlane;
+    const uint32_t invariant_vbase = (uint32_t)(uintptr_t)((byte_lds)lds + vring_offset) + (uint32_t)vlane;
+    const uint32_t kdma = (uint32_t)(uintptr_t)(byte_lds)lds + (uint32_t)wave * 1024u;
+    const Lds<D> sm{(byte_lds)lds, (byte_lds)(uintptr_t)invariant_vbase, kdma, scalar_add_imm<vring_offset>(kdma),
+                   klane0, klane1, klane2, koffsets[0], koffsets[1], voffsets[0], voffsets[1]};
+    // A fake use anchors each tail V address selection, so CodeGenPrepare does not sink the
+    // base-plus-slot add into every PV site as an addressing mode.
     byte_lds tail_vbase = nullptr;
     const i8 sel = selector();
 
@@ -1795,6 +1761,7 @@ tail:
         tail0: {
             if (scalar_increment(k) >= n) goto last0;
             tail_vbase = (byte_lds)(uintptr_t)(invariant_vbase + sm.value_offset(base + k));
+            phase_use(tail_vbase);
             if (k < fm) goto normal0;
             if (k == fm) goto pvo0;
             phase_barrier();
@@ -1834,6 +1801,7 @@ tail:
         last0: {
             if (fm < k) goto dead_last0;
             tail_vbase = (byte_lds)(uintptr_t)(invariant_vbase + sm.value_offset(base + k));
+            phase_use(tail_vbase);
             [[clang::nomerge]] __builtin_amdgcn_s_setprio(0);
             Probability<D> p = softmax<D>(s, params, p_scale);
             phase_use(p.a);
@@ -1900,6 +1868,7 @@ finished_dead_last0:
         tail1: {
             if (scalar_increment(k) >= n) goto last1;
             tail_vbase = (byte_lds)(uintptr_t)(invariant_vbase + sm.value_offset(base + k));
+            phase_use(tail_vbase);
             if (k < fm) goto normal1;
             if (k == fm) goto pvo1;
             phase_barrier();
@@ -1939,6 +1908,7 @@ finished_dead_last0:
         last1: {
             if (fm < k) goto dead_last1;
             tail_vbase = (byte_lds)(uintptr_t)(invariant_vbase + sm.value_offset(base + k));
+            phase_use(tail_vbase);
             [[clang::nomerge]] __builtin_amdgcn_s_setprio(0);
             Probability<D> p = softmax<D>(s, params, p_scale);
             phase_use(p.a);

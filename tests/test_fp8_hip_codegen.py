@@ -102,7 +102,9 @@ def test_hip_runtime_v_selection_uses_numeric_lds_addresses(native_frontend_ir, 
     definitions = dict(re.findall(r"^\s*(%[\w.$]+) = (.*)$", body[1], re.MULTILINE))
     invariant = re.findall(r"store i32 (%[\w.$]+), ptr %invariant_vbase(?:\.ascast)?,", body[1])
     assert len(invariant) == 1, invariant
-    assert re.fullmatch(r"add i32 %[\w.$]+, %[\w.$]+", definitions[invariant[0]])
+    # The V ring base is a constant offset into the kernel's single LDS array.
+    assert re.fullmatch(r"add i32 (?:%[\w.$]+|ptrtoint \(.*@\S+3lds, i32 65536\) to i32\)), %[\w.$]+",
+                        definitions[invariant[0]]), definitions[invariant[0]]
     stores = re.findall(r"store ptr addrspace\(3\) (%[\w.$]+), ptr %tail_vbase(?:\.ascast)?,", body[1])
     assert len(stores) == 4, stores
     for pointer in stores:
@@ -115,6 +117,19 @@ def test_hip_runtime_v_selection_uses_numeric_lds_addresses(native_frontend_ir, 
         assert addition, definitions[address]
         assert any(re.match(r"load i32, ptr %invariant_vbase(?:\.ascast)?,", definitions[value])
                    for value in addition.groups()), definitions[address]
+
+
+@pytest.mark.parametrize("dim,size", [(128, 163840), (192, 131072)])
+def test_hip_kernel_uses_one_lds_array(native_frontend_ir, native_assembly, dim, size):
+    if not LLVM:
+        pytest.skip("requires ZYFA_LLVM_ROOT for LDS layout inspection")
+    arrays = re.findall(rf"^@_ZZN15fmha_fp8_native6attendILi{dim}E\S+ = [^\n]*addrspace\(3\) global \[(\d+) x i8\]",
+                        native_frontend_ir, re.MULTILINE)
+    assert arrays == [str(size)], arrays
+    kernel = re.search(rf"^\s+\.amdhsa_kernel _ZN15fmha_fp8_native6attendILi{dim}E.*?^\s+\.end_amdhsa_kernel",
+                       native_assembly, re.MULTILINE | re.DOTALL)
+    assert kernel
+    assert int(re.search(r"\.amdhsa_group_segment_fixed_size (\d+)", kernel[0])[1]) == size
 
 
 @pytest.fixture(scope="module")
@@ -164,6 +179,38 @@ def test_hip_steady_disassembled_mnemonics_match(disassembled_kernels, dim, inde
     result = compare(steady_loop(reference, mfmas), steady_loop(llvm, mfmas))
     assert result["counts_match"], result["count_differences"]
     assert result["sequence_match"], result["first_mismatch"]
+
+
+@pytest.mark.parametrize("dim,index,mfmas", [(128, 1, 72), (192, 2, 44)])
+def test_hip_steady_dma_m0_uses_assembly_immediates(disassembled_kernels, dim, index, mfmas):
+    from benchmarks.compare_isa import parse_disassembly, select_function, steady_loop
+
+    operands = []
+    for text in (disassembled_kernels[index], disassembled_kernels[0]):
+        loop = steady_loop(select_function(parse_disassembly(text), dim), mfmas)
+        operands.append([[x.strip() for x in i.operands.split(",")] for i in loop
+                         if i.mnemonic == "s_add_u32" and i.operands.startswith("m0")])
+    reference, llvm = operands
+    assert [o[2] for o in llvm] == [o[2] for o in reference]
+    # One wave base per ring, like the assembly's S_M0K and S_M0V.
+    bases = dict(zip((o[1] for o in reference), (o[1] for o in llvm)))
+    assert len(bases) == 2 and len(set(bases.values())) == 2, bases
+    assert [bases[o[1]] for o in reference] == [o[1] for o in llvm]
+
+
+@pytest.mark.parametrize("dim,index,mfmas", [(128, 1, 72), (192, 2, 44)])
+def test_hip_steady_v_fragments_share_one_base(disassembled_kernels, dim, index, mfmas):
+    from benchmarks.compare_isa import parse_disassembly, select_function, steady_loop
+
+    reads = []
+    for text in (disassembled_kernels[index], disassembled_kernels[0]):
+        loop = steady_loop(select_function(parse_disassembly(text), dim), mfmas)
+        reads.append([i.operands for i in loop if i.mnemonic == "ds_read_b64_tr_b8"])
+    for operands in reads:
+        assert len({o.split(",")[1].split()[0] for o in operands}) == 1, operands
+    offsets = [[int(m[1]) if (m := re.search(r"offset:(\d+)", o)) else 0 for o in operands]
+               for operands in reads]
+    assert offsets[1] == offsets[0]
 
 
 @pytest.mark.parametrize("dim", [128, 192])
