@@ -990,6 +990,13 @@ __device__ __forceinline__ uint32_t pack_bf16(float a, float b) {
 }
 
 #define FP8_OUTPUT_POINT(A) do { [[clang::nomerge]] phase_use(A); SCHED_FENCE(); } while (false)
+// A permlane32 swap's two results go to rows 0/2 (or 1/3) of a 128-bit store, not to a register
+// pair, so they are anchored separately: a fake use of the pair would need an aligned VGPR pair.
+#define FP8_OUTPUT_PAIR(A) do { \
+    [[clang::nomerge]] phase_use((A)[0]); \
+    [[clang::nomerge]] phase_use((A)[1]); \
+    SCHED_FENCE(); \
+} while (false)
 #define FP8_OUTPUT() \
 do { \
     pipeline_nop(15); pipeline_nop(3); SCHED_FENCE(); \
@@ -1198,65 +1205,65 @@ do { \
     FP8_OUTPUT_POINT(pd[7]); \
     { \
         const auto lo = __builtin_amdgcn_permlane32_swap(pa[0], pa[2], false, false); \
-        FP8_OUTPUT_POINT(lo); \
+        FP8_OUTPUT_PAIR(lo); \
         const auto hi = __builtin_amdgcn_permlane32_swap(pa[1], pa[3], false, false); \
-        FP8_OUTPUT_POINT(hi); \
+        FP8_OUTPUT_PAIR(hi); \
         pa[0] = lo[0]; pa[2] = lo[1]; \
         pa[1] = hi[0]; pa[3] = hi[1]; \
     } \
     { \
         const auto lo = __builtin_amdgcn_permlane32_swap(pa[4], pa[6], false, false); \
-        FP8_OUTPUT_POINT(lo); \
+        FP8_OUTPUT_PAIR(lo); \
         const auto hi = __builtin_amdgcn_permlane32_swap(pa[5], pa[7], false, false); \
-        FP8_OUTPUT_POINT(hi); \
+        FP8_OUTPUT_PAIR(hi); \
         pa[4] = lo[0]; pa[6] = lo[1]; \
         pa[5] = hi[0]; pa[7] = hi[1]; \
     } \
     { \
         const auto lo = __builtin_amdgcn_permlane32_swap(pb[0], pb[2], false, false); \
-        FP8_OUTPUT_POINT(lo); \
+        FP8_OUTPUT_PAIR(lo); \
         const auto hi = __builtin_amdgcn_permlane32_swap(pb[1], pb[3], false, false); \
-        FP8_OUTPUT_POINT(hi); \
+        FP8_OUTPUT_PAIR(hi); \
         pb[0] = lo[0]; pb[2] = lo[1]; \
         pb[1] = hi[0]; pb[3] = hi[1]; \
     } \
     { \
         const auto lo = __builtin_amdgcn_permlane32_swap(pb[4], pb[6], false, false); \
-        FP8_OUTPUT_POINT(lo); \
+        FP8_OUTPUT_PAIR(lo); \
         const auto hi = __builtin_amdgcn_permlane32_swap(pb[5], pb[7], false, false); \
-        FP8_OUTPUT_POINT(hi); \
+        FP8_OUTPUT_PAIR(hi); \
         pb[4] = lo[0]; pb[6] = lo[1]; \
         pb[5] = hi[0]; pb[7] = hi[1]; \
     } \
     { \
         const auto lo = __builtin_amdgcn_permlane32_swap(pc[0], pc[2], false, false); \
-        FP8_OUTPUT_POINT(lo); \
+        FP8_OUTPUT_PAIR(lo); \
         const auto hi = __builtin_amdgcn_permlane32_swap(pc[1], pc[3], false, false); \
-        FP8_OUTPUT_POINT(hi); \
+        FP8_OUTPUT_PAIR(hi); \
         pc[0] = lo[0]; pc[2] = lo[1]; \
         pc[1] = hi[0]; pc[3] = hi[1]; \
     } \
     { \
         const auto lo = __builtin_amdgcn_permlane32_swap(pc[4], pc[6], false, false); \
-        FP8_OUTPUT_POINT(lo); \
+        FP8_OUTPUT_PAIR(lo); \
         const auto hi = __builtin_amdgcn_permlane32_swap(pc[5], pc[7], false, false); \
-        FP8_OUTPUT_POINT(hi); \
+        FP8_OUTPUT_PAIR(hi); \
         pc[4] = lo[0]; pc[6] = lo[1]; \
         pc[5] = hi[0]; pc[7] = hi[1]; \
     } \
     { \
         const auto lo = __builtin_amdgcn_permlane32_swap(pd[0], pd[2], false, false); \
-        FP8_OUTPUT_POINT(lo); \
+        FP8_OUTPUT_PAIR(lo); \
         const auto hi = __builtin_amdgcn_permlane32_swap(pd[1], pd[3], false, false); \
-        FP8_OUTPUT_POINT(hi); \
+        FP8_OUTPUT_PAIR(hi); \
         pd[0] = lo[0]; pd[2] = lo[1]; \
         pd[1] = hi[0]; pd[3] = hi[1]; \
     } \
     { \
         const auto lo = __builtin_amdgcn_permlane32_swap(pd[4], pd[6], false, false); \
-        FP8_OUTPUT_POINT(lo); \
+        FP8_OUTPUT_PAIR(lo); \
         const auto hi = __builtin_amdgcn_permlane32_swap(pd[5], pd[7], false, false); \
-        FP8_OUTPUT_POINT(hi); \
+        FP8_OUTPUT_PAIR(hi); \
         pd[4] = lo[0]; pd[6] = lo[1]; \
         pd[5] = hi[0]; pd[7] = hi[1]; \
     } \
