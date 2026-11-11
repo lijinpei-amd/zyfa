@@ -1568,9 +1568,7 @@ __global__ __launch_bounds__(512, 1) void attend(Args<D> kernel_args) {
         FP8_SCHEDULE_POINT(low_bit);
         chunk += low_bit << 4;
         FP8_SCHEDULE_POINT(chunk);
-        const uint32_t product = key * (uint32_t)k_stride;
-        FP8_SCHEDULE_POINT(product);
-        koffsets[pass_index] = product + chunk;
+        koffsets[pass_index] = __umul24(key, (uint32_t)k_stride) + chunk;
         FP8_SCHEDULE_POINT(koffsets[pass_index]);
     }
 #pragma unroll
@@ -1601,9 +1599,7 @@ __global__ __launch_bounds__(512, 1) void attend(Args<D> kernel_args) {
         FP8_SCHEDULE_POINT(dg);
         const uint32_t chunk = dg << 4;
         FP8_SCHEDULE_POINT(chunk);
-        const uint32_t product = key * (uint32_t)v_stride;
-        FP8_SCHEDULE_POINT(product);
-        voffsets[pass_index] = product + chunk;
+        voffsets[pass_index] = __umul24(key, (uint32_t)v_stride) + chunk;
         FP8_SCHEDULE_POINT(voffsets[pass_index]);
     }
     const Lds<D> sm{(byte_lds)k0, (byte_lds)k1, (byte_lds)k2, (byte_lds)k3,
@@ -2040,11 +2036,13 @@ kernel_end:
 #undef FP8_ANCHOR1
 
 hipError_t launch_d128(const Args128 &args, hipStream_t stream) {
+    if (args.kv_ss >= (1u << 24)) return hipErrorInvalidValue;
     hipLaunchKernelGGL(attend<128>, dim3(args.grid), dim3(512), 0, stream, args);
     return hipGetLastError();
 }
 
 hipError_t launch_d192(const Args192 &args, hipStream_t stream) {
+    if (args.k_ss >= (1u << 24) || args.v_ss >= (1u << 24)) return hipErrorInvalidValue;
     hipLaunchKernelGGL(attend<192>, dim3(args.grid), dim3(512), 0, stream, args);
     return hipGetLastError();
 }

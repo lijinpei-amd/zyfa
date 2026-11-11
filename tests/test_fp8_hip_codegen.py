@@ -571,3 +571,43 @@ def test_hip_steady_rescale_vote_uses_scalar_flag(native_assembly, dim, function
 def test_hip_d192_steady_probability_words_need_no_zero_initializers(native_assembly):
     body = extract_loop(native_assembly, 1, 44)
     assert not any(re.match(r"\s*v_mov_b32_e32\s+[^,]+, 0\s*$", line) for line in body)
+
+
+@pytest.mark.parametrize("dim,mads", [(128, 4), (192, 3)])
+def test_hip_setup_offsets_fuse_to_u24_mads(disassembled_kernels, dim, mads):
+    from benchmarks.compare_isa import parse_disassembly, select_function
+
+    code = select_function(parse_disassembly(disassembled_kernels[0]), dim)
+    end = next(i for i, instruction in enumerate(code)
+               if instruction.mnemonic == "s_cmp_ge_u32")
+    setup = code[:end]
+    assert sum(i.mnemonic == "v_mad_u32_u24" for i in setup) == mads
+    assert not any(re.sub(r"_e(?:32|64)$", "", i.mnemonic)
+                   in {"v_mul_lo_u32", "v_mul_u32_u24", "v_mad_u64_u32"}
+                   for i in setup)
+    # Five query and two shared output bodies retain full-width products.
+    assert sum(i.mnemonic == "v_mul_lo_u32" for i in code[end:]) == 7
+
+
+def test_hip_native_launch_rejects_u24_stride_boundary(tmp_path):
+    import importlib.util
+
+    if not LLVM:
+        pytest.skip("requires ZYFA_LLVM_ROOT for native host compilation")
+    torch_lib = Path(importlib.util.find_spec("torch").origin).parent / "lib"
+    output = tmp_path / "native_stride_guard"
+    command = [str(LLVM / "build/bin/clang++"), "-O1", "-std=c++20", "-DKITTENS_CDNA4",
+               "-D__HIP_PLATFORM_AMD__", "-x", "hip",
+               "--offload-arch=gfx950", "--rocm-path=" + str(ROCM), "-fno-gpu-rdc",
+               str(ROOT / "csrc/fp8_native.hip"),
+               str(ROOT / "tests/native_fp8_stride_guard.cpp"),
+               "-I" + str(ROOT / "csrc"), "-L" + str(ROCM / "lib"),
+               "-Wl,-rpath," + str(ROCM / "lib"),
+               "-Wl,-rpath," + str(torch_lib), "-Wl,-rpath-link," + str(torch_lib),
+               "-lamdhip64", "-o", str(output)]
+    result = subprocess.run(command, capture_output=True, text=True)
+    assert result.returncode == 0, result.stderr
+    env = dict(os.environ)
+    env["LD_LIBRARY_PATH"] = str(torch_lib) + ":" + env.get("LD_LIBRARY_PATH", "")
+    result = subprocess.run([str(output)], capture_output=True, text=True, env=env)
+    assert result.returncode == 0, result.stdout + result.stderr

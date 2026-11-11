@@ -31,6 +31,8 @@ struct alignas(8) Args192 {
 static_assert(sizeof(Args128) == 152 && offsetof(Args128, q_descale) == 128);
 static_assert(sizeof(Args192) == 152 && offsetof(Args192, q_descale) == 128);
 
+// K/V byte strides must be below 2^24: kv_ss for d128, k_ss and v_ss for d192.
+// Launchers reject larger unsigned strides with hipErrorInvalidValue before enqueue.
 hipError_t launch_d128(const Args128 &args, hipStream_t stream);
 hipError_t launch_d192(const Args192 &args, hipStream_t stream);
 
