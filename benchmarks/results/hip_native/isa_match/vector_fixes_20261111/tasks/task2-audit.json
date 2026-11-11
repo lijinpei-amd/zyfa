@@ -1,0 +1,1865 @@
+{
+  "128": {
+    "setup_mads": [
+      {
+        "mnemonic": "v_mad_u32_u24",
+        "operands": "v233, s8, v4, v8",
+        "address": 7136,
+        "line": 53,
+        "branch_target": null
+      },
+      {
+        "mnemonic": "v_mad_u32_u24",
+        "operands": "v234, s8, v9, v5",
+        "address": 7176,
+        "line": 61,
+        "branch_target": null
+      },
+      {
+        "mnemonic": "v_mad_u32_u24",
+        "operands": "v235, s8, v15, v14",
+        "address": 7248,
+        "line": 75,
+        "branch_target": null
+      },
+      {
+        "mnemonic": "v_mad_u32_u24",
+        "operands": "v236, s8, v5, v14",
+        "address": 7272,
+        "line": 80,
+        "branch_target": null
+      }
+    ],
+    "setup_mul_or_full_width_mad": [],
+    "full_width_query_output_products": 7,
+    "whole": {
+      "counts_match": false,
+      "sequence_match": false,
+      "reference_instruction_count": 5042,
+      "llvm_instruction_count": 5039,
+      "reference_counts": {
+        "buffer_load_dwordx4": 106,
+        "ds_read_b128": 140,
+        "ds_read_b64_tr_b8": 320,
+        "ds_write_b128": 16,
+        "global_load_dwordx4": 20,
+        "global_store_dword": 2,
+        "global_store_dwordx4": 16,
+        "s_add_u32": 295,
+        "s_addc_u32": 29,
+        "s_addk_i32": 5,
+        "s_and_b32": 23,
+        "s_and_b64": 19,
+        "s_barrier": 30,
+        "s_bfe_u32": 5,
+        "s_bitcmp1_b32": 2,
+        "s_branch": 28,
+        "s_cbranch_scc0": 19,
+        "s_cbranch_scc1": 75,
+        "s_cbranch_vccz": 2,
+        "s_cmp_eq_u32": 17,
+        "s_cmp_eq_u64": 8,
+        "s_cmp_ge_i32": 12,
+        "s_cmp_ge_u32": 29,
+        "s_cmp_lg_u32": 5,
+        "s_cmp_lg_u64": 6,
+        "s_cmp_lt_i32": 14,
+        "s_cmp_lt_u32": 8,
+        "s_cselect_b32": 22,
+        "s_cselect_b64": 16,
+        "s_endpgm": 1,
+        "s_load_dword": 3,
+        "s_load_dwordx16": 2,
+        "s_load_dwordx2": 1,
+        "s_load_dwordx4": 1,
+        "s_load_dwordx8": 5,
+        "s_lshl_b32": 73,
+        "s_lshr_b32": 9,
+        "s_min_u32": 13,
+        "s_mov_b32": 54,
+        "s_movk_i32": 4,
+        "s_mul_i32": 57,
+        "s_nop": 307,
+        "s_not_b32": 9,
+        "s_or_b32": 31,
+        "s_or_b64": 4,
+        "s_setprio": 22,
+        "s_sub_i32": 12,
+        "s_sub_u32": 12,
+        "s_waitcnt": 130,
+        "s_xor_b32": 7,
+        "v_add3_u32": 48,
+        "v_add_f32_e32": 26,
+        "v_add_u32_e32": 65,
+        "v_and_b32_e32": 11,
+        "v_and_or_b32": 1,
+        "v_bfe_u32": 5,
+        "v_cmp_eq_u32_e32": 1,
+        "v_cmp_gt_i32_e32": 192,
+        "v_cmp_lt_f32_e32": 6,
+        "v_cndmask_b32_e32": 1,
+        "v_cndmask_b32_e64": 198,
+        "v_cvt_i32_f32_e32": 16,
+        "v_cvt_pk_bf16_f32": 64,
+        "v_cvt_pk_u8_f32": 640,
+        "v_exp_f32_e32": 6,
+        "v_floor_f32_e32": 16,
+        "v_fma_f32": 680,
+        "v_log_f32_e32": 2,
+        "v_lshl_or_b32": 3,
+        "v_lshlrev_b32_e32": 33,
+        "v_lshrrev_b32_e32": 7,
+        "v_max3_f32": 224,
+        "v_max_f32_e32": 78,
+        "v_med3_f32": 16,
+        "v_mfma_f32_16x16x128_f8f6f4": 20,
+        "v_mfma_f32_32x32x64_f8f6f4": 64,
+        "v_mfma_scale_f32_32x32x64_f8f6f4": 80,
+        "v_mov_b32_e32": 8,
+        "v_mul_f32_e32": 170,
+        "v_mul_lo_u32": 11,
+        "v_or3_b32": 2,
+        "v_or_b32_e32": 24,
+        "v_permlane32_swap_b32_e32": 48,
+        "v_pk_mul_f32": 192,
+        "v_rcp_f32_e32": 2,
+        "v_readfirstlane_b32": 1,
+        "v_sub_f32_e32": 12,
+        "v_sub_u32_e32": 1,
+        "v_xor_b32_e32": 22
+      },
+      "llvm_counts": {
+        "buffer_load_dwordx4": 106,
+        "ds_read_b128": 140,
+        "ds_read_b64_tr_b8": 320,
+        "ds_write_b128": 16,
+        "global_load_dwordx4": 20,
+        "global_store_dword": 2,
+        "global_store_dwordx4": 16,
+        "s_add_u32": 295,
+        "s_addc_u32": 29,
+        "s_addk_i32": 5,
+        "s_and_b32": 23,
+        "s_and_b64": 19,
+        "s_barrier": 30,
+        "s_bfe_u32": 5,
+        "s_bitcmp1_b32": 2,
+        "s_branch": 28,
+        "s_cbranch_scc0": 19,
+        "s_cbranch_scc1": 75,
+        "s_cbranch_vccz": 2,
+        "s_cmp_eq_u32": 17,
+        "s_cmp_eq_u64": 8,
+        "s_cmp_ge_i32": 12,
+        "s_cmp_ge_u32": 29,
+        "s_cmp_lg_u32": 5,
+        "s_cmp_lg_u64": 6,
+        "s_cmp_lt_i32": 14,
+        "s_cmp_lt_u32": 8,
+        "s_cselect_b32": 22,
+        "s_cselect_b64": 16,
+        "s_endpgm": 1,
+        "s_load_dword": 3,
+        "s_load_dwordx16": 2,
+        "s_load_dwordx2": 1,
+        "s_load_dwordx4": 1,
+        "s_load_dwordx8": 5,
+        "s_lshl_b32": 73,
+        "s_lshr_b32": 9,
+        "s_min_u32": 13,
+        "s_mov_b32": 54,
+        "s_movk_i32": 4,
+        "s_mul_i32": 57,
+        "s_nop": 308,
+        "s_not_b32": 9,
+        "s_or_b32": 31,
+        "s_or_b64": 4,
+        "s_setprio": 22,
+        "s_sub_i32": 12,
+        "s_sub_u32": 12,
+        "s_waitcnt": 130,
+        "s_xor_b32": 7,
+        "v_add3_u32": 48,
+        "v_add_f32_e32": 26,
+        "v_add_u32_e32": 61,
+        "v_and_b32_e32": 11,
+        "v_and_or_b32": 1,
+        "v_bfe_u32": 5,
+        "v_cmp_eq_u32_e32": 1,
+        "v_cmp_gt_i32_e32": 192,
+        "v_cmp_lt_f32_e32": 6,
+        "v_cndmask_b32_e32": 1,
+        "v_cndmask_b32_e64": 198,
+        "v_cvt_i32_f32_e32": 16,
+        "v_cvt_pk_bf16_f32": 64,
+        "v_cvt_pk_u8_f32": 640,
+        "v_exp_f32_e32": 6,
+        "v_floor_f32_e32": 16,
+        "v_fma_f32": 680,
+        "v_log_f32_e32": 2,
+        "v_lshl_or_b32": 3,
+        "v_lshlrev_b32_e32": 33,
+        "v_lshrrev_b32_e32": 7,
+        "v_mad_u32_u24": 4,
+        "v_max3_f32": 224,
+        "v_max_f32_e32": 78,
+        "v_med3_f32": 16,
+        "v_mfma_f32_16x16x128_f8f6f4": 20,
+        "v_mfma_f32_32x32x64_f8f6f4": 64,
+        "v_mfma_scale_f32_32x32x64_f8f6f4": 80,
+        "v_mov_b32_e32": 8,
+        "v_mul_f32_e32": 170,
+        "v_mul_lo_u32": 7,
+        "v_or3_b32": 2,
+        "v_or_b32_e32": 24,
+        "v_permlane32_swap_b32_e32": 48,
+        "v_pk_mul_f32": 192,
+        "v_rcp_f32_e32": 2,
+        "v_readfirstlane_b32": 1,
+        "v_sub_f32_e32": 12,
+        "v_sub_u32_e32": 1,
+        "v_xor_b32_e32": 22
+      },
+      "count_differences": {
+        "s_nop": {
+          "reference": 307,
+          "llvm": 308,
+          "delta": 1
+        },
+        "v_add_u32_e32": {
+          "reference": 65,
+          "llvm": 61,
+          "delta": -4
+        },
+        "v_mad_u32_u24": {
+          "reference": 0,
+          "llvm": 4,
+          "delta": 4
+        },
+        "v_mul_lo_u32": {
+          "reference": 11,
+          "llvm": 7,
+          "delta": -4
+        }
+      },
+      "first_mismatch": {
+        "index": 44,
+        "reference": {
+          "mnemonic": "v_mul_lo_u32",
+          "operands": "v9, s8, v4",
+          "address": 7136,
+          "line": 53,
+          "branch_target": null
+        },
+        "llvm": {
+          "mnemonic": "v_mad_u32_u24",
+          "operands": "v233, s8, v4, v8",
+          "address": 7136,
+          "line": 53,
+          "branch_target": null
+        }
+      },
+      "excluded": {
+        "reference": [],
+        "llvm": []
+      }
+    },
+    "strict_loop": {
+      "counts_match": true,
+      "sequence_match": true,
+      "reference_instruction_count": 1333,
+      "llvm_instruction_count": 1333,
+      "reference_counts": {
+        "buffer_load_dwordx4": 16,
+        "ds_read_b128": 64,
+        "ds_read_b64_tr_b8": 128,
+        "s_add_u32": 32,
+        "s_barrier": 8,
+        "s_branch": 1,
+        "s_cbranch_scc1": 8,
+        "s_cmp_eq_u32": 4,
+        "s_cmp_ge_u32": 4,
+        "s_cmp_lg_u64": 4,
+        "s_cselect_b32": 4,
+        "s_cselect_b64": 4,
+        "s_min_u32": 8,
+        "s_nop": 28,
+        "s_setprio": 8,
+        "s_waitcnt": 36,
+        "v_add_f32_e32": 8,
+        "v_add_u32_e32": 8,
+        "v_cmp_lt_f32_e32": 4,
+        "v_cndmask_b32_e64": 4,
+        "v_cvt_i32_f32_e32": 8,
+        "v_cvt_pk_u8_f32": 256,
+        "v_exp_f32_e32": 4,
+        "v_floor_f32_e32": 8,
+        "v_fma_f32": 276,
+        "v_lshlrev_b32_e32": 8,
+        "v_max3_f32": 112,
+        "v_max_f32_e32": 40,
+        "v_med3_f32": 8,
+        "v_mfma_f32_16x16x128_f8f6f4": 8,
+        "v_mfma_f32_32x32x64_f8f6f4": 32,
+        "v_mfma_scale_f32_32x32x64_f8f6f4": 32,
+        "v_mul_f32_e32": 16,
+        "v_permlane32_swap_b32_e32": 8,
+        "v_pk_mul_f32": 128,
+        "v_sub_f32_e32": 8
+      },
+      "llvm_counts": {
+        "buffer_load_dwordx4": 16,
+        "ds_read_b128": 64,
+        "ds_read_b64_tr_b8": 128,
+        "s_add_u32": 32,
+        "s_barrier": 8,
+        "s_branch": 1,
+        "s_cbranch_scc1": 8,
+        "s_cmp_eq_u32": 4,
+        "s_cmp_ge_u32": 4,
+        "s_cmp_lg_u64": 4,
+        "s_cselect_b32": 4,
+        "s_cselect_b64": 4,
+        "s_min_u32": 8,
+        "s_nop": 28,
+        "s_setprio": 8,
+        "s_waitcnt": 36,
+        "v_add_f32_e32": 8,
+        "v_add_u32_e32": 8,
+        "v_cmp_lt_f32_e32": 4,
+        "v_cndmask_b32_e64": 4,
+        "v_cvt_i32_f32_e32": 8,
+        "v_cvt_pk_u8_f32": 256,
+        "v_exp_f32_e32": 4,
+        "v_floor_f32_e32": 8,
+        "v_fma_f32": 276,
+        "v_lshlrev_b32_e32": 8,
+        "v_max3_f32": 112,
+        "v_max_f32_e32": 40,
+        "v_med3_f32": 8,
+        "v_mfma_f32_16x16x128_f8f6f4": 8,
+        "v_mfma_f32_32x32x64_f8f6f4": 32,
+        "v_mfma_scale_f32_32x32x64_f8f6f4": 32,
+        "v_mul_f32_e32": 16,
+        "v_permlane32_swap_b32_e32": 8,
+        "v_pk_mul_f32": 128,
+        "v_sub_f32_e32": 8
+      },
+      "count_differences": {},
+      "first_mismatch": null,
+      "excluded": {
+        "reference": [
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v153, v152",
+            "address": 13636,
+            "line": 1238,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v151, v150",
+            "address": 13640,
+            "line": 1239,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v145, v144",
+            "address": 14420,
+            "line": 1350,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v147, v146",
+            "address": 14424,
+            "line": 1351,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v130, s50",
+            "address": 14712,
+            "line": 1395,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v153, v152",
+            "address": 16124,
+            "line": 1576,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v151, v150",
+            "address": 16128,
+            "line": 1577,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v145, v144",
+            "address": 16908,
+            "line": 1688,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v147, v146",
+            "address": 16912,
+            "line": 1689,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v130, s50",
+            "address": 17200,
+            "line": 1733,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v153, v152",
+            "address": 18612,
+            "line": 1914,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v151, v150",
+            "address": 18616,
+            "line": 1915,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v145, v144",
+            "address": 19396,
+            "line": 2026,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v147, v146",
+            "address": 19400,
+            "line": 2027,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v130, s50",
+            "address": 19688,
+            "line": 2071,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v153, v152",
+            "address": 21100,
+            "line": 2252,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v151, v150",
+            "address": 21104,
+            "line": 2253,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v145, v144",
+            "address": 21884,
+            "line": 2364,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v147, v146",
+            "address": 21888,
+            "line": 2365,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v130, s50",
+            "address": 22176,
+            "line": 2409,
+            "branch_target": null,
+            "reason": "register_copy"
+          }
+        ],
+        "llvm": [
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v153, v152",
+            "address": 13624,
+            "line": 1235,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v151, v150",
+            "address": 13628,
+            "line": 1236,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v145, v144",
+            "address": 14408,
+            "line": 1347,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v147, v146",
+            "address": 14412,
+            "line": 1348,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v130, s50",
+            "address": 14700,
+            "line": 1392,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v153, v152",
+            "address": 16112,
+            "line": 1573,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v151, v150",
+            "address": 16116,
+            "line": 1574,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v145, v144",
+            "address": 16896,
+            "line": 1685,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v147, v146",
+            "address": 16900,
+            "line": 1686,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v130, s50",
+            "address": 17188,
+            "line": 1730,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v153, v152",
+            "address": 18600,
+            "line": 1911,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v151, v150",
+            "address": 18604,
+            "line": 1912,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v145, v144",
+            "address": 19384,
+            "line": 2023,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v147, v146",
+            "address": 19388,
+            "line": 2024,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v130, s50",
+            "address": 19676,
+            "line": 2068,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v153, v152",
+            "address": 21088,
+            "line": 2249,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v151, v150",
+            "address": 21092,
+            "line": 2250,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v145, v144",
+            "address": 21872,
+            "line": 2361,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v147, v146",
+            "address": 21876,
+            "line": 2362,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v130, s50",
+            "address": 22164,
+            "line": 2406,
+            "branch_target": null,
+            "reason": "register_copy"
+          }
+        ]
+      }
+    },
+    "memory_before_after": [
+      {
+        "buffer_load_dwordx4": 106,
+        "ds_read_b128": 140,
+        "ds_read_b64_tr_b8": 320,
+        "ds_write_b128": 16,
+        "global_load_dwordx4": 20,
+        "global_store_dword": 2,
+        "global_store_dwordx4": 16,
+        "s_load_dword": 3,
+        "s_load_dwordx16": 2,
+        "s_load_dwordx2": 1,
+        "s_load_dwordx4": 1,
+        "s_load_dwordx8": 5
+      },
+      {
+        "buffer_load_dwordx4": 106,
+        "ds_read_b128": 140,
+        "ds_read_b64_tr_b8": 320,
+        "ds_write_b128": 16,
+        "global_load_dwordx4": 20,
+        "global_store_dword": 2,
+        "global_store_dwordx4": 16,
+        "s_load_dword": 3,
+        "s_load_dwordx16": 2,
+        "s_load_dwordx2": 1,
+        "s_load_dwordx4": 1,
+        "s_load_dwordx8": 5
+      }
+    ],
+    "float_before_after": [
+      {
+        "v_add_f32_e32": 26,
+        "v_cmp_lt_f32_e32": 6,
+        "v_cvt_i32_f32_e32": 16,
+        "v_cvt_pk_bf16_f32": 64,
+        "v_cvt_pk_u8_f32": 640,
+        "v_exp_f32_e32": 6,
+        "v_floor_f32_e32": 16,
+        "v_fma_f32": 680,
+        "v_log_f32_e32": 2,
+        "v_max3_f32": 224,
+        "v_max_f32_e32": 78,
+        "v_med3_f32": 16,
+        "v_mfma_f32_16x16x128_f8f6f4": 20,
+        "v_mfma_f32_32x32x64_f8f6f4": 64,
+        "v_mfma_scale_f32_32x32x64_f8f6f4": 80,
+        "v_mul_f32_e32": 170,
+        "v_pk_mul_f32": 192,
+        "v_rcp_f32_e32": 2,
+        "v_sub_f32_e32": 12
+      },
+      {
+        "v_add_f32_e32": 26,
+        "v_cmp_lt_f32_e32": 6,
+        "v_cvt_i32_f32_e32": 16,
+        "v_cvt_pk_bf16_f32": 64,
+        "v_cvt_pk_u8_f32": 640,
+        "v_exp_f32_e32": 6,
+        "v_floor_f32_e32": 16,
+        "v_fma_f32": 680,
+        "v_log_f32_e32": 2,
+        "v_max3_f32": 224,
+        "v_max_f32_e32": 78,
+        "v_med3_f32": 16,
+        "v_mfma_f32_16x16x128_f8f6f4": 20,
+        "v_mfma_f32_32x32x64_f8f6f4": 64,
+        "v_mfma_scale_f32_32x32x64_f8f6f4": 80,
+        "v_mul_f32_e32": 170,
+        "v_pk_mul_f32": 192,
+        "v_rcp_f32_e32": 2,
+        "v_sub_f32_e32": 12
+      }
+    ],
+    "resources_before_after": [
+      {
+        "group_segment_fixed_size": 163840,
+        "private_segment_fixed_size": 64,
+        "sgpr_count": 106,
+        "vgpr_count": 256,
+        "max_flat_workgroup_size": 512
+      },
+      {
+        "group_segment_fixed_size": 163840,
+        "private_segment_fixed_size": 64,
+        "sgpr_count": 106,
+        "vgpr_count": 256,
+        "max_flat_workgroup_size": 512
+      }
+    ],
+    "excluded_lane_spills_before_after": [
+      73,
+      73
+    ]
+  },
+  "192": {
+    "setup_mads": [
+      {
+        "mnemonic": "v_mad_u32_u24",
+        "operands": "v164, s6, v7, v8",
+        "address": 43776,
+        "line": 5899,
+        "branch_target": null
+      },
+      {
+        "mnemonic": "v_mad_u32_u24",
+        "operands": "v165, s6, v7, v4",
+        "address": 43824,
+        "line": 5909,
+        "branch_target": null
+      },
+      {
+        "mnemonic": "v_mad_u32_u24",
+        "operands": "v166, s7, v15, v11",
+        "address": 43908,
+        "line": 5922,
+        "branch_target": null
+      }
+    ],
+    "setup_mul_or_full_width_mad": [],
+    "full_width_query_output_products": 7,
+    "whole": {
+      "counts_match": false,
+      "sequence_match": false,
+      "reference_instruction_count": 3420,
+      "llvm_instruction_count": 3418,
+      "reference_counts": {
+        "buffer_load_dwordx4": 85,
+        "ds_read_b128": 104,
+        "ds_read_b64_tr_b8": 160,
+        "ds_write_b128": 16,
+        "global_load_dwordx4": 30,
+        "global_store_dword": 2,
+        "global_store_dwordx4": 16,
+        "s_add_u32": 220,
+        "s_addc_u32": 29,
+        "s_and_b32": 23,
+        "s_and_b64": 21,
+        "s_barrier": 30,
+        "s_bfe_u32": 5,
+        "s_bitcmp1_b32": 2,
+        "s_branch": 30,
+        "s_cbranch_scc0": 17,
+        "s_cbranch_scc1": 71,
+        "s_cbranch_vccnz": 1,
+        "s_cmp_eq_u32": 13,
+        "s_cmp_eq_u64": 8,
+        "s_cmp_ge_i32": 6,
+        "s_cmp_ge_u32": 29,
+        "s_cmp_lg_u32": 9,
+        "s_cmp_lg_u64": 6,
+        "s_cmp_lt_i32": 8,
+        "s_cmp_lt_u32": 8,
+        "s_cselect_b32": 20,
+        "s_cselect_b64": 11,
+        "s_endpgm": 1,
+        "s_load_dword": 3,
+        "s_load_dwordx16": 2,
+        "s_load_dwordx2": 1,
+        "s_load_dwordx4": 1,
+        "s_load_dwordx8": 5,
+        "s_lshl_b32": 81,
+        "s_lshl_b64": 10,
+        "s_lshr_b32": 9,
+        "s_min_u32": 13,
+        "s_mov_b32": 47,
+        "s_mov_b64": 9,
+        "s_movk_i32": 4,
+        "s_mul_i32": 53,
+        "s_nop": 182,
+        "s_not_b32": 9,
+        "s_or_b32": 34,
+        "s_setprio": 22,
+        "s_sub_i32": 6,
+        "s_sub_u32": 6,
+        "s_waitcnt": 90,
+        "s_xor_b32": 7,
+        "v_add3_u32": 24,
+        "v_add_f32_e32": 14,
+        "v_add_lshl_u32": 1,
+        "v_add_u32_e32": 50,
+        "v_and_b32_e32": 12,
+        "v_and_or_b32": 4,
+        "v_bfe_u32": 6,
+        "v_cmp_eq_u32_e32": 1,
+        "v_cmp_gt_i32_e32": 96,
+        "v_cmp_gt_u32_e32": 2,
+        "v_cmp_lt_f32_e32": 6,
+        "v_cndmask_b32_e32": 3,
+        "v_cndmask_b32_e64": 102,
+        "v_cvt_i32_f32_e32": 8,
+        "v_cvt_pk_bf16_f32": 64,
+        "v_cvt_pk_fp8_f32": 160,
+        "v_exp_f32_e32": 326,
+        "v_floor_f32_e32": 8,
+        "v_fma_f32": 18,
+        "v_log_f32_e32": 2,
+        "v_lshl_or_b32": 5,
+        "v_lshlrev_b32_e32": 28,
+        "v_lshrrev_b32_e32": 6,
+        "v_max3_f32": 112,
+        "v_max_f32_e32": 38,
+        "v_med3_f32": 8,
+        "v_mfma_f32_16x16x128_f8f6f4": 10,
+        "v_mfma_f32_32x32x64_f8f6f4": 48,
+        "v_mfma_scale_f32_32x32x64_f8f6f4": 40,
+        "v_mov_b32_e32": 62,
+        "v_mul_f32_e32": 149,
+        "v_mul_lo_u32": 10,
+        "v_or3_b32": 2,
+        "v_or_b32_e32": 21,
+        "v_permlane32_swap_b32_e32": 40,
+        "v_pk_fma_f32": 128,
+        "v_pk_mul_f32": 192,
+        "v_rcp_f32_e32": 2,
+        "v_readfirstlane_b32": 1,
+        "v_sub_f32_e32": 20,
+        "v_sub_u32_e32": 3,
+        "v_xor_b32_e32": 13
+      },
+      "llvm_counts": {
+        "buffer_load_dwordx4": 85,
+        "ds_read_b128": 104,
+        "ds_read_b64_tr_b8": 160,
+        "ds_write_b128": 16,
+        "global_load_dwordx4": 30,
+        "global_store_dword": 2,
+        "global_store_dwordx4": 16,
+        "s_add_u32": 220,
+        "s_addc_u32": 29,
+        "s_and_b32": 23,
+        "s_and_b64": 21,
+        "s_barrier": 30,
+        "s_bfe_u32": 5,
+        "s_bitcmp1_b32": 2,
+        "s_branch": 30,
+        "s_cbranch_scc0": 17,
+        "s_cbranch_scc1": 71,
+        "s_cbranch_vccnz": 1,
+        "s_cmp_eq_u32": 13,
+        "s_cmp_eq_u64": 8,
+        "s_cmp_ge_i32": 6,
+        "s_cmp_ge_u32": 29,
+        "s_cmp_lg_u32": 9,
+        "s_cmp_lg_u64": 6,
+        "s_cmp_lt_i32": 8,
+        "s_cmp_lt_u32": 8,
+        "s_cselect_b32": 20,
+        "s_cselect_b64": 11,
+        "s_endpgm": 1,
+        "s_load_dword": 3,
+        "s_load_dwordx16": 2,
+        "s_load_dwordx2": 1,
+        "s_load_dwordx4": 1,
+        "s_load_dwordx8": 5,
+        "s_lshl_b32": 81,
+        "s_lshl_b64": 10,
+        "s_lshr_b32": 9,
+        "s_min_u32": 13,
+        "s_mov_b32": 47,
+        "s_mov_b64": 9,
+        "s_movk_i32": 4,
+        "s_mul_i32": 53,
+        "s_nop": 183,
+        "s_not_b32": 9,
+        "s_or_b32": 34,
+        "s_setprio": 22,
+        "s_sub_i32": 6,
+        "s_sub_u32": 6,
+        "s_waitcnt": 90,
+        "s_xor_b32": 7,
+        "v_add3_u32": 24,
+        "v_add_f32_e32": 14,
+        "v_add_lshl_u32": 1,
+        "v_add_u32_e32": 47,
+        "v_and_b32_e32": 12,
+        "v_and_or_b32": 4,
+        "v_bfe_u32": 6,
+        "v_cmp_eq_u32_e32": 1,
+        "v_cmp_gt_i32_e32": 96,
+        "v_cmp_gt_u32_e32": 2,
+        "v_cmp_lt_f32_e32": 6,
+        "v_cndmask_b32_e32": 3,
+        "v_cndmask_b32_e64": 102,
+        "v_cvt_i32_f32_e32": 8,
+        "v_cvt_pk_bf16_f32": 64,
+        "v_cvt_pk_fp8_f32": 160,
+        "v_exp_f32_e32": 326,
+        "v_floor_f32_e32": 8,
+        "v_fma_f32": 18,
+        "v_log_f32_e32": 2,
+        "v_lshl_or_b32": 5,
+        "v_lshlrev_b32_e32": 28,
+        "v_lshrrev_b32_e32": 6,
+        "v_mad_u32_u24": 3,
+        "v_max3_f32": 112,
+        "v_max_f32_e32": 38,
+        "v_med3_f32": 8,
+        "v_mfma_f32_16x16x128_f8f6f4": 10,
+        "v_mfma_f32_32x32x64_f8f6f4": 48,
+        "v_mfma_scale_f32_32x32x64_f8f6f4": 40,
+        "v_mov_b32_e32": 62,
+        "v_mul_f32_e32": 149,
+        "v_mul_lo_u32": 7,
+        "v_or3_b32": 2,
+        "v_or_b32_e32": 21,
+        "v_permlane32_swap_b32_e32": 40,
+        "v_pk_fma_f32": 128,
+        "v_pk_mul_f32": 192,
+        "v_rcp_f32_e32": 2,
+        "v_readfirstlane_b32": 1,
+        "v_sub_f32_e32": 20,
+        "v_sub_u32_e32": 3,
+        "v_xor_b32_e32": 13
+      },
+      "count_differences": {
+        "s_nop": {
+          "reference": 182,
+          "llvm": 183,
+          "delta": 1
+        },
+        "v_add_u32_e32": {
+          "reference": 50,
+          "llvm": 47,
+          "delta": -3
+        },
+        "v_mad_u32_u24": {
+          "reference": 0,
+          "llvm": 3,
+          "delta": 3
+        },
+        "v_mul_lo_u32": {
+          "reference": 10,
+          "llvm": 7,
+          "delta": -3
+        }
+      },
+      "first_mismatch": {
+        "index": 47,
+        "reference": {
+          "mnemonic": "v_mul_lo_u32",
+          "operands": "v7, s6, v7",
+          "address": 43776,
+          "line": 5902,
+          "branch_target": null
+        },
+        "llvm": {
+          "mnemonic": "v_mad_u32_u24",
+          "operands": "v164, s6, v7, v8",
+          "address": 43776,
+          "line": 5899,
+          "branch_target": null
+        }
+      },
+      "excluded": {
+        "reference": [],
+        "llvm": []
+      }
+    },
+    "strict_loop": {
+      "counts_match": true,
+      "sequence_match": true,
+      "reference_instruction_count": 825,
+      "llvm_instruction_count": 825,
+      "reference_counts": {
+        "buffer_load_dwordx4": 12,
+        "ds_read_b128": 48,
+        "ds_read_b64_tr_b8": 64,
+        "s_add_u32": 28,
+        "s_barrier": 8,
+        "s_branch": 1,
+        "s_cbranch_scc1": 8,
+        "s_cmp_eq_u32": 4,
+        "s_cmp_ge_u32": 4,
+        "s_cmp_lg_u64": 4,
+        "s_cselect_b32": 4,
+        "s_cselect_b64": 4,
+        "s_min_u32": 8,
+        "s_nop": 24,
+        "s_setprio": 8,
+        "s_waitcnt": 24,
+        "v_add_f32_e32": 4,
+        "v_add_u32_e32": 4,
+        "v_cmp_lt_f32_e32": 4,
+        "v_cndmask_b32_e64": 4,
+        "v_cvt_i32_f32_e32": 4,
+        "v_cvt_pk_fp8_f32": 64,
+        "v_exp_f32_e32": 132,
+        "v_floor_f32_e32": 4,
+        "v_fma_f32": 8,
+        "v_lshlrev_b32_e32": 4,
+        "v_max3_f32": 56,
+        "v_max_f32_e32": 20,
+        "v_med3_f32": 4,
+        "v_mfma_f32_16x16x128_f8f6f4": 4,
+        "v_mfma_f32_32x32x64_f8f6f4": 24,
+        "v_mfma_scale_f32_32x32x64_f8f6f4": 16,
+        "v_mul_f32_e32": 8,
+        "v_permlane32_swap_b32_e32": 4,
+        "v_pk_fma_f32": 64,
+        "v_pk_mul_f32": 128,
+        "v_sub_f32_e32": 12
+      },
+      "llvm_counts": {
+        "buffer_load_dwordx4": 12,
+        "ds_read_b128": 48,
+        "ds_read_b64_tr_b8": 64,
+        "s_add_u32": 28,
+        "s_barrier": 8,
+        "s_branch": 1,
+        "s_cbranch_scc1": 8,
+        "s_cmp_eq_u32": 4,
+        "s_cmp_ge_u32": 4,
+        "s_cmp_lg_u64": 4,
+        "s_cselect_b32": 4,
+        "s_cselect_b64": 4,
+        "s_min_u32": 8,
+        "s_nop": 24,
+        "s_setprio": 8,
+        "s_waitcnt": 24,
+        "v_add_f32_e32": 4,
+        "v_add_u32_e32": 4,
+        "v_cmp_lt_f32_e32": 4,
+        "v_cndmask_b32_e64": 4,
+        "v_cvt_i32_f32_e32": 4,
+        "v_cvt_pk_fp8_f32": 64,
+        "v_exp_f32_e32": 132,
+        "v_floor_f32_e32": 4,
+        "v_fma_f32": 8,
+        "v_lshlrev_b32_e32": 4,
+        "v_max3_f32": 56,
+        "v_max_f32_e32": 20,
+        "v_med3_f32": 4,
+        "v_mfma_f32_16x16x128_f8f6f4": 4,
+        "v_mfma_f32_32x32x64_f8f6f4": 24,
+        "v_mfma_scale_f32_32x32x64_f8f6f4": 16,
+        "v_mul_f32_e32": 8,
+        "v_permlane32_swap_b32_e32": 4,
+        "v_pk_fma_f32": 64,
+        "v_pk_mul_f32": 128,
+        "v_sub_f32_e32": 12
+      },
+      "count_differences": {},
+      "first_mismatch": null,
+      "excluded": {
+        "reference": [
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v80, v180",
+            "address": 47920,
+            "line": 6719,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v81, v180",
+            "address": 47940,
+            "line": 6722,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v82, v180",
+            "address": 47964,
+            "line": 6726,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v83, v180",
+            "address": 47992,
+            "line": 6731,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v84, v180",
+            "address": 48064,
+            "line": 6747,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v85, v180",
+            "address": 48084,
+            "line": 6750,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v86, v180",
+            "address": 48104,
+            "line": 6753,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v87, v180",
+            "address": 48124,
+            "line": 6756,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v89, v88",
+            "address": 48684,
+            "line": 6835,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v143, v142",
+            "address": 48816,
+            "line": 6857,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v80, v180",
+            "address": 49320,
+            "line": 6935,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v81, v180",
+            "address": 49340,
+            "line": 6938,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v82, v180",
+            "address": 49364,
+            "line": 6942,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v83, v180",
+            "address": 49392,
+            "line": 6947,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v84, v180",
+            "address": 49464,
+            "line": 6963,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v85, v180",
+            "address": 49484,
+            "line": 6966,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v86, v180",
+            "address": 49504,
+            "line": 6969,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v87, v180",
+            "address": 49524,
+            "line": 6972,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v89, v88",
+            "address": 50084,
+            "line": 7051,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v143, v142",
+            "address": 50216,
+            "line": 7073,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v80, v180",
+            "address": 50720,
+            "line": 7151,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v81, v180",
+            "address": 50740,
+            "line": 7154,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v82, v180",
+            "address": 50764,
+            "line": 7158,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v83, v180",
+            "address": 50792,
+            "line": 7163,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v84, v180",
+            "address": 50864,
+            "line": 7179,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v85, v180",
+            "address": 50884,
+            "line": 7182,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v86, v180",
+            "address": 50904,
+            "line": 7185,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v87, v180",
+            "address": 50924,
+            "line": 7188,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v89, v88",
+            "address": 51484,
+            "line": 7267,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v143, v142",
+            "address": 51616,
+            "line": 7289,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v80, v180",
+            "address": 52120,
+            "line": 7367,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v81, v180",
+            "address": 52140,
+            "line": 7370,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v82, v180",
+            "address": 52164,
+            "line": 7374,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v83, v180",
+            "address": 52192,
+            "line": 7379,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v84, v180",
+            "address": 52264,
+            "line": 7395,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v85, v180",
+            "address": 52284,
+            "line": 7398,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v86, v180",
+            "address": 52304,
+            "line": 7401,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v87, v180",
+            "address": 52324,
+            "line": 7404,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v89, v88",
+            "address": 52884,
+            "line": 7483,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v143, v142",
+            "address": 53016,
+            "line": 7505,
+            "branch_target": null,
+            "reason": "register_copy"
+          }
+        ],
+        "llvm": [
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v80, v180",
+            "address": 47908,
+            "line": 6713,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v81, v180",
+            "address": 47928,
+            "line": 6716,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v82, v180",
+            "address": 47952,
+            "line": 6720,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v83, v180",
+            "address": 47980,
+            "line": 6725,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v84, v180",
+            "address": 48052,
+            "line": 6741,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v85, v180",
+            "address": 48072,
+            "line": 6744,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v86, v180",
+            "address": 48092,
+            "line": 6747,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v87, v180",
+            "address": 48112,
+            "line": 6750,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v89, v88",
+            "address": 48672,
+            "line": 6829,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v143, v142",
+            "address": 48804,
+            "line": 6851,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v80, v180",
+            "address": 49308,
+            "line": 6929,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v81, v180",
+            "address": 49328,
+            "line": 6932,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v82, v180",
+            "address": 49352,
+            "line": 6936,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v83, v180",
+            "address": 49380,
+            "line": 6941,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v84, v180",
+            "address": 49452,
+            "line": 6957,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v85, v180",
+            "address": 49472,
+            "line": 6960,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v86, v180",
+            "address": 49492,
+            "line": 6963,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v87, v180",
+            "address": 49512,
+            "line": 6966,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v89, v88",
+            "address": 50072,
+            "line": 7045,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v143, v142",
+            "address": 50204,
+            "line": 7067,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v80, v180",
+            "address": 50708,
+            "line": 7145,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v81, v180",
+            "address": 50728,
+            "line": 7148,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v82, v180",
+            "address": 50752,
+            "line": 7152,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v83, v180",
+            "address": 50780,
+            "line": 7157,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v84, v180",
+            "address": 50852,
+            "line": 7173,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v85, v180",
+            "address": 50872,
+            "line": 7176,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v86, v180",
+            "address": 50892,
+            "line": 7179,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v87, v180",
+            "address": 50912,
+            "line": 7182,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v89, v88",
+            "address": 51472,
+            "line": 7261,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v143, v142",
+            "address": 51604,
+            "line": 7283,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v80, v180",
+            "address": 52108,
+            "line": 7361,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v81, v180",
+            "address": 52128,
+            "line": 7364,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v82, v180",
+            "address": 52152,
+            "line": 7368,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v83, v180",
+            "address": 52180,
+            "line": 7373,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v84, v180",
+            "address": 52252,
+            "line": 7389,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v85, v180",
+            "address": 52272,
+            "line": 7392,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v86, v180",
+            "address": 52292,
+            "line": 7395,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v87, v180",
+            "address": 52312,
+            "line": 7398,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v89, v88",
+            "address": 52872,
+            "line": 7477,
+            "branch_target": null,
+            "reason": "register_copy"
+          },
+          {
+            "mnemonic": "v_mov_b32_e32",
+            "operands": "v143, v142",
+            "address": 53004,
+            "line": 7499,
+            "branch_target": null,
+            "reason": "register_copy"
+          }
+        ]
+      }
+    },
+    "memory_before_after": [
+      {
+        "buffer_load_dwordx4": 85,
+        "ds_read_b128": 104,
+        "ds_read_b64_tr_b8": 160,
+        "ds_write_b128": 16,
+        "global_load_dwordx4": 30,
+        "global_store_dword": 2,
+        "global_store_dwordx4": 16,
+        "s_load_dword": 3,
+        "s_load_dwordx16": 2,
+        "s_load_dwordx2": 1,
+        "s_load_dwordx4": 1,
+        "s_load_dwordx8": 5
+      },
+      {
+        "buffer_load_dwordx4": 85,
+        "ds_read_b128": 104,
+        "ds_read_b64_tr_b8": 160,
+        "ds_write_b128": 16,
+        "global_load_dwordx4": 30,
+        "global_store_dword": 2,
+        "global_store_dwordx4": 16,
+        "s_load_dword": 3,
+        "s_load_dwordx16": 2,
+        "s_load_dwordx2": 1,
+        "s_load_dwordx4": 1,
+        "s_load_dwordx8": 5
+      }
+    ],
+    "float_before_after": [
+      {
+        "v_add_f32_e32": 14,
+        "v_cmp_lt_f32_e32": 6,
+        "v_cvt_i32_f32_e32": 8,
+        "v_cvt_pk_bf16_f32": 64,
+        "v_cvt_pk_fp8_f32": 160,
+        "v_exp_f32_e32": 326,
+        "v_floor_f32_e32": 8,
+        "v_fma_f32": 18,
+        "v_log_f32_e32": 2,
+        "v_max3_f32": 112,
+        "v_max_f32_e32": 38,
+        "v_med3_f32": 8,
+        "v_mfma_f32_16x16x128_f8f6f4": 10,
+        "v_mfma_f32_32x32x64_f8f6f4": 48,
+        "v_mfma_scale_f32_32x32x64_f8f6f4": 40,
+        "v_mul_f32_e32": 149,
+        "v_pk_fma_f32": 128,
+        "v_pk_mul_f32": 192,
+        "v_rcp_f32_e32": 2,
+        "v_sub_f32_e32": 20
+      },
+      {
+        "v_add_f32_e32": 14,
+        "v_cmp_lt_f32_e32": 6,
+        "v_cvt_i32_f32_e32": 8,
+        "v_cvt_pk_bf16_f32": 64,
+        "v_cvt_pk_fp8_f32": 160,
+        "v_exp_f32_e32": 326,
+        "v_floor_f32_e32": 8,
+        "v_fma_f32": 18,
+        "v_log_f32_e32": 2,
+        "v_max3_f32": 112,
+        "v_max_f32_e32": 38,
+        "v_med3_f32": 8,
+        "v_mfma_f32_16x16x128_f8f6f4": 10,
+        "v_mfma_f32_32x32x64_f8f6f4": 48,
+        "v_mfma_scale_f32_32x32x64_f8f6f4": 40,
+        "v_mul_f32_e32": 149,
+        "v_pk_fma_f32": 128,
+        "v_pk_mul_f32": 192,
+        "v_rcp_f32_e32": 2,
+        "v_sub_f32_e32": 20
+      }
+    ],
+    "resources_before_after": [
+      {
+        "group_segment_fixed_size": 131072,
+        "private_segment_fixed_size": 0,
+        "sgpr_count": 106,
+        "vgpr_count": 231,
+        "max_flat_workgroup_size": 512
+      },
+      {
+        "group_segment_fixed_size": 131072,
+        "private_segment_fixed_size": 0,
+        "sgpr_count": 106,
+        "vgpr_count": 231,
+        "max_flat_workgroup_size": 512
+      }
+    ],
+    "excluded_lane_spills_before_after": [
+      2,
+      2
+    ]
+  }
+}

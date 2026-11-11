@@ -2,7 +2,14 @@
 
 Both four-stage steady loops retain the assembly backend's exact disassembled
 mnemonic counts and sequence. The whole-kernel counts and sequence still differ.
-The latest continuation is captured in
+The latest vector fixes reuse one runtime V address per PV site and restore
+four/three setup MAD_U24s with HIP `__umul24` and validated native stride bounds.
+The linked kernels retain 4955/3382 instructions, down from 5042/3420, with
+unchanged steady sequences and resources. See
+[`vector_fixes_20261111`](../benchmarks/results/hip_native/isa_match/vector_fixes_20261111/).
+No additional LLVM change was needed for these source fixes.
+
+The preceding whole-kernel continuation is captured in
 [`whole_kernel_fixes_20261111`](../benchmarks/results/hip_native/isa_match/whole_kernel_fixes_20261111/).
 Its compiled source is ZYFA `5a2bf97` and compiler LLVM `72e518a3f02a`.
 
@@ -61,10 +68,14 @@ Important mnemonic changes in the actual linked kernel:
 | `s_add_u32` | 185 → 295 | 174 → 220 |
 | `v_add3_u32` | 0 → 48 | 0 → 24 |
 
-The scalar V-base boundary also repeats some additions. Its complete histogram
-is closer than the lower-instruction-count alternative; that alternative remains
-in the task-2 evidence. Static count improvements alone do not establish a
-performance benefit.
+That capture still repeated the scalar/vector V-base pair for every runtime
+fragment. The subsequent vector fixes remove 42/18 repeated pairs across six
+PV sites; each site now reuses one pair. They also replace the four/three setup
+MUL_LO-plus-ADD pairs with four/three MAD_U24s. Native launchers reject K/V byte
+strides at or above 2^24 before enqueue, matching the existing public wrapper
+domain. Query/output products retain their full width. Each kernel gains one
+block-alignment NOP outside the steady loop. Static count improvements alone
+do not establish a performance benefit.
 
 ## Remaining differences
 

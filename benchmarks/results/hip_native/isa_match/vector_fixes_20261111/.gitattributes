@@ -1,0 +1,2 @@
+# Embedded format-patch context prefixes are significant.
+tasks/task-1-report.md -whitespace

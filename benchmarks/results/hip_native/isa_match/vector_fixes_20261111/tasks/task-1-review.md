@@ -1,0 +1,20 @@
+# Task 1 review: runtime PV V address reuse
+
+Spec verdict: **PASS**. Code-quality verdict: **APPROVE**. No blocking or nonblocking code findings were identified in the scoped change.
+
+Reviewed candidate commit `80bb84378217c4de8a28338e686b6bff02d76bbf`, the complete `task-1-review.patch`, `task-1-brief.md`, candidate source and test context, `task-1-report.md`, recorded red/green/static logs, the artifact validation script, and the resulting `v-address-validation.json`. Review was read-only with respect to implementation and artifacts; no compiler, test suite, or validation script was rerun.
+
+## Spec compliance
+
+- `pv` selects `Slot < 0 ? runtime_slot : Slot` exactly as before and computes the completed `sm.value(slot) + laneoff` once. `Lds::value` retains its actual four-pointer, allocation-aware runtime derivation and scalar-add boundary. No LDS contiguity assumption or fixed-register/inline-assembly workaround was introduced.
+- `read_v_fragment` retains all four transposed-read builtins, byte offsets `4096 * Half + 256 * J` followed by `0/1024/2048/3072`, packed result order, and optional scheduler fences. Every `pv` fragment substitution retains its previous Half/J pairing. Read-ahead placement, waits and pending counts, prefetch callbacks, probability/MFMA inputs, and output accumulator order are unchanged.
+- Existing steady callers still enter `read_v<D,Half,J,Cur,true>` with a compile-time slot and preserve the direct `Lds::value` constant-slot path. The recorded actual fat-object comparison confirms strict retained steady mnemonic/count identity: 1333 d128 and 825 d192. The recorded d128 operand differences are a consistent induction-register renaming; d192 has no loop operand differences.
+- The regression checks every transposed DS consumer after the identified steady loop, partitions the exact 192/96 reads into six 32/16-read PV sites, checks the complete ordered immediate-offset lists, and requires one completed-address origin per site. Tracking current physical-register definitions and propagating vector register-copy origins catches repeated completed-address arithmetic irrespective of whether the defining instruction is ADD3 or another add opcode. Recorded baseline failures identify eight/four origins at site 0; recorded candidate codegen validation has 63 passes.
+- Recorded owning-current fat-object data has exactly the intended whole-kernel mnemonic deltas: d128 removes 42 `s_add_u32` and 42 `v_add3_u32`; d192 removes 18 of each. All six candidate sites have one scalar/vector pair and unchanged DS reads, compared with eight/four pairs per owning site. Recorded resource metadata and complete wait/barrier/priority operand sequences are equal. Memory and MFMA histograms are unchanged.
+- The report records source/object provenance, complete histograms, DS PCs/offsets, resources and spills, current-owning and reference comparisons, red/green results, and remaining reference differences. Scope is confined to the requested helper/`pv` refactor and one regression; candidate commit and clean-worktree status were supplied by the parent.
+
+## Code quality and review limits
+
+The helper split is small and preserves the existing constant-slot API. The shared address lifetime is explicit and local to `pv`, and the fragment reader no longer owns slot/lane reconstruction. The regression checks consumed definitions and offsets rather than a fragile opcode count or source-string expectation. Its linear register-definition tracking is appropriate to the supplied compiler's straight-line PV read sites; it is not a general CFG-aware ISA dataflow analysis.
+
+The recorded static setup/ISA tests have 12 passes. Integrated numerical execution and timing remain the root task's acceptance work, as explicitly scoped; this review makes no runtime performance or numerical-execution claim. The unchanged isolated resource metadata resolves the identified shared-address lifetime concern for these generated kernels; the combined candidate still needs the planned integrated object inspection and numerical validation.

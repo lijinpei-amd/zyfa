@@ -1,0 +1,200 @@
+{
+  "filter": "scratch/register copies/native SGPR lane spills excluded; literal initialization retained",
+  "dimensions": {
+    "128": {
+      "steady_count_sequence_match": true,
+      "steady_instructions": 1333,
+      "before_total": 5042,
+      "after_total": 4955,
+      "reference_total": 5302,
+      "before_after_differences": {
+        "s_add_u32": {
+          "reference": 295,
+          "llvm": 253,
+          "delta": -42
+        },
+        "s_nop": {
+          "reference": 307,
+          "llvm": 308,
+          "delta": 1
+        },
+        "v_add3_u32": {
+          "reference": 48,
+          "llvm": 6,
+          "delta": -42
+        },
+        "v_add_u32_e32": {
+          "reference": 65,
+          "llvm": 61,
+          "delta": -4
+        },
+        "v_mad_u32_u24": {
+          "reference": 0,
+          "llvm": 4,
+          "delta": 4
+        },
+        "v_mul_lo_u32": {
+          "reference": 11,
+          "llvm": 7,
+          "delta": -4
+        }
+      },
+      "positive_excess_sum": 313,
+      "negative_excess_sum": -660,
+      "vector_positive_excess": {
+        "v_add3_u32": {
+          "reference": 0,
+          "llvm": 6,
+          "delta": 6
+        },
+        "v_and_or_b32": {
+          "reference": 0,
+          "llvm": 1,
+          "delta": 1
+        },
+        "v_cndmask_b32_e32": {
+          "reference": 0,
+          "llvm": 1,
+          "delta": 1
+        },
+        "v_or3_b32": {
+          "reference": 0,
+          "llvm": 2,
+          "delta": 2
+        },
+        "v_or_b32_e32": {
+          "reference": 0,
+          "llvm": 24,
+          "delta": 24
+        }
+      },
+      "first_sequence_mismatch": {
+        "index": 4,
+        "reference": {
+          "mnemonic": "v_lshrrev_b32_e32",
+          "operands": "v255, 6, v216",
+          "address": 5412,
+          "line": 13,
+          "branch_target": null
+        },
+        "llvm": {
+          "mnemonic": "v_bfe_u32",
+          "operands": "v1, v0, 5, 1",
+          "address": 6944,
+          "line": 11,
+          "branch_target": null
+        }
+      }
+    },
+    "192": {
+      "steady_count_sequence_match": true,
+      "steady_instructions": 825,
+      "before_total": 3420,
+      "after_total": 3382,
+      "reference_total": 3737,
+      "before_after_differences": {
+        "s_add_u32": {
+          "reference": 220,
+          "llvm": 202,
+          "delta": -18
+        },
+        "s_nop": {
+          "reference": 182,
+          "llvm": 183,
+          "delta": 1
+        },
+        "v_add3_u32": {
+          "reference": 24,
+          "llvm": 6,
+          "delta": -18
+        },
+        "v_add_u32_e32": {
+          "reference": 50,
+          "llvm": 47,
+          "delta": -3
+        },
+        "v_mad_u32_u24": {
+          "reference": 0,
+          "llvm": 3,
+          "delta": 3
+        },
+        "v_mul_lo_u32": {
+          "reference": 10,
+          "llvm": 7,
+          "delta": -3
+        }
+      },
+      "positive_excess_sum": 219,
+      "negative_excess_sum": -574,
+      "vector_positive_excess": {
+        "v_add3_u32": {
+          "reference": 0,
+          "llvm": 6,
+          "delta": 6
+        },
+        "v_add_lshl_u32": {
+          "reference": 0,
+          "llvm": 1,
+          "delta": 1
+        },
+        "v_and_or_b32": {
+          "reference": 0,
+          "llvm": 4,
+          "delta": 4
+        },
+        "v_cndmask_b32_e32": {
+          "reference": 0,
+          "llvm": 3,
+          "delta": 3
+        },
+        "v_lshl_or_b32": {
+          "reference": 4,
+          "llvm": 5,
+          "delta": 1
+        },
+        "v_or3_b32": {
+          "reference": 0,
+          "llvm": 2,
+          "delta": 2
+        },
+        "v_or_b32_e32": {
+          "reference": 0,
+          "llvm": 21,
+          "delta": 21
+        }
+      },
+      "first_sequence_mismatch": {
+        "index": 4,
+        "reference": {
+          "mnemonic": "v_lshrrev_b32_e32",
+          "operands": "v213, 6, v188",
+          "address": 5412,
+          "line": 13,
+          "branch_target": null
+        },
+        "llvm": {
+          "mnemonic": "v_and_b32_e32",
+          "operands": "v2, 63, v0",
+          "address": 43040,
+          "line": 5770,
+          "branch_target": null
+        }
+      }
+    }
+  },
+  "manifest": {
+    "native_source_sha256": "ba1aa49e71dd0063c647f93b42c8bb5dd2dd0cbdc5ae93d36ee8838012d9cad2",
+    "object_sha256": "011e772511700a205b9165683d91e2cbcd82574b9126408e3af25200fb956dd2",
+    "code_object_sha256": "72c6e37cc9c824d7e417fc74ceaa8737e6eab202916db1e0192e24878279d304",
+    "object": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/native/fp8_native.o",
+    "assembly_origin": "disassembly of the selected object's embedded code object",
+    "inspection_tool_version": "AMD LLVM version 22.0.0git\n  Optimized build.\n\n\n  Registered Targets:\n    amdgcn - AMD GCN GPUs\n    r600   - AMD GPUs HD2XXX-HD6XXX\n    x86    - 32-bit X86: Pentium-Pro and above\n    x86-64 - 64-bit X86: EM64T and AMD64",
+    "lds_bytes_per_block": {
+      "d128": 163840,
+      "d192": 131072
+    },
+    "extension_sha256": "5fa7ec9234c229a14c87d751ec71c516db08f36ea540f18fed362fb8bfbfa7d7",
+    "extension_contains_exact_native_fatbin": true,
+    "source_commit": "f097bea84a17c9e171b23fd5f3c286182050bfa8"
+  }
+}
