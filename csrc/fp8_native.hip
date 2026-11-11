@@ -160,6 +160,13 @@ __device__ __forceinline__ uint32_t sgpr_constant() {
 // A zero tile written as one v_mov_b32 per register, as the assembly clears O at each pass top.
 // A zero splat is a single value that reaches all four O phis at each steady-loop entry, so PHI
 // elimination copies it into three of the four tiles on every entry edge.
+//
+// Hazard: the hazard recognizer does not check inline asm against MFMA hazards, so it inserts no
+// wait states between these moves and an MFMA that reads or writes the same registers. This is
+// safe only because of the current layout: the nearest MFMA touching a cleared O register is
+// 102 (d128) / 67 (d192) wait states away, against a window of about 19.
+// test_hip_inline_asm_o_clear_is_outside_mfma_hazard_window checks this distance; recheck it with
+// benchmarks/check_inline_asm_hazards.py if code moves next to the O clear.
 __device__ __forceinline__ fx16 zero_fx16() {
     fx16 z;
 #pragma unroll

@@ -195,6 +195,19 @@ def test_hip_steady_register_copies_do_not_exceed_assembly(disassembled_kernels,
     assert llvm <= reference, copies
 
 
+@pytest.mark.parametrize("dim", [128, 192])
+def test_hip_inline_asm_o_clear_is_outside_mfma_hazard_window(disassembled_kernels, dim):
+    # The hazard recognizer pads no inline asm against MFMAs, so the O-clear moves rely on layout:
+    # no MFMA that reads or writes a cleared register may be within 19 wait states.
+    from benchmarks.check_inline_asm_hazards import nearest_overlapping_mfma
+    from benchmarks.compare_isa import parse_disassembly, select_function
+
+    code = select_function(parse_disassembly(disassembled_kernels[0]), dim)
+    targets, nearest = nearest_overlapping_mfma(code, limit=19)
+    assert targets >= 64, targets
+    assert nearest is None, nearest
+
+
 @pytest.mark.parametrize("dim,index,mfmas", [(128, 1, 72), (192, 2, 44)])
 def test_hip_steady_dma_m0_uses_assembly_immediates(disassembled_kernels, dim, index, mfmas):
     from benchmarks.compare_isa import parse_disassembly, select_function, steady_loop
