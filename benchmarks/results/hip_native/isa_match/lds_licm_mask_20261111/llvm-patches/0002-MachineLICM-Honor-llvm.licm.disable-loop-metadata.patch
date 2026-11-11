@@ -1,0 +1,194 @@
+From 282bb0968039969c966a43e7bdd937bf7930191b Mon Sep 17 00:00:00 2001
+From: Li Jinpei <jinpli@amd.com>
+Date: Wed, 11 Nov 2026 22:44:28 +0800
+Subject: [PATCH 2/2] [MachineLICM] Honor llvm.licm.disable loop metadata
+
+LICM skips a loop whose loop ID carries llvm.licm.disable, but
+MachineLICM still hoists out of it. In particular it hoists the
+S_MOV_B32/V_MOV_B32 immediates that instruction selection materializes
+for each use. IR LICM never sees those because constants are not
+instructions, so the metadata cannot keep them in the loop.
+
+Read the metadata through MachineLoop::getLoopID, as MachinePipeliner
+does for llvm.loop.pipeline.disable. An instruction is hoisted to the
+preheader of a loop only if neither that loop nor any loop between it
+and the instruction is marked; inner unmarked loops still hoist to their
+own preheaders. This applies to the pre- and post-RA passes.
+
+Assisted-by: Claude Opus 5.5
+---
+ llvm/lib/CodeGen/MachineLICM.cpp              | 27 ++++++++++++++++---
+ .../machinelicm-licm-disable-postra.mir       | 12 ++++-----
+ .../AMDGPU/machinelicm-licm-disable.mir       |  6 ++---
+ 3 files changed, 33 insertions(+), 12 deletions(-)
+
+diff --git a/llvm/lib/CodeGen/MachineLICM.cpp b/llvm/lib/CodeGen/MachineLICM.cpp
+index 50d910f3b74c..e3e523bd5a98 100644
+--- a/llvm/lib/CodeGen/MachineLICM.cpp
++++ b/llvm/lib/CodeGen/MachineLICM.cpp
+@@ -22,6 +22,7 @@
+ #include "llvm/ADT/SmallVector.h"
+ #include "llvm/ADT/Statistic.h"
+ #include "llvm/Analysis/AliasAnalysis.h"
++#include "llvm/Analysis/LoopInfo.h"
+ #include "llvm/CodeGen/LazyMachineBlockFrequencyInfo.h"
+ #include "llvm/CodeGen/MachineBasicBlock.h"
+ #include "llvm/CodeGen/MachineBlockFrequencyInfo.h"
+@@ -436,6 +437,19 @@ bool MachineLICMImpl::run(MachineFunction &MF) {
+   return Changed;
+ }
+ 
++/// Return the outermost loop that code in \p MBB can be hoisted out of without
++/// leaving a loop marked with llvm.licm.disable.
++static MachineLoop *getOutermostHoistableLoop(const MachineLoopInfo &MLI,
++                                              const MachineBasicBlock *MBB) {
++  MachineLoop *Outermost = nullptr;
++  for (MachineLoop *L = MLI.getLoopFor(MBB); L; L = L->getParentLoop()) {
++    if (findOptionMDForLoopID(L->getLoopID(), "llvm.licm.disable"))
++      break;
++    Outermost = L;
++  }
++  return Outermost;
++}
++
+ /// Return true if instruction stores to the specified frame.
+ static bool InstructionStoresToFI(const MachineInstr *MI, int FI) {
+   // Check mayStore before memory operands so that e.g. DBG_VALUEs will return
+@@ -692,6 +706,9 @@ void MachineLICMImpl::HoistRegionPostRA(MachineLoop *CurLoop) {
+       continue;
+ 
+     MachineInstr *MI = Candidate.MI;
++    if (getOutermostHoistableLoop(*MLI, MI->getParent()) != CurLoop)
++      continue;
++
+     for (const MachineOperand &MO : MI->all_uses()) {
+       if (!MO.getReg())
+         continue;
+@@ -886,15 +903,19 @@ void MachineLICMImpl::HoistOutOfLoop(MachineDomTreeNode *HeaderN,
+ 
+     // Process the block
+     GuaranteedToExecute.clear();
++    MachineLoop *HoistableLoop = getOutermostHoistableLoop(*MLI, MBB);
++    MachineLoop *StopLoop =
++        HoistableLoop ? HoistableLoop->getParentLoop() : MLI->getLoopFor(MBB);
+     for (MachineInstr &MI : llvm::make_early_inc_range(*MBB)) {
+       unsigned HoistRes = HoistResult::NotHoisted;
+-      HoistRes = Hoist(&MI, Preheader, CurLoop);
++      if (HoistableLoop == CurLoop)
++        HoistRes = Hoist(&MI, Preheader, CurLoop);
+       if (HoistRes & HoistResult::NotHoisted) {
+         // We have failed to hoist MI to outermost loop's preheader. If MI is in
+         // a subloop, try to hoist it to subloop's preheader.
+         SmallVector<MachineLoop *> InnerLoopWorkList;
+-        for (MachineLoop *L = MLI->getLoopFor(MI.getParent()); L != CurLoop;
+-             L = L->getParentLoop())
++        for (MachineLoop *L = MLI->getLoopFor(MI.getParent());
++             L != CurLoop && L != StopLoop; L = L->getParentLoop())
+           InnerLoopWorkList.push_back(L);
+ 
+         while (!InnerLoopWorkList.empty()) {
+diff --git a/llvm/test/CodeGen/AMDGPU/machinelicm-licm-disable-postra.mir b/llvm/test/CodeGen/AMDGPU/machinelicm-licm-disable-postra.mir
+index 10d78ba06e17..8bdaaee3d348 100644
+--- a/llvm/test/CodeGen/AMDGPU/machinelicm-licm-disable-postra.mir
++++ b/llvm/test/CodeGen/AMDGPU/machinelicm-licm-disable-postra.mir
+@@ -93,13 +93,13 @@ body: |
+   ; CHECK-NEXT:   successors: %bb.1(0x80000000)
+   ; CHECK-NEXT:   liveins: $sgpr0, $sgpr2
+   ; CHECK-NEXT: {{  $}}
+-  ; CHECK-NEXT:   $sgpr1 = S_MOV_B32 1234
+   ; CHECK-NEXT:   S_BRANCH %bb.1
+   ; CHECK-NEXT: {{  $}}
+   ; CHECK-NEXT: bb.1.loop:
+   ; CHECK-NEXT:   successors: %bb.1(0x40000000), %bb.2(0x40000000)
+-  ; CHECK-NEXT:   liveins: $sgpr0, $sgpr2, $sgpr1
++  ; CHECK-NEXT:   liveins: $sgpr0, $sgpr2
+   ; CHECK-NEXT: {{  $}}
++  ; CHECK-NEXT:   $sgpr1 = S_MOV_B32 1234
+   ; CHECK-NEXT:   $sgpr2 = S_ADD_U32 $sgpr2, $sgpr1, implicit-def dead $scc
+   ; CHECK-NEXT:   S_CMP_LG_U32 $sgpr2, $sgpr0, implicit-def $scc
+   ; CHECK-NEXT:   S_CBRANCH_SCC1 %bb.1, implicit $scc
+@@ -131,19 +131,19 @@ body: |
+   ; CHECK-NEXT:   successors: %bb.1(0x80000000)
+   ; CHECK-NEXT:   liveins: $sgpr0, $sgpr2
+   ; CHECK-NEXT: {{  $}}
+-  ; CHECK-NEXT:   $sgpr1 = S_MOV_B32 1234
+   ; CHECK-NEXT:   S_BRANCH %bb.1
+   ; CHECK-NEXT: {{  $}}
+   ; CHECK-NEXT: bb.1.outer:
+   ; CHECK-NEXT:   successors: %bb.2(0x80000000)
+-  ; CHECK-NEXT:   liveins: $sgpr0, $sgpr2, $sgpr1
++  ; CHECK-NEXT:   liveins: $sgpr0, $sgpr2
+   ; CHECK-NEXT: {{  $}}
+   ; CHECK-NEXT:   S_BRANCH %bb.2
+   ; CHECK-NEXT: {{  $}}
+   ; CHECK-NEXT: bb.2.inner:
+   ; CHECK-NEXT:   successors: %bb.2(0x40000000), %bb.3(0x40000000)
+-  ; CHECK-NEXT:   liveins: $sgpr0, $sgpr2, $sgpr1
++  ; CHECK-NEXT:   liveins: $sgpr0, $sgpr2
+   ; CHECK-NEXT: {{  $}}
++  ; CHECK-NEXT:   $sgpr1 = S_MOV_B32 1234
+   ; CHECK-NEXT:   $sgpr2 = S_ADD_U32 $sgpr2, $sgpr1, implicit-def dead $scc
+   ; CHECK-NEXT:   S_CMP_LG_U32 $sgpr2, $sgpr0, implicit-def $scc
+   ; CHECK-NEXT:   S_CBRANCH_SCC1 %bb.2, implicit $scc
+@@ -151,7 +151,7 @@ body: |
+   ; CHECK-NEXT: {{  $}}
+   ; CHECK-NEXT: bb.3.latch:
+   ; CHECK-NEXT:   successors: %bb.1(0x40000000), %bb.4(0x40000000)
+-  ; CHECK-NEXT:   liveins: $sgpr0, $sgpr2, $sgpr1
++  ; CHECK-NEXT:   liveins: $sgpr0, $sgpr2
+   ; CHECK-NEXT: {{  $}}
+   ; CHECK-NEXT:   S_CMP_LG_U32 $sgpr2, 0, implicit-def $scc
+   ; CHECK-NEXT:   S_CBRANCH_SCC1 %bb.1, implicit $scc
+diff --git a/llvm/test/CodeGen/AMDGPU/machinelicm-licm-disable.mir b/llvm/test/CodeGen/AMDGPU/machinelicm-licm-disable.mir
+index 892d5d6aee54..26482ab430d7 100644
+--- a/llvm/test/CodeGen/AMDGPU/machinelicm-licm-disable.mir
++++ b/llvm/test/CodeGen/AMDGPU/machinelicm-licm-disable.mir
+@@ -117,13 +117,13 @@ body: |
+   ; CHECK-NEXT: {{  $}}
+   ; CHECK-NEXT:   [[COPY:%[0-9]+]]:sreg_32 = COPY $sgpr0
+   ; CHECK-NEXT:   [[S_MOV_B32_:%[0-9]+]]:sreg_32 = S_MOV_B32 0
+-  ; CHECK-NEXT:   [[S_MOV_B32_1:%[0-9]+]]:sreg_32 = S_MOV_B32 1234
+   ; CHECK-NEXT:   S_BRANCH %bb.1
+   ; CHECK-NEXT: {{  $}}
+   ; CHECK-NEXT: bb.1.loop:
+   ; CHECK-NEXT:   successors: %bb.1(0x40000000), %bb.2(0x40000000)
+   ; CHECK-NEXT: {{  $}}
+   ; CHECK-NEXT:   [[PHI:%[0-9]+]]:sreg_32 = PHI [[S_MOV_B32_]], %bb.0, %3, %bb.1
++  ; CHECK-NEXT:   [[S_MOV_B32_1:%[0-9]+]]:sreg_32 = S_MOV_B32 1234
+   ; CHECK-NEXT:   [[S_ADD_U32_:%[0-9]+]]:sreg_32 = S_ADD_U32 [[PHI]], [[S_MOV_B32_1]], implicit-def dead $scc
+   ; CHECK-NEXT:   S_CMP_LG_U32 [[S_ADD_U32_]], [[COPY]], implicit-def $scc
+   ; CHECK-NEXT:   S_CBRANCH_SCC1 %bb.1, implicit $scc
+@@ -159,13 +159,13 @@ body: |
+   ; CHECK-NEXT: {{  $}}
+   ; CHECK-NEXT:   [[COPY:%[0-9]+]]:sreg_32 = COPY $sgpr0
+   ; CHECK-NEXT:   [[S_MOV_B32_:%[0-9]+]]:sreg_32 = S_MOV_B32 0
+-  ; CHECK-NEXT:   [[S_MOV_B32_1:%[0-9]+]]:sreg_32 = S_MOV_B32 1234
+   ; CHECK-NEXT:   S_BRANCH %bb.1
+   ; CHECK-NEXT: {{  $}}
+   ; CHECK-NEXT: bb.1.outer:
+   ; CHECK-NEXT:   successors: %bb.2(0x80000000)
+   ; CHECK-NEXT: {{  $}}
+   ; CHECK-NEXT:   [[PHI:%[0-9]+]]:sreg_32 = PHI [[S_MOV_B32_]], %bb.0, %3, %bb.3
++  ; CHECK-NEXT:   [[S_MOV_B32_1:%[0-9]+]]:sreg_32 = S_MOV_B32 1234
+   ; CHECK-NEXT:   S_BRANCH %bb.2
+   ; CHECK-NEXT: {{  $}}
+   ; CHECK-NEXT: bb.2.inner:
+@@ -225,7 +225,6 @@ body: |
+   ; CHECK-NEXT: {{  $}}
+   ; CHECK-NEXT:   [[COPY:%[0-9]+]]:sreg_32 = COPY $sgpr0
+   ; CHECK-NEXT:   [[S_MOV_B32_:%[0-9]+]]:sreg_32 = S_MOV_B32 0
+-  ; CHECK-NEXT:   [[S_MOV_B32_1:%[0-9]+]]:sreg_32 = S_MOV_B32 1234
+   ; CHECK-NEXT:   S_BRANCH %bb.1
+   ; CHECK-NEXT: {{  $}}
+   ; CHECK-NEXT: bb.1.outer:
+@@ -238,6 +237,7 @@ body: |
+   ; CHECK-NEXT:   successors: %bb.2(0x40000000), %bb.3(0x40000000)
+   ; CHECK-NEXT: {{  $}}
+   ; CHECK-NEXT:   [[PHI1:%[0-9]+]]:sreg_32 = PHI [[PHI]], %bb.1, %5, %bb.2
++  ; CHECK-NEXT:   [[S_MOV_B32_1:%[0-9]+]]:sreg_32 = S_MOV_B32 1234
+   ; CHECK-NEXT:   [[S_ADD_U32_:%[0-9]+]]:sreg_32 = S_ADD_U32 [[PHI1]], [[S_MOV_B32_1]], implicit-def dead $scc
+   ; CHECK-NEXT:   S_CMP_LG_U32 [[S_ADD_U32_]], [[COPY]], implicit-def $scc
+   ; CHECK-NEXT:   S_CBRANCH_SCC1 %bb.2, implicit $scc
+-- 
+2.53.0
+

@@ -1,0 +1,14 @@
+diff --git a/../ebddf9d-B/setup.py b/setup.py
+index 9f0a7c9..800c502 100644
+--- a/../ebddf9d-B/setup.py
++++ b/setup.py
+@@ -56,7 +56,8 @@ class BuildExt(BuildExtension):
+                             "-Xarch_device", "-mllvm=-amdgpu-preserve-uniform-irreducible",
+                             "-Xarch_device", "-mllvm=-amdgpu-shrink-late-compare-mask",
+                             "-Xarch_device", "-mllvm=-amdgpu-prefer-unsigned-add",
+-                            "-Xarch_device", "-mllvm=-amdgpu-prefer-ge-scalar-bounds"]
++                            "-Xarch_device", "-mllvm=-amdgpu-prefer-ge-scalar-bounds",
++                            "-Xarch_device", "-mllvm=-disable-machine-licm"]
+             subprocess.run([str(compiler), *native_flags, "-c", str(ROOT / "csrc/fp8_native.hip"),
+                             "-o", str(NATIVE_OBJECT)], check=True)
+         super().run()

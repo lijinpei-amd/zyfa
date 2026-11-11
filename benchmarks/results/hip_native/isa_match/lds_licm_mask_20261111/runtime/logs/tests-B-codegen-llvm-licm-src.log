@@ -1,0 +1,11 @@
+date: 2026-11-11T23:22:34+08:00
+tree: /home/jinpli/workspace/home/jinpli/development/zyfa/.claude/worktrees/agent-ac019c7f660da3916/build/ebddf9d-B
+HIP_VISIBLE_DEVICES=2
+args: -q -rs -p no:cacheprovider tests/test_fp8_hip_codegen.py
+pinned zyfa: /home/jinpli/workspace/home/jinpli/development/zyfa/.claude/worktrees/agent-ac019c7f660da3916/build/ebddf9d-B/zyfa/__init__.py _C: /home/jinpli/workspace/home/jinpli/development/zyfa/.claude/worktrees/agent-ac019c7f660da3916/build/ebddf9d-B/zyfa/_C.cpython-314-x86_64-linux-gnu.so f9b7241d0140026a951a0952a8cdb617a8ed822d46cb7e618dba134003ef7780
+........................................................................ [ 94%]
+....                                                                     [100%]
+76 passed in 8.57s
+pytest exit code 0 zyfa still /home/jinpli/workspace/home/jinpli/development/zyfa/.claude/worktrees/agent-ac019c7f660da3916/build/ebddf9d-B/zyfa/__init__.py
+wall seconds: 10
+exit: 0

@@ -1,0 +1,118 @@
+{
+ "candidate_extension": "/home/jinpli/workspace/home/jinpli/development/zyfa/.claude/worktrees/agent-ac019c7f660da3916/build/ebddf9d-B/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+ "candidate_extension_sha256": "f9b7241d0140026a951a0952a8cdb617a8ed822d46cb7e618dba134003ef7780",
+ "references": {
+  "owning": {
+   "path": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261111/gpu-validation-3ff0230/extensions/owning-4dd38ce.so",
+   "sha256": "dbb3ebfa0fe06a5dcda2ec453bf18d9bbd71336a45a00c0edfd5ace3d02298fb"
+  },
+  "c3ff0230": {
+   "path": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261111/gpu-validation-3ff0230/extensions/candidate-3ff0230.so",
+   "sha256": "daedaa8928be0af1225de363f3cee6f607914e2e214dec1d093b4f039adf481f"
+  },
+  "ebddf9dA": {
+   "path": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261111/gpu-validation-ebddf9d/extensions/ebddf9d-A.so",
+   "sha256": "30e9c69de1433260f83adfa9ecf85d48c1829cd1a2784908985842c3b53a5803"
+  }
+ },
+ "device": "AMD Instinct MI350X",
+ "HIP_VISIBLE_DEVICES": "6",
+ "args": {
+  "reference": "['owning=/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261111/gpu-validation-3ff0230/extensions/owning-4dd38ce.so', 'c3ff0230=/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261111/gpu-validation-3ff0230/extensions/candidate-3ff0230.so', 'ebddf9dA=/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261111/gpu-validation-ebddf9d/extensions/ebddf9d-A.so']",
+  "expect_sha": "f9b7241d0140026a951a0952a8cdb617a8ed822d46cb7e618dba134003ef7780",
+  "output": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261111/gpu-validation-ebddf9d/tail-race-long",
+  "repeats": "500",
+  "diag_repeats": "20",
+  "stress_iters": "20000",
+  "seeds": "200",
+  "phases": "kernel,persistent,padded,diagonal,stress"
+ },
+ "start": "2026-11-11T23:29:50"
+}
+kernel phase done 7.4s
+persistent phase done 19.2s
+padded phase done 56.1s
+diagonal phase done 59.8s
+stress phase done 213.3s
+{
+ "meta": {
+  "candidate_extension": "/home/jinpli/workspace/home/jinpli/development/zyfa/.claude/worktrees/agent-ac019c7f660da3916/build/ebddf9d-B/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+  "candidate_extension_sha256": "f9b7241d0140026a951a0952a8cdb617a8ed822d46cb7e618dba134003ef7780",
+  "references": {
+   "owning": {
+    "path": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261111/gpu-validation-3ff0230/extensions/owning-4dd38ce.so",
+    "sha256": "dbb3ebfa0fe06a5dcda2ec453bf18d9bbd71336a45a00c0edfd5ace3d02298fb"
+   },
+   "c3ff0230": {
+    "path": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261111/gpu-validation-3ff0230/extensions/candidate-3ff0230.so",
+    "sha256": "daedaa8928be0af1225de363f3cee6f607914e2e214dec1d093b4f039adf481f"
+   },
+   "ebddf9dA": {
+    "path": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261111/gpu-validation-ebddf9d/extensions/ebddf9d-A.so",
+    "sha256": "30e9c69de1433260f83adfa9ecf85d48c1829cd1a2784908985842c3b53a5803"
+   }
+  },
+  "device": "AMD Instinct MI350X",
+  "HIP_VISIBLE_DEVICES": "6",
+  "args": {
+   "reference": "['owning=/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261111/gpu-validation-3ff0230/extensions/owning-4dd38ce.so', 'c3ff0230=/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261111/gpu-validation-3ff0230/extensions/candidate-3ff0230.so', 'ebddf9dA=/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261111/gpu-validation-ebddf9d/extensions/ebddf9d-A.so']",
+   "expect_sha": "f9b7241d0140026a951a0952a8cdb617a8ed822d46cb7e618dba134003ef7780",
+   "output": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261111/gpu-validation-ebddf9d/tail-race-long",
+   "repeats": "500",
+   "diag_repeats": "20",
+   "stress_iters": "20000",
+   "seeds": "200",
+   "phases": "kernel,persistent,padded,diagonal,stress"
+  },
+  "start": "2026-11-11T23:29:50",
+  "negative_control": "single-bit flips in output and LSE detected",
+  "end": "2026-11-11T23:33:24",
+  "elapsed_s": 213.3165032863617
+ },
+ "cases": 1106,
+ "failures": 0,
+ "by_phase": {
+  "diagonal": {
+   "cases": 594,
+   "pass": 594
+  },
+  "kernel": {
+   "cases": 100,
+   "pass": 100
+  },
+  "padded": {
+   "cases": 336,
+   "pass": 336
+  },
+  "persistent": {
+   "cases": 48,
+   "pass": 48
+  },
+  "stress-fixed": {
+   "cases": 14,
+   "pass": 14
+  },
+  "stress-seeds": {
+   "cases": 14,
+   "pass": 14
+  }
+ },
+ "all_equal_checks_true": true,
+ "equal_checks": [
+  "equal_api_raw_lse",
+  "equal_api_raw_nolse",
+  "equal_c3ff0230_lse",
+  "equal_c3ff0230_nolse",
+  "equal_ebddf9dA_lse",
+  "equal_ebddf9dA_nolse",
+  "equal_output_lse_vs_nolse",
+  "equal_owning_lse",
+  "equal_owning_nolse"
+ ],
+ "repeat_stable_all": true,
+ "total_candidate_launches": 792716,
+ "max_rel_rms": 0.02673099520108922,
+ "max_abs_err": 0.04236257436282298,
+ "max_lse_abs_err": 0.05005439362632447
+}
+FAILURES 0

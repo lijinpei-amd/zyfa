@@ -1,0 +1,22 @@
+date: 2026-11-11T23:33:38+08:00
+script: /home/jinpli/workspace/home/jinpli/development/zyfa/.claude/worktrees/agent-ac019c7f660da3916/build/ebddf9d-B/build/bench/benchmark-before-after.py (406716cd5f2b325e4fb63e81ef45626b825fbd91ae1d8eb9eb1e87a0dc7f295f)
+baseline: /home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261111/gpu-validation-3ff0230/extensions/owning-4dd38ce.so (dbb3ebfa0fe06a5dcda2ec453bf18d9bbd71336a45a00c0edfd5ace3d02298fb)
+HIP_VISIBLE_DEVICES=0
+--- GPU processes before
+        PID: 347514             VRAM_MEM: 494.0 MB
+dim group length before_us after_us asm_us change_pct
+128 1 256 47.16 40.44 37.71 -14.25%
+128 1 1024 65.87 58.70 55.70 -10.89%
+128 1 8192 274.35 275.31 268.05 +0.35%
+128 4 256 40.41 33.95 32.22 -15.98%
+128 4 1024 60.85 53.27 49.93 -12.45%
+128 4 8192 280.96 274.43 264.45 -2.32%
+192 1 256 48.91 48.10 43.10 -1.65%
+192 1 1024 73.85 73.16 70.02 -0.94%
+192 1 8192 392.43 383.13 378.86 -2.37%
+192 4 256 43.98 42.95 39.32 -2.33%
+192 4 1024 70.89 68.80 64.92 -2.95%
+192 4 8192 382.51 388.00 373.76 +1.44%
+wall seconds: 12
+exit: 0
+max GFX activity per GPU during run: 0 0 0 99 21 23 23 24 

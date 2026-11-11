@@ -1,0 +1,25 @@
+{
+  "128": {
+    "strict_loop_exact": true,
+    "strict_loop_instructions": 1333,
+    "add3==0": true,
+    "mad_u24==4": true,
+    "mul_lo==7": true,
+    "protected_equal_owning": true,
+    "pv_one_v_address": true,
+    "u24_setup": true,
+    "s_waitcnt": 117
+  },
+  "192": {
+    "strict_loop_exact": true,
+    "strict_loop_instructions": 825,
+    "add3==0": true,
+    "mad_u24==3": true,
+    "mul_lo==7": true,
+    "protected_equal_owning": true,
+    "pv_one_v_address": true,
+    "u24_setup": true,
+    "s_waitcnt": 85
+  },
+  "all_ok": true
+}

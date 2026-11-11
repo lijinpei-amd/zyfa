@@ -1,0 +1,528 @@
+{
+  "filter": "scratch/register copies/native SGPR lane spills excluded; literal initialization retained",
+  "dimensions": {
+    "128": {
+      "steady_count_sequence_match": true,
+      "steady_instructions": 1333,
+      "before_total": 4929,
+      "after_total": 4910,
+      "reference_total": 5302,
+      "before_after_differences": {
+        "s_add_u32": {
+          "reference": 247,
+          "llvm": 235,
+          "delta": -12
+        },
+        "s_addc_u32": {
+          "reference": 29,
+          "llvm": 35,
+          "delta": 6
+        },
+        "s_addk_i32": {
+          "reference": 7,
+          "llvm": 13,
+          "delta": 6
+        },
+        "s_and_b32": {
+          "reference": 17,
+          "llvm": 20,
+          "delta": 3
+        },
+        "s_and_b64": {
+          "reference": 19,
+          "llvm": 18,
+          "delta": -1
+        },
+        "s_bfe_u32": {
+          "reference": 5,
+          "llvm": 4,
+          "delta": -1
+        },
+        "s_branch": {
+          "reference": 28,
+          "llvm": 37,
+          "delta": 9
+        },
+        "s_cbranch_scc0": {
+          "reference": 19,
+          "llvm": 17,
+          "delta": -2
+        },
+        "s_cbranch_scc1": {
+          "reference": 75,
+          "llvm": 77,
+          "delta": 2
+        },
+        "s_cmp_lg_u32": {
+          "reference": 5,
+          "llvm": 6,
+          "delta": 1
+        },
+        "s_lshl_b32": {
+          "reference": 65,
+          "llvm": 67,
+          "delta": 2
+        },
+        "s_mov_b32": {
+          "reference": 54,
+          "llvm": 40,
+          "delta": -14
+        },
+        "s_movk_i32": {
+          "reference": 4,
+          "llvm": 1,
+          "delta": -3
+        },
+        "s_nop": {
+          "reference": 307,
+          "llvm": 286,
+          "delta": -21
+        },
+        "s_or_b32": {
+          "reference": 23,
+          "llvm": 12,
+          "delta": -11
+        },
+        "s_waitcnt": {
+          "reference": 130,
+          "llvm": 117,
+          "delta": -13
+        },
+        "v_add_u32_e32": {
+          "reference": 63,
+          "llvm": 59,
+          "delta": -4
+        },
+        "v_and_b32_e32": {
+          "reference": 12,
+          "llvm": 22,
+          "delta": 10
+        },
+        "v_lshl_or_b32": {
+          "reference": 3,
+          "llvm": 2,
+          "delta": -1
+        },
+        "v_lshlrev_b32_e32": {
+          "reference": 34,
+          "llvm": 36,
+          "delta": 2
+        },
+        "v_lshrrev_b32_e32": {
+          "reference": 7,
+          "llvm": 9,
+          "delta": 2
+        },
+        "v_mov_b32_e32": {
+          "reference": 8,
+          "llvm": 9,
+          "delta": 1
+        },
+        "v_or3_b32": {
+          "reference": 3,
+          "llvm": 5,
+          "delta": 2
+        },
+        "v_sub_u32_e32": {
+          "reference": 1,
+          "llvm": 12,
+          "delta": 11
+        },
+        "v_xor_b32_e32": {
+          "reference": 22,
+          "llvm": 29,
+          "delta": 7
+        }
+      },
+      "positive_excess_sum": 261,
+      "negative_excess_sum": -653,
+      "l1_distance": 914,
+      "before_positive_excess_sum": 301,
+      "before_negative_excess_sum": -674,
+      "before_l1_distance": 975,
+      "scalar_positive_excess": 221,
+      "vector_positive_excess": {
+        "v_and_or_b32": {
+          "reference": 0,
+          "llvm": 1,
+          "delta": 1
+        },
+        "v_cndmask_b32_e32": {
+          "reference": 0,
+          "llvm": 1,
+          "delta": 1
+        },
+        "v_or3_b32": {
+          "reference": 0,
+          "llvm": 5,
+          "delta": 5
+        },
+        "v_or_b32_e32": {
+          "reference": 0,
+          "llvm": 24,
+          "delta": 24
+        },
+        "v_sub_u32_e32": {
+          "reference": 3,
+          "llvm": 12,
+          "delta": 9
+        }
+      },
+      "raw_allocator_instructions": {
+        "s_mov_b32": 66,
+        "s_mov_b64": 11,
+        "v_mov_b32_e32": 276,
+        "v_mov_b64_e32": 256
+      },
+      "first_sequence_mismatch": {
+        "index": 4,
+        "reference": {
+          "mnemonic": "v_lshrrev_b32_e32",
+          "operands": "v255, 6, v216",
+          "address": 5412,
+          "line": 13,
+          "branch_target": null
+        },
+        "llvm": {
+          "mnemonic": "v_bfe_u32",
+          "operands": "v175, v0, 5, 1",
+          "address": 6944,
+          "line": 11,
+          "branch_target": null
+        }
+      }
+    },
+    "192": {
+      "steady_count_sequence_match": true,
+      "steady_instructions": 825,
+      "before_total": 3359,
+      "after_total": 3398,
+      "reference_total": 3737,
+      "before_after_differences": {
+        "s_add_u32": {
+          "reference": 190,
+          "llvm": 216,
+          "delta": 26
+        },
+        "s_addc_u32": {
+          "reference": 29,
+          "llvm": 35,
+          "delta": 6
+        },
+        "s_addk_i32": {
+          "reference": 0,
+          "llvm": 7,
+          "delta": 7
+        },
+        "s_and_b32": {
+          "reference": 17,
+          "llvm": 24,
+          "delta": 7
+        },
+        "s_and_b64": {
+          "reference": 21,
+          "llvm": 18,
+          "delta": -3
+        },
+        "s_bfe_u32": {
+          "reference": 5,
+          "llvm": 4,
+          "delta": -1
+        },
+        "s_branch": {
+          "reference": 30,
+          "llvm": 32,
+          "delta": 2
+        },
+        "s_cbranch_scc0": {
+          "reference": 19,
+          "llvm": 15,
+          "delta": -4
+        },
+        "s_cbranch_scc1": {
+          "reference": 69,
+          "llvm": 73,
+          "delta": 4
+        },
+        "s_cbranch_vccnz": {
+          "reference": 1,
+          "llvm": 0,
+          "delta": -1
+        },
+        "s_cmp_ge_u32": {
+          "reference": 27,
+          "llvm": 29,
+          "delta": 2
+        },
+        "s_cmp_lg_u32": {
+          "reference": 9,
+          "llvm": 10,
+          "delta": 1
+        },
+        "s_cmp_lt_u32": {
+          "reference": 10,
+          "llvm": 8,
+          "delta": -2
+        },
+        "s_cselect_b32": {
+          "reference": 20,
+          "llvm": 22,
+          "delta": 2
+        },
+        "s_cselect_b64": {
+          "reference": 11,
+          "llvm": 10,
+          "delta": -1
+        },
+        "s_lshl_b32": {
+          "reference": 75,
+          "llvm": 80,
+          "delta": 5
+        },
+        "s_mov_b32": {
+          "reference": 47,
+          "llvm": 40,
+          "delta": -7
+        },
+        "s_mov_b64": {
+          "reference": 9,
+          "llvm": 8,
+          "delta": -1
+        },
+        "s_movk_i32": {
+          "reference": 4,
+          "llvm": 1,
+          "delta": -3
+        },
+        "s_nop": {
+          "reference": 183,
+          "llvm": 189,
+          "delta": 6
+        },
+        "s_or_b32": {
+          "reference": 34,
+          "llvm": 16,
+          "delta": -18
+        },
+        "s_waitcnt": {
+          "reference": 90,
+          "llvm": 85,
+          "delta": -5
+        },
+        "v_add_u32_e32": {
+          "reference": 47,
+          "llvm": 45,
+          "delta": -2
+        },
+        "v_and_b32_e32": {
+          "reference": 11,
+          "llvm": 16,
+          "delta": 5
+        },
+        "v_lshl_add_u32": {
+          "reference": 4,
+          "llvm": 2,
+          "delta": -2
+        },
+        "v_lshl_or_b32": {
+          "reference": 4,
+          "llvm": 3,
+          "delta": -1
+        },
+        "v_lshlrev_b32_e32": {
+          "reference": 29,
+          "llvm": 31,
+          "delta": 2
+        },
+        "v_lshrrev_b32_e32": {
+          "reference": 7,
+          "llvm": 8,
+          "delta": 1
+        },
+        "v_mov_b32_e32": {
+          "reference": 62,
+          "llvm": 57,
+          "delta": -5
+        },
+        "v_or3_b32": {
+          "reference": 3,
+          "llvm": 5,
+          "delta": 2
+        },
+        "v_sub_u32_e32": {
+          "reference": 3,
+          "llvm": 8,
+          "delta": 5
+        },
+        "v_xor_b32_e32": {
+          "reference": 13,
+          "llvm": 25,
+          "delta": 12
+        }
+      },
+      "positive_excess_sum": 203,
+      "negative_excess_sum": -542,
+      "l1_distance": 745,
+      "before_positive_excess_sum": 214,
+      "before_negative_excess_sum": -592,
+      "before_l1_distance": 806,
+      "scalar_positive_excess": 160,
+      "vector_positive_excess": {
+        "v_add_lshl_u32": {
+          "reference": 0,
+          "llvm": 1,
+          "delta": 1
+        },
+        "v_and_or_b32": {
+          "reference": 0,
+          "llvm": 4,
+          "delta": 4
+        },
+        "v_cndmask_b32_e32": {
+          "reference": 0,
+          "llvm": 3,
+          "delta": 3
+        },
+        "v_lshlrev_b32_e32": {
+          "reference": 29,
+          "llvm": 31,
+          "delta": 2
+        },
+        "v_lshrrev_b32_e32": {
+          "reference": 6,
+          "llvm": 8,
+          "delta": 2
+        },
+        "v_or3_b32": {
+          "reference": 0,
+          "llvm": 5,
+          "delta": 5
+        },
+        "v_or_b32_e32": {
+          "reference": 0,
+          "llvm": 23,
+          "delta": 23
+        },
+        "v_sub_u32_e32": {
+          "reference": 5,
+          "llvm": 8,
+          "delta": 3
+        }
+      },
+      "raw_allocator_instructions": {
+        "s_mov_b32": 70,
+        "s_mov_b64": 11,
+        "v_mov_b32_e32": 202,
+        "v_mov_b64_e32": 160
+      },
+      "first_sequence_mismatch": {
+        "index": 4,
+        "reference": {
+          "mnemonic": "v_lshrrev_b32_e32",
+          "operands": "v213, 6, v188",
+          "address": 5412,
+          "line": 13,
+          "branch_target": null
+        },
+        "llvm": {
+          "mnemonic": "v_and_b32_e32",
+          "operands": "v1, 63, v0",
+          "address": 41760,
+          "line": 5533,
+          "branch_target": null
+        }
+      }
+    }
+  },
+  "resources": {
+    "128": {
+      "group_segment_fixed_size": 163840,
+      "kernarg_segment_align": 8,
+      "kernarg_segment_size": 152,
+      "max_flat_workgroup_size": 512,
+      "private_segment_fixed_size": 0,
+      "sgpr_count": 88,
+      "sgpr_spill_count": 0,
+      "vgpr_count": 244,
+      "vgpr_spill_count": 0,
+      "wavefront_size": 64
+    },
+    "192": {
+      "group_segment_fixed_size": 131072,
+      "kernarg_segment_align": 8,
+      "kernarg_segment_size": 152,
+      "max_flat_workgroup_size": 512,
+      "private_segment_fixed_size": 0,
+      "sgpr_count": 90,
+      "sgpr_spill_count": 0,
+      "vgpr_count": 206,
+      "vgpr_spill_count": 0,
+      "wavefront_size": 64
+    }
+  },
+  "resources_before": {
+    "128": {
+      "group_segment_fixed_size": 163840,
+      "kernarg_segment_align": 8,
+      "kernarg_segment_size": 152,
+      "max_flat_workgroup_size": 512,
+      "private_segment_fixed_size": 64,
+      "sgpr_count": 106,
+      "sgpr_spill_count": 14,
+      "vgpr_count": 256,
+      "vgpr_spill_count": 23,
+      "wavefront_size": 64
+    },
+    "192": {
+      "group_segment_fixed_size": 131072,
+      "kernarg_segment_align": 8,
+      "kernarg_segment_size": 152,
+      "max_flat_workgroup_size": 512,
+      "private_segment_fixed_size": 0,
+      "sgpr_count": 106,
+      "sgpr_spill_count": 1,
+      "vgpr_count": 231,
+      "vgpr_spill_count": 0,
+      "wavefront_size": 64
+    }
+  },
+  "validated_build_equivalence": {
+    "owning_code_object_sha256": "6dc25cabb50f06d947a57bf3343f99301cd4b51cbf1d3cb439e311d081ac54a7",
+    "text_sha256": "38114f548b3b0e1e9c084b1d286c53afdd00ce55f1817ee384343ed827ae0a87",
+    "validated_A_code_object_sha256": "558a70d884dcf853f3cdbb75e7c28ec008e9b7508ed87184d8eaec6d8a9ea4a0",
+    "validated_A_differing_sections": [
+      ".dynstr",
+      ".gnu.hash",
+      ".strtab"
+    ],
+    "validated_B_code_object_sha256": "733050321d3bbcb4061ede2131ab092411b92864d81102a1366b7d072234bd57",
+    "validated_B_differing_sections": [
+      ".comment",
+      ".dynstr",
+      ".gnu.hash",
+      ".hash",
+      ".strtab"
+    ],
+    "text_rodata_notes_byte_identical": true,
+    "unfiltered_isa_address_mnemonic_operands_identity": {
+      "128": 5519,
+      "192": 3841
+    }
+  },
+  "manifest": {
+    "native_source_sha256": "776857b4dce02393091681f27668b1286eb6da65f3bac6f83176b4ccee0bcd43",
+    "object_sha256": "d1ec1bd6c25a8631862b15efeb541d165f0727fe2353a3d57abac0ebc306f1db",
+    "code_object_sha256": "6dc25cabb50f06d947a57bf3343f99301cd4b51cbf1d3cb439e311d081ac54a7",
+    "object": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/native/fp8_native.o",
+    "assembly_origin": "disassembly of the selected object's embedded code object",
+    "inspection_tool_version": "AMD LLVM version 22.0.0git\n  Optimized build.\n\n\n  Registered Targets:\n    amdgcn - AMD GCN GPUs\n    r600   - AMD GPUs HD2XXX-HD6XXX\n    x86    - 32-bit X86: Pentium-Pro and above\n    x86-64 - 64-bit X86: EM64T and AMD64",
+    "lds_bytes_per_block": {
+      "d128": 163840,
+      "d192": 131072
+    },
+    "extension_sha256": "8a0d5fb8994ebf2228b2e92e1e90ad8574cde41713fcc9814525128602d3cc6f",
+    "extension_contains_exact_native_fatbin": true,
+    "baseline_extension_sha256": "dbb3ebfa0fe06a5dcda2ec453bf18d9bbd71336a45a00c0edfd5ace3d02298fb",
+    "source_commit": "9379f89d785f9479be8a55b29c2bf315bbae72e8"
+  }
+}
