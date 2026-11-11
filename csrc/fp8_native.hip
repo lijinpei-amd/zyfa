@@ -383,20 +383,22 @@ __device__ __forceinline__ void mask(fx16 &s, int q_start, int tile, float ninf)
     const int delta = scalar_mask_sub<Block * 32>(scalar_sub((uint32_t)q_start, (uint32_t)tile * keys<D>));
     if (delta >= 32)
         return;
-    if (delta < 0) {
-        s = fx16{} + ninf;
+    // The elementwise path comes first, so it is the fall-through of the delta < 0 branch, as in
+    // the assembly.
+    if (delta >= 0) {
+        const int threshold = delta + (laneid() & 31) - (laneid() >> 5) * 4;
+#pragma unroll
+        for (int j = 0; j < 4; ++j)
+#pragma unroll
+            for (int i = 0; i < 4; ++i)
+                {
+                    const uint64_t visible = __builtin_amdgcn_sicmp(8 * j + i, threshold, 38);
+                    s[4 * j + i] = select_wave_mask(visible, s[4 * j + i], ninf);
+                    SCHED_FENCE();
+                }
         return;
     }
-    const int threshold = delta + (laneid() & 31) - (laneid() >> 5) * 4;
-#pragma unroll
-    for (int j = 0; j < 4; ++j)
-#pragma unroll
-        for (int i = 0; i < 4; ++i)
-            {
-                const uint64_t visible = __builtin_amdgcn_sicmp(8 * j + i, threshold, 38);
-                s[4 * j + i] = select_wave_mask(visible, s[4 * j + i], ninf);
-                SCHED_FENCE();
-            }
+    s = fx16{} + ninf;
 }
 
 // neg_eight is -8.0: fma(x, -8, bias) == fma(-x, 8, bias) exactly.
