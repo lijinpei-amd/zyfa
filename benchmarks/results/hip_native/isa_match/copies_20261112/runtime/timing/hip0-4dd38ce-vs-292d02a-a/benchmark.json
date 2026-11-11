@@ -1,0 +1,629 @@
+{
+  "baseline_extension_sha256": "dbb3ebfa0fe06a5dcda2ec453bf18d9bbd71336a45a00c0edfd5ace3d02298fb",
+  "current_extension_sha256": "4d6bebacf84fcad845b1a64699288874fd8d07c63817e4ca5e1a7c758e7ea1e6",
+  "source_sha256": "a636145c58361731ff82cd4c43ac17d28744a42d3acf0ccbc4765302d6ebee83",
+  "gpu": "AMD Instinct MI350X",
+  "protocol": {
+    "warmup": 200,
+    "iters": 100,
+    "repeats": 5,
+    "seed": 29,
+    "layout": "bshd",
+    "return_lse": true,
+    "same_process": true
+  },
+  "cases": [
+    {
+      "dim": 128,
+      "group": 1,
+      "length": 256,
+      "heads": 1024,
+      "medians_us": {
+        "before": 47.23385000000001,
+        "after": 40.34773,
+        "assembly": 37.79849000000002
+      },
+      "samples_us": {
+        "before": [
+          49.33149000000001,
+          47.23385000000001,
+          47.32705,
+          47.221060000000016,
+          47.19665999999998
+        ],
+        "after": [
+          41.07534,
+          40.39211999999999,
+          40.336919999999985,
+          40.34173,
+          40.34773
+        ],
+        "assembly": [
+          38.23008999999999,
+          37.79849000000002,
+          37.693290000000005,
+          37.81289000000002,
+          37.75728999999999
+        ]
+      },
+      "kernel_names": {
+        "before": [
+          "void fmha_fp8_native::attend<128>(std::conditional<(128)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ],
+        "after": [
+          "void fmha_fp8_native::attend<128>(std::conditional<(128)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ],
+        "assembly": [
+          "fmha_fp8pp.kd"
+        ]
+      },
+      "change_pct": -14.578781954043574,
+      "bitwise_output_lse_equal": [
+        true,
+        true
+      ],
+      "relative_rms": 0.005528329627456286
+    },
+    {
+      "dim": 128,
+      "group": 1,
+      "length": 1024,
+      "heads": 256,
+      "medians_us": {
+        "before": 66.02219999999998,
+        "after": 59.04725999999999,
+        "assembly": 55.66480999999999
+      },
+      "samples_us": {
+        "before": [
+          66.02219999999998,
+          66.00139000000001,
+          65.99940000000001,
+          66.18459000000001,
+          66.08297999999999
+        ],
+        "after": [
+          58.86607999999999,
+          59.04725999999999,
+          58.946460000000016,
+          59.26725999999998,
+          59.136460000000014
+        ],
+        "assembly": [
+          55.66480999999999,
+          55.650009999999995,
+          55.60479000000001,
+          56.0616,
+          55.69599999999998
+        ]
+      },
+      "kernel_names": {
+        "before": [
+          "void fmha_fp8_native::attend<128>(std::conditional<(128)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ],
+        "after": [
+          "void fmha_fp8_native::attend<128>(std::conditional<(128)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ],
+        "assembly": [
+          "fmha_fp8pp.kd"
+        ]
+      },
+      "change_pct": -10.564537382880301,
+      "bitwise_output_lse_equal": [
+        true,
+        true
+      ],
+      "relative_rms": 0.005943745958183383
+    },
+    {
+      "dim": 128,
+      "group": 1,
+      "length": 8192,
+      "heads": 32,
+      "medians_us": {
+        "before": 278.0344200000001,
+        "after": 275.25799,
+        "assembly": 271.9898099999998
+      },
+      "samples_us": {
+        "before": [
+          274.78356000000014,
+          276.13437999999996,
+          282.8004700000002,
+          279.4008400000001,
+          278.0344200000001
+        ],
+        "after": [
+          281.4645,
+          277.13599999999997,
+          275.25799,
+          272.14110000000005,
+          269.3414300000002
+        ],
+        "assembly": [
+          284.85614000000004,
+          278.9591999999999,
+          271.9898099999998,
+          269.74908000000005,
+          271.7795
+        ]
+      },
+      "kernel_names": {
+        "before": [
+          "void fmha_fp8_native::attend<128>(std::conditional<(128)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ],
+        "after": [
+          "void fmha_fp8_native::attend<128>(std::conditional<(128)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ],
+        "assembly": [
+          "fmha_fp8pp.kd"
+        ]
+      },
+      "change_pct": -0.9985921886938032,
+      "bitwise_output_lse_equal": [
+        true,
+        true
+      ],
+      "relative_rms": 0.0051225482405337225
+    },
+    {
+      "dim": 128,
+      "group": 4,
+      "length": 256,
+      "heads": 1024,
+      "medians_us": {
+        "before": 40.43731999999999,
+        "after": 34.27601,
+        "assembly": 32.307579999999994
+      },
+      "samples_us": {
+        "before": [
+          42.34296999999999,
+          40.43731999999999,
+          40.36333000000002,
+          40.54053000000002,
+          40.40092999999998
+        ],
+        "after": [
+          35.69284000000001,
+          34.27400999999999,
+          34.46961999999999,
+          34.27601,
+          34.218419999999995
+        ],
+        "assembly": [
+          32.94358999999998,
+          32.322379999999974,
+          32.168779999999984,
+          32.18998000000001,
+          32.307579999999994
+        ]
+      },
+      "kernel_names": {
+        "before": [
+          "void fmha_fp8_native::attend<128>(std::conditional<(128)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ],
+        "after": [
+          "void fmha_fp8_native::attend<128>(std::conditional<(128)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ],
+        "assembly": [
+          "fmha_fp8pp.kd"
+        ]
+      },
+      "change_pct": -15.236692243699624,
+      "bitwise_output_lse_equal": [
+        true,
+        true
+      ],
+      "relative_rms": 0.006014382710579072
+    },
+    {
+      "dim": 128,
+      "group": 4,
+      "length": 1024,
+      "heads": 256,
+      "medians_us": {
+        "before": 61.10250000000002,
+        "after": 53.55396000000003,
+        "assembly": 50.05550000000006
+      },
+      "samples_us": {
+        "before": [
+          60.96650000000002,
+          61.10250000000002,
+          60.91128999999998,
+          61.17970999999997,
+          61.33210000000002
+        ],
+        "after": [
+          53.598370000000024,
+          53.55396000000003,
+          53.26076000000001,
+          53.48837000000009,
+          53.942369999999976
+        ],
+        "assembly": [
+          49.87270000000002,
+          50.05550000000006,
+          49.86269999999999,
+          50.12350000000003,
+          51.61793000000001
+        ]
+      },
+      "kernel_names": {
+        "before": [
+          "void fmha_fp8_native::attend<128>(std::conditional<(128)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ],
+        "after": [
+          "void fmha_fp8_native::attend<128>(std::conditional<(128)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ],
+        "assembly": [
+          "fmha_fp8pp.kd"
+        ]
+      },
+      "change_pct": -12.35389714005153,
+      "bitwise_output_lse_equal": [
+        true,
+        true
+      ],
+      "relative_rms": 0.005515820184060077
+    },
+    {
+      "dim": 128,
+      "group": 4,
+      "length": 8192,
+      "heads": 32,
+      "medians_us": {
+        "before": 276.2091499999999,
+        "after": 268.7830399999999,
+        "assembly": 267.35941
+      },
+      "samples_us": {
+        "before": [
+          277.12319,
+          276.2091499999999,
+          267.77300000000014,
+          288.36338999999987,
+          273.58672000000007
+        ],
+        "after": [
+          272.38187999999997,
+          268.2914,
+          277.63280000000003,
+          268.091,
+          268.7830399999999
+        ],
+        "assembly": [
+          267.35941,
+          265.97979,
+          283.77611,
+          277.45159,
+          262.4325100000001
+        ]
+      },
+      "kernel_names": {
+        "before": [
+          "void fmha_fp8_native::attend<128>(std::conditional<(128)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ],
+        "after": [
+          "void fmha_fp8_native::attend<128>(std::conditional<(128)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ],
+        "assembly": [
+          "fmha_fp8pp.kd"
+        ]
+      },
+      "change_pct": -2.6885821849131353,
+      "bitwise_output_lse_equal": [
+        true,
+        true
+      ],
+      "relative_rms": 0.00563995081407651
+    },
+    {
+      "dim": 192,
+      "group": 1,
+      "length": 256,
+      "heads": 1024,
+      "medians_us": {
+        "before": 48.90548000000004,
+        "after": 48.309860000000015,
+        "assembly": 43.086569999999966
+      },
+      "samples_us": {
+        "before": [
+          50.760709999999975,
+          48.95148000000003,
+          48.90548000000004,
+          48.80308000000003,
+          48.868279999999984
+        ],
+        "after": [
+          48.600660000000055,
+          48.34386999999997,
+          48.20945999999999,
+          48.258269999999996,
+          48.309860000000015
+        ],
+        "assembly": [
+          43.099370000000015,
+          42.99178000000003,
+          43.08976999999999,
+          43.086569999999966,
+          43.06217000000002
+        ]
+      },
+      "kernel_names": {
+        "before": [
+          "void fmha_fp8_native::attend<192>(std::conditional<(192)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ],
+        "after": [
+          "void fmha_fp8_native::attend<192>(std::conditional<(192)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ],
+        "assembly": [
+          "fmha_fp8pp192.kd"
+        ]
+      },
+      "change_pct": -1.2179003252805742,
+      "bitwise_output_lse_equal": [
+        true,
+        true
+      ],
+      "relative_rms": 0.00494760205620424
+    },
+    {
+      "dim": 192,
+      "group": 1,
+      "length": 1024,
+      "heads": 256,
+      "medians_us": {
+        "before": 73.79232,
+        "after": 72.97350999999999,
+        "assembly": 69.73585
+      },
+      "samples_us": {
+        "before": [
+          73.76991999999997,
+          73.79232,
+          73.63872000000005,
+          77.96600000000001,
+          77.99040999999995
+        ],
+        "after": [
+          72.59469999999997,
+          72.87191,
+          72.97350999999999,
+          73.29470999999998,
+          75.63596000000003
+        ],
+        "assembly": [
+          68.27182000000003,
+          68.39982,
+          69.73585,
+          73.19791000000004,
+          73.81312999999999
+        ]
+      },
+      "kernel_names": {
+        "before": [
+          "void fmha_fp8_native::attend<192>(std::conditional<(192)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ],
+        "after": [
+          "void fmha_fp8_native::attend<192>(std::conditional<(192)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ],
+        "assembly": [
+          "fmha_fp8pp192.kd"
+        ]
+      },
+      "change_pct": -1.1096141170246598,
+      "bitwise_output_lse_equal": [
+        true,
+        true
+      ],
+      "relative_rms": 0.003938867972345506
+    },
+    {
+      "dim": 192,
+      "group": 1,
+      "length": 8192,
+      "heads": 32,
+      "medians_us": {
+        "before": 397.80375,
+        "after": 384.82512999999983,
+        "assembly": 380.5218400000004
+      },
+      "samples_us": {
+        "before": [
+          393.2796699999997,
+          398.5517600000003,
+          397.80375,
+          390.5492200000001,
+          398.3873499999999
+        ],
+        "after": [
+          386.65234999999973,
+          384.82512999999983,
+          382.54148000000015,
+          385.7043299999998,
+          383.4614799999999
+        ],
+        "assembly": [
+          384.7019200000001,
+          383.7055,
+          378.99300999999997,
+          376.1309600000001,
+          380.5218400000004
+        ]
+      },
+      "kernel_names": {
+        "before": [
+          "void fmha_fp8_native::attend<192>(std::conditional<(192)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ],
+        "after": [
+          "void fmha_fp8_native::attend<192>(std::conditional<(192)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ],
+        "assembly": [
+          "fmha_fp8pp192.kd"
+        ]
+      },
+      "change_pct": -3.26256854039213,
+      "bitwise_output_lse_equal": [
+        true,
+        true
+      ],
+      "relative_rms": 0.004741983930983033
+    },
+    {
+      "dim": 192,
+      "group": 4,
+      "length": 256,
+      "heads": 1024,
+      "medians_us": {
+        "before": 44.028190000000016,
+        "after": 43.30978000000001,
+        "assembly": 39.66412000000004
+      },
+      "samples_us": {
+        "before": [
+          46.23542999999998,
+          43.968990000000005,
+          44.026190000000035,
+          44.028190000000016,
+          44.21699000000004
+        ],
+        "after": [
+          44.350999999999985,
+          43.36657999999997,
+          43.24177000000003,
+          43.30978000000001,
+          43.29098
+        ],
+        "assembly": [
+          39.610509999999984,
+          39.712909999999994,
+          39.66451000000002,
+          39.597709999999964,
+          39.66412000000004
+        ]
+      },
+      "kernel_names": {
+        "before": [
+          "void fmha_fp8_native::attend<192>(std::conditional<(192)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ],
+        "after": [
+          "void fmha_fp8_native::attend<192>(std::conditional<(192)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ],
+        "assembly": [
+          "fmha_fp8pp192.kd"
+        ]
+      },
+      "change_pct": -1.6317045965323684,
+      "bitwise_output_lse_equal": [
+        true,
+        true
+      ],
+      "relative_rms": 0.004768074969376654
+    },
+    {
+      "dim": 192,
+      "group": 4,
+      "length": 1024,
+      "heads": 256,
+      "medians_us": {
+        "before": 69.78184999999999,
+        "after": 70.46387,
+        "assembly": 65.56537999999996
+      },
+      "samples_us": {
+        "before": [
+          68.62702999999999,
+          69.78184999999999,
+          72.21109999999997,
+          75.35915999999997,
+          69.53065000000001
+        ],
+        "after": [
+          67.60820999999999,
+          71.43948999999999,
+          71.65349,
+          68.39183,
+          70.46387
+        ],
+        "assembly": [
+          63.59014000000003,
+          64.58776,
+          67.97981999999998,
+          67.94221999999999,
+          65.56537999999996
+        ]
+      },
+      "kernel_names": {
+        "before": [
+          "void fmha_fp8_native::attend<192>(std::conditional<(192)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ],
+        "after": [
+          "void fmha_fp8_native::attend<192>(std::conditional<(192)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ],
+        "assembly": [
+          "fmha_fp8pp192.kd"
+        ]
+      },
+      "change_pct": 0.97736015883787,
+      "bitwise_output_lse_equal": [
+        true,
+        true
+      ],
+      "relative_rms": 0.004732300878228324
+    },
+    {
+      "dim": 192,
+      "group": 4,
+      "length": 8192,
+      "heads": 32,
+      "medians_us": {
+        "before": 390.33481,
+        "after": 376.69297,
+        "assembly": 372.36809
+      },
+      "samples_us": {
+        "before": [
+          390.33481,
+          386.86355000000003,
+          391.74564000000015,
+          394.8028900000003,
+          389.16639
+        ],
+        "after": [
+          379.27740999999986,
+          378.10898999999995,
+          376.69297,
+          376.4389699999999,
+          375.4333400000001
+        ],
+        "assembly": [
+          372.36809,
+          370.38525000000004,
+          378.96901,
+          378.29338999999976,
+          369.18963
+        ]
+      },
+      "kernel_names": {
+        "before": [
+          "void fmha_fp8_native::attend<192>(std::conditional<(192)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ],
+        "after": [
+          "void fmha_fp8_native::attend<192>(std::conditional<(192)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type) [clone .kd]"
+        ],
+        "assembly": [
+          "fmha_fp8pp192.kd"
+        ]
+      },
+      "change_pct": -3.494907359146371,
+      "bitwise_output_lse_equal": [
+        true,
+        true
+      ],
+      "relative_rms": 0.0046867044047532915
+    }
+  ]
+}

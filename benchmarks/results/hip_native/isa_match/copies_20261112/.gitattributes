@@ -1,0 +1,12 @@
+owning/*.s -diff
+owning/*/steady-loop.s -diff
+owning/d*-before-after.json -diff
+owning/d*-kernel.json -diff
+owning/d*-loop.json -diff
+tasks/*.s -diff
+tasks/*.co -diff
+build.log -diff
+runtime/tail-race-long/*.csv -diff
+runtime/logs/* -diff
+runtime/timing/** -diff
+att/align-*.json -diff

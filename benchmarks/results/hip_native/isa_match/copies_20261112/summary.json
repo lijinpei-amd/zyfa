@@ -1,0 +1,287 @@
+{
+  "filter": "scratch/register copies/native SGPR lane spills excluded; literal initialization retained",
+  "dimensions": {
+    "128": {
+      "steady_count_sequence_match": true,
+      "steady_instructions": 1333,
+      "before_total": 4910,
+      "after_total": 4974,
+      "reference_total": 5302,
+      "before_after_differences": {
+        "s_add_u32": {
+          "reference": 235,
+          "llvm": 237,
+          "delta": 2
+        },
+        "s_addk_i32": {
+          "reference": 13,
+          "llvm": 11,
+          "delta": -2
+        },
+        "v_mov_b32_e32": {
+          "reference": 9,
+          "llvm": 73,
+          "delta": 64
+        }
+      },
+      "positive_excess_sum": 259,
+      "negative_excess_sum": -587,
+      "l1_distance": 846,
+      "before_positive_excess_sum": 261,
+      "before_negative_excess_sum": -653,
+      "before_l1_distance": 914,
+      "scalar_positive_excess": 219,
+      "vector_positive_excess": {
+        "v_and_or_b32": {
+          "reference": 0,
+          "llvm": 1,
+          "delta": 1
+        },
+        "v_cndmask_b32_e32": {
+          "reference": 0,
+          "llvm": 1,
+          "delta": 1
+        },
+        "v_or3_b32": {
+          "reference": 0,
+          "llvm": 5,
+          "delta": 5
+        },
+        "v_or_b32_e32": {
+          "reference": 0,
+          "llvm": 24,
+          "delta": 24
+        },
+        "v_sub_u32_e32": {
+          "reference": 3,
+          "llvm": 12,
+          "delta": 9
+        }
+      },
+      "raw_allocator_instructions": {
+        "s_mov_b32": 21,
+        "s_mov_b64": 11,
+        "v_mov_b32_e32": 220,
+        "v_mov_b64_e32": 96
+      },
+      "first_sequence_mismatch": {
+        "index": 4,
+        "reference": {
+          "mnemonic": "v_lshrrev_b32_e32",
+          "operands": "v255, 6, v216",
+          "address": 5412,
+          "line": 13,
+          "branch_target": null
+        },
+        "llvm": {
+          "mnemonic": "v_bfe_u32",
+          "operands": "v171, v0, 5, 1",
+          "address": 6944,
+          "line": 11,
+          "branch_target": null
+        }
+      },
+      "register_copies": {
+        "after": {
+          "loop": 8,
+          "whole": 348
+        },
+        "before": {
+          "loop": 16,
+          "whole": 609
+        },
+        "assembly": {
+          "loop": 12,
+          "whole": 319
+        }
+      }
+    },
+    "192": {
+      "steady_count_sequence_match": true,
+      "steady_instructions": 825,
+      "before_total": 3398,
+      "after_total": 3463,
+      "reference_total": 3737,
+      "before_after_differences": {
+        "s_nop": {
+          "reference": 189,
+          "llvm": 190,
+          "delta": 1
+        },
+        "v_mov_b32_e32": {
+          "reference": 57,
+          "llvm": 121,
+          "delta": 64
+        }
+      },
+      "positive_excess_sum": 204,
+      "negative_excess_sum": -478,
+      "l1_distance": 682,
+      "before_positive_excess_sum": 203,
+      "before_negative_excess_sum": -542,
+      "before_l1_distance": 745,
+      "scalar_positive_excess": 161,
+      "vector_positive_excess": {
+        "v_add_lshl_u32": {
+          "reference": 0,
+          "llvm": 1,
+          "delta": 1
+        },
+        "v_and_or_b32": {
+          "reference": 0,
+          "llvm": 4,
+          "delta": 4
+        },
+        "v_cndmask_b32_e32": {
+          "reference": 0,
+          "llvm": 3,
+          "delta": 3
+        },
+        "v_lshlrev_b32_e32": {
+          "reference": 29,
+          "llvm": 31,
+          "delta": 2
+        },
+        "v_lshrrev_b32_e32": {
+          "reference": 6,
+          "llvm": 8,
+          "delta": 2
+        },
+        "v_or3_b32": {
+          "reference": 0,
+          "llvm": 5,
+          "delta": 5
+        },
+        "v_or_b32_e32": {
+          "reference": 0,
+          "llvm": 23,
+          "delta": 23
+        },
+        "v_sub_u32_e32": {
+          "reference": 5,
+          "llvm": 8,
+          "delta": 3
+        }
+      },
+      "raw_allocator_instructions": {
+        "s_mov_b32": 25,
+        "s_mov_b64": 11,
+        "v_mov_b32_e32": 122
+      },
+      "first_sequence_mismatch": {
+        "index": 4,
+        "reference": {
+          "mnemonic": "v_lshrrev_b32_e32",
+          "operands": "v213, 6, v188",
+          "address": 5412,
+          "line": 13,
+          "branch_target": null
+        },
+        "llvm": {
+          "mnemonic": "v_and_b32_e32",
+          "operands": "v1, 63, v0",
+          "address": 40992,
+          "line": 5336,
+          "branch_target": null
+        }
+      },
+      "register_copies": {
+        "after": {
+          "loop": 4,
+          "whole": 158
+        },
+        "before": {
+          "loop": 36,
+          "whole": 443
+        },
+        "assembly": {
+          "loop": 12,
+          "whole": 223
+        }
+      }
+    }
+  },
+  "resources": {
+    "128": {
+      "group_segment_fixed_size": 163840,
+      "kernarg_segment_align": 8,
+      "kernarg_segment_size": 152,
+      "max_flat_workgroup_size": 512,
+      "private_segment_fixed_size": 0,
+      "sgpr_count": 77,
+      "sgpr_spill_count": 0,
+      "vgpr_count": 244,
+      "vgpr_spill_count": 0,
+      "wavefront_size": 64
+    },
+    "192": {
+      "group_segment_fixed_size": 131072,
+      "kernarg_segment_align": 8,
+      "kernarg_segment_size": 152,
+      "max_flat_workgroup_size": 512,
+      "private_segment_fixed_size": 0,
+      "sgpr_count": 79,
+      "sgpr_spill_count": 0,
+      "vgpr_count": 206,
+      "vgpr_spill_count": 0,
+      "wavefront_size": 64
+    }
+  },
+  "resources_before": {
+    "128": {
+      "group_segment_fixed_size": 163840,
+      "kernarg_segment_align": 8,
+      "kernarg_segment_size": 152,
+      "max_flat_workgroup_size": 512,
+      "private_segment_fixed_size": 0,
+      "sgpr_count": 88,
+      "sgpr_spill_count": 0,
+      "vgpr_count": 244,
+      "vgpr_spill_count": 0,
+      "wavefront_size": 64
+    },
+    "192": {
+      "group_segment_fixed_size": 131072,
+      "kernarg_segment_align": 8,
+      "kernarg_segment_size": 152,
+      "max_flat_workgroup_size": 512,
+      "private_segment_fixed_size": 0,
+      "sgpr_count": 90,
+      "sgpr_spill_count": 0,
+      "vgpr_count": 206,
+      "vgpr_spill_count": 0,
+      "wavefront_size": 64
+    }
+  },
+  "validated_build_equivalence": {
+    "owning_code_object_sha256": "9bb7e9c9c6acaa09d982a9aefd000de4073d96a858acb58c574387ac1990b096",
+    "validated_code_object_sha256": "ffcf7937c5a6fb9f1d75566afd8df21a9a1548b5aac411dfd29e8d087e2f90b8",
+    "text_sha256": "04b70d822ca406fc60f31e5b9f00e307bc642b0d087363c49a1d727a30703eaa",
+    "differing_sections": [
+      ".dynstr",
+      ".gnu.hash",
+      ".strtab"
+    ],
+    "text_rodata_notes_byte_identical": true,
+    "unfiltered_isa_address_mnemonic_operands_identity": {
+      "128": 5322,
+      "192": 3621
+    }
+  },
+  "manifest": {
+    "native_source_sha256": "a636145c58361731ff82cd4c43ac17d28744a42d3acf0ccbc4765302d6ebee83",
+    "object_sha256": "8d34cef7a63bc6517fc93a5c270c55e8fe63df3ce6b533d12c4ff34ed8f10512",
+    "code_object_sha256": "9bb7e9c9c6acaa09d982a9aefd000de4073d96a858acb58c574387ac1990b096",
+    "object": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/native/fp8_native.o",
+    "assembly_origin": "disassembly of the selected object's embedded code object",
+    "inspection_tool_version": "AMD LLVM version 22.0.0git\n  Optimized build.\n\n\n  Registered Targets:\n    amdgcn - AMD GCN GPUs\n    r600   - AMD GPUs HD2XXX-HD6XXX\n    x86    - 32-bit X86: Pentium-Pro and above\n    x86-64 - 64-bit X86: EM64T and AMD64",
+    "lds_bytes_per_block": {
+      "d128": 163840,
+      "d192": 131072
+    },
+    "extension_sha256": "e948f140b7fe34bcdac1256f0a687cfa32e7cca573d6ce7f1e14017cfb343642",
+    "extension_contains_exact_native_fatbin": true,
+    "baseline_extension_sha256": "8a0d5fb8994ebf2228b2e92e1e90ad8574cde41713fcc9814525128602d3cc6f",
+    "source_commit": "292d02a60e2c82c90dd49416c0cbbc93eda9293c"
+  }
+}

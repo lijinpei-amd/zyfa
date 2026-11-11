@@ -1,0 +1,109 @@
+{
+  "schema": 1,
+  "output-dir": "/home/jinpli/workspace/home/jinpli/.local/share/capture_att_trace/zyfa_fp8_d192_hip/2026-11-11-16-32-10-zyfa_fp8_d192_hip-baseline",
+  "structured": true,
+  "storage-base": "/home/jinpli/workspace/home/jinpli/.local/share/capture_att_trace",
+  "kernel-id": "zyfa_fp8_d192_hip",
+  "version": "baseline",
+  "profile": 0,
+  "rep": 1,
+  "note": "ZYFA FP8 d192 hip, integrated ac8512a extension, len 8192 MHA BSHD causal LSE, dispatch 10 of 12",
+  "rocprofv3-options": [
+    "-T",
+    "--kernel-include-regex",
+    "^attend$",
+    "--kernel-iteration-range",
+    "10",
+    "--att-target-cu",
+    "1",
+    "--att-simd-select",
+    "0xF",
+    "--att-shader-engine-mask",
+    "0x1",
+    "--att-buffer-size",
+    "268435456",
+    "--att-library-path",
+    "/home/jinpli/workspace/home/jinpli/.local/opt/rocprofiler-7.2.3/opt/rocm-7.2.3/lib"
+  ],
+  "command": [
+    "build/att-20261112/run_case.sh",
+    "--dim",
+    "192",
+    "--backend",
+    "hip",
+    "--iters",
+    "12"
+  ],
+  "rocprofv3-command": [
+    "rocprofv3",
+    "--att",
+    "-d",
+    "/home/jinpli/workspace/home/jinpli/.local/share/capture_att_trace/zyfa_fp8_d192_hip/2026-11-11-16-32-10-zyfa_fp8_d192_hip-baseline",
+    "-T",
+    "--kernel-include-regex",
+    "^attend$",
+    "--kernel-iteration-range",
+    "10",
+    "--att-target-cu",
+    "1",
+    "--att-simd-select",
+    "0xF",
+    "--att-shader-engine-mask",
+    "0x1",
+    "--att-buffer-size",
+    "268435456",
+    "--att-library-path",
+    "/home/jinpli/workspace/home/jinpli/.local/opt/rocprofiler-7.2.3/opt/rocm-7.2.3/lib",
+    "--",
+    "build/att-20261112/run_case.sh",
+    "--dim",
+    "192",
+    "--backend",
+    "hip",
+    "--iters",
+    "12"
+  ],
+  "started": "2026-11-11T16:32:10Z",
+  "host": "cv350-tnndh2-a08-1",
+  "cwd": "/home/jinpli/workspace/home/jinpli/development/zyfa",
+  "env": {
+    "HIP_VISIBLE_DEVICES": "0",
+    "ROCM_PATH": "/home/jinpli/workspace/home/jinpli/.local/opt/rocm-7.2.3"
+  },
+  "gpu-archs": [
+    "gfx950"
+  ],
+  "rocm-version": "7.2.3",
+  "rocprofv3-version": "version: 1.1.0\n        git_revision: c2d94761153e1033a91744842dfc66eddd631fde\n        library_arch: x86_64-linux-gnu\n         system_name: Linux\n    system_processor: x86_64\n      system_version: 5.15.0-151-generic\n         compiler_id: GNU\n    compiler_version: 13.3.0\n        rocm_version: 7.2.3",
+  "setup-warnings": [],
+  "isa-hash": "sha256:364a2035417f46d40065d1e5129948ab943fa197a1e4cba4a70848ee172779cd",
+  "result": {
+    "rocprofv3-exit-code": 0,
+    "att-files": 1,
+    "ui-output-dirs": [
+      "ui_output_agent_10340_dispatch_74"
+    ],
+    "stats": [
+      {
+        "file": "stats_ui_output_agent_10340_dispatch_74.csv",
+        "instruction-rows": 3842
+      }
+    ],
+    "log-warnings": [],
+    "isa-kernels": [
+      {
+        "name": "void fmha_fp8_native::attend<128>(std::conditional<(128)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type)",
+        "hash": "sha256:cb5281a9badb7cce0a2a37bdf9068b0a0d48050750c1c23fed213af640ade955"
+      },
+      {
+        "name": "void fmha_fp8_native::attend<192>(std::conditional<(192)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type)",
+        "hash": "sha256:9e0d4d10b7fa70f6cc42a003828368aa642745335c0b4bfacbbfd8188959c869"
+      }
+    ],
+    "consistency-errors": [],
+    "consistency-warnings": [],
+    "isa-recorded": true,
+    "verdict": "OK",
+    "exit-code": 0
+  }
+}

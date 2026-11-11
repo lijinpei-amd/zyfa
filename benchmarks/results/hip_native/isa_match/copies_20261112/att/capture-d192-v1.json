@@ -1,0 +1,114 @@
+{
+  "schema": 1,
+  "output-dir": "/home/jinpli/workspace/home/jinpli/.local/share/capture_att_trace/zyfa_fp8_d192_hip/2026-11-11-16-40-44-zyfa_fp8_d192_hip-v1-d192-cvt-pack-poison",
+  "structured": true,
+  "storage-base": "/home/jinpli/workspace/home/jinpli/.local/share/capture_att_trace",
+  "kernel-id": "zyfa_fp8_d192_hip",
+  "version": "v1",
+  "desc": "d192-cvt-pack-poison",
+  "profile": 0,
+  "rep": 1,
+  "note": "ZYFA FP8 d192 hip, copies-20261112 0ddab6a over ac8512a, len 8192 MHA BSHD causal LSE, dispatch 10 of 12",
+  "rocprofv3-options": [
+    "-T",
+    "--kernel-include-regex",
+    "^attend$",
+    "--kernel-iteration-range",
+    "10",
+    "--att-target-cu",
+    "1",
+    "--att-simd-select",
+    "0xF",
+    "--att-shader-engine-mask",
+    "0x1",
+    "--att-buffer-size",
+    "268435456",
+    "--att-library-path",
+    "/home/jinpli/workspace/home/jinpli/.local/opt/rocprofiler-7.2.3/opt/rocm-7.2.3/lib"
+  ],
+  "command": [
+    "build/att-20261112/run_case.sh",
+    "--dim",
+    "192",
+    "--backend",
+    "hip",
+    "--iters",
+    "12",
+    "--root",
+    "/home/jinpli/workspace/home/jinpli/development/zyfa/build/att-20261112/tree-0ddab6a"
+  ],
+  "rocprofv3-command": [
+    "rocprofv3",
+    "--att",
+    "-d",
+    "/home/jinpli/workspace/home/jinpli/.local/share/capture_att_trace/zyfa_fp8_d192_hip/2026-11-11-16-40-44-zyfa_fp8_d192_hip-v1-d192-cvt-pack-poison",
+    "-T",
+    "--kernel-include-regex",
+    "^attend$",
+    "--kernel-iteration-range",
+    "10",
+    "--att-target-cu",
+    "1",
+    "--att-simd-select",
+    "0xF",
+    "--att-shader-engine-mask",
+    "0x1",
+    "--att-buffer-size",
+    "268435456",
+    "--att-library-path",
+    "/home/jinpli/workspace/home/jinpli/.local/opt/rocprofiler-7.2.3/opt/rocm-7.2.3/lib",
+    "--",
+    "build/att-20261112/run_case.sh",
+    "--dim",
+    "192",
+    "--backend",
+    "hip",
+    "--iters",
+    "12",
+    "--root",
+    "/home/jinpli/workspace/home/jinpli/development/zyfa/build/att-20261112/tree-0ddab6a"
+  ],
+  "started": "2026-11-11T16:40:44Z",
+  "host": "cv350-tnndh2-a08-1",
+  "cwd": "/home/jinpli/workspace/home/jinpli/development/zyfa",
+  "env": {
+    "HIP_VISIBLE_DEVICES": "0",
+    "ROCM_PATH": "/home/jinpli/workspace/home/jinpli/.local/opt/rocm-7.2.3"
+  },
+  "gpu-archs": [
+    "gfx950"
+  ],
+  "rocm-version": "7.2.3",
+  "rocprofv3-version": "version: 1.1.0\n        git_revision: c2d94761153e1033a91744842dfc66eddd631fde\n        library_arch: x86_64-linux-gnu\n         system_name: Linux\n    system_processor: x86_64\n      system_version: 5.15.0-151-generic\n         compiler_id: GNU\n    compiler_version: 13.3.0\n        rocm_version: 7.2.3",
+  "setup-warnings": [],
+  "isa-hash": "sha256:d0f7c15a0804c1fa6356941e36db2a6935d81627251552f42596f4a03c1da946",
+  "result": {
+    "rocprofv3-exit-code": 0,
+    "att-files": 1,
+    "ui-output-dirs": [
+      "ui_output_agent_35392_dispatch_74"
+    ],
+    "stats": [
+      {
+        "file": "stats_ui_output_agent_35392_dispatch_74.csv",
+        "instruction-rows": 3810
+      }
+    ],
+    "log-warnings": [],
+    "isa-kernels": [
+      {
+        "name": "void fmha_fp8_native::attend<128>(std::conditional<(128)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type)",
+        "hash": "sha256:cb5281a9badb7cce0a2a37bdf9068b0a0d48050750c1c23fed213af640ade955"
+      },
+      {
+        "name": "void fmha_fp8_native::attend<192>(std::conditional<(192)==(128), fmha_fp8_native::Args128, fmha_fp8_native::Args192>::type)",
+        "hash": "sha256:337add6b704d32f9dedbfc273ee698555f9adbdd5239cacb36ed54c87f9e5143"
+      }
+    ],
+    "consistency-errors": [],
+    "consistency-warnings": [],
+    "isa-recorded": true,
+    "verdict": "OK",
+    "exit-code": 0
+  }
+}

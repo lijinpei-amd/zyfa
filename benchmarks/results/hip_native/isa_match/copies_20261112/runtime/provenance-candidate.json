@@ -1,0 +1,112 @@
+{
+  "git_head": "3ff02305aa34d8d58808aaa40de9339338e87b4b",
+  "git_status_porcelain": "",
+  "source_sha256": "a636145c58361731ff82cd4c43ac17d28744a42d3acf0ccbc4765302d6ebee83",
+  "source_sha256_at_head_blob": "3cd9ee17689f91588420a15edae7184f0b2ef9e9816b97146c4e8b2641f41dca",
+  "test_codegen_sha256": "368d5ac9ba99a4bb113d6de2d0cf2a953681fcdf6c1c9e2698d7133033f2b92a",
+  "inspect_manifest": {
+    "native_source_sha256": "a636145c58361731ff82cd4c43ac17d28744a42d3acf0ccbc4765302d6ebee83",
+    "object_sha256": "130afb2a16acd69b40d0bb459fef838345e22ba4f1baecab29879ca1e615e1ee",
+    "code_object_sha256": "ffcf7937c5a6fb9f1d75566afd8df21a9a1548b5aac411dfd29e8d087e2f90b8",
+    "object": "/home/jinpli/workspace/home/jinpli/development/zyfa/.claude/worktrees/agent-ac019c7f660da3916/build/292d02a/build/native/fp8_native.o",
+    "assembly_origin": "disassembly of the selected object's embedded code object",
+    "inspection_tool_version": "AMD LLVM version 22.0.0git\n  Optimized build.\n\n\n  Registered Targets:\n    amdgcn - AMD GCN GPUs\n    r600   - AMD GPUs HD2XXX-HD6XXX\n    x86    - 32-bit X86: Pentium-Pro and above\n    x86-64 - 64-bit X86: EM64T and AMD64",
+    "lds_bytes_per_block": {
+      "d128": 163840,
+      "d192": 131072
+    }
+  },
+  "native_fatbin_sha256": "903087a528fba99372a40bf7c9eedeaf43f3b345681b455ed07ec1e548ad97bc",
+  "extension": "/home/jinpli/workspace/home/jinpli/development/zyfa/.claude/worktrees/agent-ac019c7f660da3916/build/292d02a/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+  "extension_sha256": "4d6bebacf84fcad845b1a64699288874fd8d07c63817e4ca5e1a7c758e7ea1e6",
+  "extension_native_fatbin_occurrences": 1,
+  "extension_owning_fatbin_occurrences": 0,
+  "extension_native_code_object_occurrences": 1,
+  "reference_dir": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/att-20261112/tree-292d02a/inspect",
+  "reference_code_object_sha256": "244740bc59c469dd40e883104bb384511f9913bb73e13235f1eb715e06218391",
+  "code_object_sha256": "ffcf7937c5a6fb9f1d75566afd8df21a9a1548b5aac411dfd29e8d087e2f90b8",
+  "reference_source_sha256": "a636145c58361731ff82cd4c43ac17d28744a42d3acf0ccbc4765302d6ebee83",
+  "section_names_equal": true,
+  "differing_sections": [
+    ".dynstr",
+    ".gnu.hash",
+    ".hash",
+    ".strtab"
+  ],
+  ".text_identical_to_reference": true,
+  ".rodata_identical_to_reference": true,
+  ".note_identical_to_reference": true,
+  "text_sha256": "04b70d822ca406fc60f31e5b9f00e307bc642b0d087363c49a1d727a30703eaa",
+  "hip_cuid": {
+    "candidate": "__hip_cuid_c9d1e3dd2cbf0bec",
+    "reference": "__hip_cuid_cb2925b6cc81d936"
+  },
+  "dimensions": {
+    "128": {
+      "instructions": 5322,
+      "owning_instructions": 5730,
+      "instruction_signatures_identical_to_reference": true,
+      "differs_from_owning": true,
+      "strict_loop_instructions": 1333,
+      "strict_loop_counts_match": true,
+      "strict_loop_sequence_match": true,
+      "s_waitcnt": 117,
+      "owning_s_waitcnt": 130
+    },
+    "192": {
+      "instructions": 3621,
+      "owning_instructions": 3898,
+      "instruction_signatures_identical_to_reference": true,
+      "differs_from_owning": true,
+      "strict_loop_instructions": 825,
+      "strict_loop_counts_match": true,
+      "strict_loop_sequence_match": true,
+      "s_waitcnt": 85,
+      "owning_s_waitcnt": 90
+    }
+  },
+  "resources": {
+    "128": {
+      "group_segment_fixed_size": 163840,
+      "private_segment_fixed_size": 0,
+      "sgpr_count": 77,
+      "sgpr_spill_count": 0,
+      "vgpr_count": 244,
+      "vgpr_spill_count": 0,
+      "kernarg_segment_size": 152,
+      "max_flat_workgroup_size": 512
+    },
+    "192": {
+      "group_segment_fixed_size": 131072,
+      "private_segment_fixed_size": 0,
+      "sgpr_count": 79,
+      "sgpr_spill_count": 0,
+      "vgpr_count": 206,
+      "vgpr_spill_count": 0,
+      "kernarg_segment_size": 152,
+      "max_flat_workgroup_size": 512
+    }
+  },
+  "owning_resources": {
+    "128": {
+      "group_segment_fixed_size": 163840,
+      "private_segment_fixed_size": 64,
+      "sgpr_count": 106,
+      "sgpr_spill_count": 14,
+      "vgpr_count": 256,
+      "vgpr_spill_count": 23,
+      "kernarg_segment_size": 152,
+      "max_flat_workgroup_size": 512
+    },
+    "192": {
+      "group_segment_fixed_size": 131072,
+      "private_segment_fixed_size": 0,
+      "sgpr_count": 106,
+      "sgpr_spill_count": 1,
+      "vgpr_count": 231,
+      "vgpr_spill_count": 0,
+      "kernarg_segment_size": 152,
+      "max_flat_workgroup_size": 512
+    }
+  }
+}

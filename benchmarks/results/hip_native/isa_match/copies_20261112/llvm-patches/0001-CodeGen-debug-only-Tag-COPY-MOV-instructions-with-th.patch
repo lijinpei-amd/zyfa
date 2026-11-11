@@ -1,0 +1,421 @@
+From 4aebeaa1b129ac970e061461633847dfd1d2aa3c Mon Sep 17 00:00:00 2001
+From: Li Jinpei <jinpli@amd.com>
+Date: Thu, 12 Nov 2026 00:51:15 +0800
+Subject: [PATCH] [CodeGen][debug-only] Tag COPY/MOV instructions with their
+ creating pass
+
+Not for upstream. Behind the hidden -copy-origin flag (default off; no
+codegen change), a side table records for each COPY and MOV instruction
+the pass that created it (tagged after every MachineFunctionPass), with
+details from PHI elimination (PHI, block, incoming edge), two-address
+lowering (tied operand / REG_SEQUENCE / INSERT_SUBREG) and greedy
+SplitKit (split strategy). ExpandPostRAPseudos and CloneMachineInstr
+carry tags to the emitted moves, and AsmPrinter prints them as
+'origin:' comments.
+
+Assisted-by: Claude Opus 5.5
+---
+ llvm/include/llvm/CodeGen/CopyOrigin.h        | 20 ++++++++
+ llvm/lib/CodeGen/AsmPrinter/AsmPrinter.cpp    |  3 ++
+ llvm/lib/CodeGen/ExpandPostRAPseudos.cpp      | 19 ++++++++
+ llvm/lib/CodeGen/MachineFunction.cpp          |  9 +++-
+ llvm/lib/CodeGen/MachineFunctionPass.cpp      | 47 +++++++++++++++++++
+ llvm/lib/CodeGen/PHIElimination.cpp           | 16 +++++++
+ llvm/lib/CodeGen/RegAllocGreedy.cpp           |  6 +++
+ llvm/lib/CodeGen/SplitKit.cpp                 | 15 ++++++
+ .../lib/CodeGen/TwoAddressInstructionPass.cpp | 19 ++++++++
+ 9 files changed, 153 insertions(+), 1 deletion(-)
+ create mode 100644 llvm/include/llvm/CodeGen/CopyOrigin.h
+
+diff --git a/llvm/include/llvm/CodeGen/CopyOrigin.h b/llvm/include/llvm/CodeGen/CopyOrigin.h
+new file mode 100644
+index 000000000000..7fe460a6d910
+--- /dev/null
++++ b/llvm/include/llvm/CodeGen/CopyOrigin.h
+@@ -0,0 +1,20 @@
++//===- CopyOrigin.h - Debug-only COPY provenance side table ----*- C++ -*-===//
++#ifndef LLVM_CODEGEN_COPYORIGIN_H
++#define LLVM_CODEGEN_COPYORIGIN_H
++#include <string>
++namespace llvm {
++class MachineInstr;
++class MachineFunction;
++class StringRef;
++namespace copyorigin {
++bool enabled();
++void set(const MachineInstr *MI, const std::string &Note);
++void setIfAbsent(const MachineInstr *MI, const std::string &Note);
++const std::string *get(const MachineInstr *MI);
++void erase(const MachineInstr *MI);
++void clearAll();
++void tagUntagged(MachineFunction &MF, StringRef PassName);
++std::string &context();
++} // namespace copyorigin
++} // namespace llvm
++#endif
+diff --git a/llvm/lib/CodeGen/AsmPrinter/AsmPrinter.cpp b/llvm/lib/CodeGen/AsmPrinter/AsmPrinter.cpp
+index 37822e36d6ed..ae07653d869f 100644
+--- a/llvm/lib/CodeGen/AsmPrinter/AsmPrinter.cpp
++++ b/llvm/lib/CodeGen/AsmPrinter/AsmPrinter.cpp
+@@ -51,6 +51,7 @@
+ #include "llvm/CodeGen/MachineFunction.h"
+ #include "llvm/CodeGen/MachineFunctionPass.h"
+ #include "llvm/CodeGen/MachineInstr.h"
++#include "llvm/CodeGen/CopyOrigin.h"
+ #include "llvm/CodeGen/MachineInstrBundle.h"
+ #include "llvm/CodeGen/MachineJumpTableInfo.h"
+ #include "llvm/CodeGen/MachineLoopInfo.h"
+@@ -2279,6 +2280,8 @@ void AsmPrinter::emitFunctionBody() {
+         break;
+       }
+       default:
++        if (const std::string *T = copyorigin::get(&MI))
++          OutStreamer->AddComment("origin: " + *T);
+         emitInstruction(&MI);
+ 
+         auto CountInstruction = [&](const MachineInstr &MI) {
+diff --git a/llvm/lib/CodeGen/ExpandPostRAPseudos.cpp b/llvm/lib/CodeGen/ExpandPostRAPseudos.cpp
+index fb65500e7dc7..3e672d20ef06 100644
+--- a/llvm/lib/CodeGen/ExpandPostRAPseudos.cpp
++++ b/llvm/lib/CodeGen/ExpandPostRAPseudos.cpp
+@@ -12,6 +12,7 @@
+ //===----------------------------------------------------------------------===//
+ 
+ #include "llvm/CodeGen/ExpandPostRAPseudos.h"
++#include "llvm/CodeGen/CopyOrigin.h"
+ #include "llvm/CodeGen/MachineDominators.h"
+ #include "llvm/CodeGen/MachineFunctionPass.h"
+ #include "llvm/CodeGen/MachineInstr.h"
+@@ -134,9 +135,26 @@ bool ExpandPostRA::run(MachineFunction &MF) {
+       if (!MI.isPseudo())
+         continue;
+ 
++      std::string OriginTag;
++      MachineInstr *OriginPrev = MI.getPrevNode();
++      MachineInstr *OriginNext = MI.getNextNode();
++      if (const std::string *T = copyorigin::get(&MI))
++        OriginTag = *T;
++      auto TagExpansion = [&]() {
++        if (OriginTag.empty())
++          return;
++        MachineBasicBlock::iterator B =
++            OriginPrev ? std::next(OriginPrev->getIterator()) : MBB.begin();
++        MachineBasicBlock::iterator E =
++            OriginNext ? OriginNext->getIterator() : MBB.end();
++        for (MachineBasicBlock::iterator I = B; I != E; ++I)
++          copyorigin::set(&*I, OriginTag);
++      };
++
+       // Give targets a chance to expand even standard pseudos.
+       if (TII->expandPostRAPseudo(MI)) {
+         MadeChange = true;
++        TagExpansion();
+         continue;
+       }
+ 
+@@ -148,6 +166,7 @@ bool ExpandPostRA::run(MachineFunction &MF) {
+       case TargetOpcode::COPY:
+         TII->lowerCopy(&MI);
+         MadeChange = true;
++        TagExpansion();
+         break;
+       case TargetOpcode::DBG_VALUE:
+         continue;
+diff --git a/llvm/lib/CodeGen/MachineFunction.cpp b/llvm/lib/CodeGen/MachineFunction.cpp
+index 6e044b957ce3..e739b90b4b87 100644
+--- a/llvm/lib/CodeGen/MachineFunction.cpp
++++ b/llvm/lib/CodeGen/MachineFunction.cpp
+@@ -13,6 +13,7 @@
+ //===----------------------------------------------------------------------===//
+ 
+ #include "llvm/CodeGen/MachineFunction.h"
++#include "llvm/CodeGen/CopyOrigin.h"
+ #include "llvm/ADT/BitVector.h"
+ #include "llvm/ADT/DenseMap.h"
+ #include "llvm/ADT/DenseSet.h"
+@@ -190,6 +191,7 @@ void MachineFunction::handleChangeDesc(MachineInstr &MI,
+ }
+ 
+ void MachineFunction::init() {
++  copyorigin::clearAll();
+   // Assume the function starts in SSA form with correct liveness.
+   Properties.setIsSSA();
+   Properties.setTracksLiveness();
+@@ -472,8 +474,12 @@ MachineInstr *MachineFunction::CreateMachineInstr(const MCInstrDesc &MCID,
+ /// identical in all ways except the instruction has no parent, prev, or next.
+ MachineInstr *
+ MachineFunction::CloneMachineInstr(const MachineInstr *Orig) {
+-  return new (InstructionRecycler.Allocate<MachineInstr>(Allocator))
++  MachineInstr *NewMI = new (InstructionRecycler.Allocate<MachineInstr>(Allocator))
+              MachineInstr(*this, *Orig);
++  copyorigin::erase(NewMI);
++  if (const std::string *T = copyorigin::get(Orig))
++    copyorigin::set(NewMI, "clone(" + *T + ")");
++  return NewMI;
+ }
+ 
+ MachineInstr &MachineFunction::cloneMachineInstrBundle(
+@@ -507,6 +513,7 @@ MachineInstr &MachineFunction::cloneMachineInstrBundle(
+ /// This function also serves as the MachineInstr destructor - the real
+ /// ~MachineInstr() destructor must be empty.
+ void MachineFunction::deleteMachineInstr(MachineInstr *MI) {
++  copyorigin::erase(MI);
+   // Verify that a call site info is at valid state. This assertion should
+   // be triggered during the implementation of support for the
+   // call site info of a new architecture. If the assertion is triggered,
+diff --git a/llvm/lib/CodeGen/MachineFunctionPass.cpp b/llvm/lib/CodeGen/MachineFunctionPass.cpp
+index 59d6e7f23505..9134cefbe11f 100644
+--- a/llvm/lib/CodeGen/MachineFunctionPass.cpp
++++ b/llvm/lib/CodeGen/MachineFunctionPass.cpp
+@@ -36,6 +36,11 @@
+ #include "llvm/IR/Module.h"
+ #include "llvm/IR/PrintPasses.h"
+ #include "llvm/Support/ErrorHandling.h"
++#include "llvm/CodeGen/CopyOrigin.h"
++#include "llvm/CodeGen/MachineInstr.h"
++#include "llvm/CodeGen/TargetInstrInfo.h"
++#include "llvm/Support/CommandLine.h"
++#include <unordered_map>
+ 
+ using namespace llvm;
+ using namespace ore;
+@@ -98,6 +103,9 @@ bool MachineFunctionPass::runOnFunction(Function &F) {
+     RV = runOnMachineFunction(MF);
+   }
+ 
++  if (copyorigin::enabled())
++    copyorigin::tagUntagged(MF, getPassName());
++
+   if (ShouldEmitSizeRemarks) {
+     // We wanted size remarks. Check if there was a change to the number of
+     // MachineInstrs in the module. Emit a remark if there was a change.
+@@ -172,3 +180,42 @@ void MachineFunctionPass::getAnalysisUsage(AnalysisUsage &AU) const {
+ 
+   FunctionPass::getAnalysisUsage(AU);
+ }
++
++static llvm::cl::opt<bool> EnableCopyOrigin("copy-origin", llvm::cl::Hidden,
++                                            llvm::cl::init(false));
++static std::unordered_map<const llvm::MachineInstr *, std::string> &originMap() {
++  static std::unordered_map<const llvm::MachineInstr *, std::string> M;
++  return M;
++}
++bool llvm::copyorigin::enabled() { return EnableCopyOrigin; }
++std::string &llvm::copyorigin::context() {
++  static std::string C;
++  return C;
++}
++void llvm::copyorigin::set(const MachineInstr *MI, const std::string &Note) {
++  if (EnableCopyOrigin)
++    originMap()[MI] = Note;
++}
++void llvm::copyorigin::setIfAbsent(const MachineInstr *MI,
++                                   const std::string &Note) {
++  if (EnableCopyOrigin)
++    originMap().emplace(MI, Note);
++}
++const std::string *llvm::copyorigin::get(const MachineInstr *MI) {
++  if (!EnableCopyOrigin)
++    return nullptr;
++  auto It = originMap().find(MI);
++  return It == originMap().end() ? nullptr : &It->second;
++}
++void llvm::copyorigin::clearAll() { originMap().clear(); }
++void llvm::copyorigin::erase(const MachineInstr *MI) {
++  if (EnableCopyOrigin)
++    originMap().erase(MI);
++}
++void llvm::copyorigin::tagUntagged(MachineFunction &MF, StringRef PassName) {
++  const TargetInstrInfo *TII = MF.getSubtarget().getInstrInfo();
++  for (MachineBasicBlock &MBB : MF)
++    for (MachineInstr &MI : MBB.instrs())
++      if (MI.isCopy() || TII->getName(MI.getOpcode()).contains("MOV"))
++        originMap().emplace(&MI, ("pass:" + PassName).str());
++}
+diff --git a/llvm/lib/CodeGen/PHIElimination.cpp b/llvm/lib/CodeGen/PHIElimination.cpp
+index e929ff3d0b31..5002d34d0fb6 100644
+--- a/llvm/lib/CodeGen/PHIElimination.cpp
++++ b/llvm/lib/CodeGen/PHIElimination.cpp
+@@ -21,6 +21,7 @@
+ #include "llvm/Analysis/LoopInfo.h"
+ #include "llvm/CodeGen/LiveInterval.h"
+ #include "llvm/CodeGen/LiveIntervals.h"
++#include "llvm/CodeGen/CopyOrigin.h"
+ #include "llvm/CodeGen/MachineBasicBlock.h"
+ #include "llvm/CodeGen/MachineBlockFrequencyInfo.h"
+ #include "llvm/CodeGen/MachineBranchProbabilityInfo.h"
+@@ -422,6 +423,13 @@ void PHIEliminationImpl::LowerPHINode(MachineBasicBlock &MBB,
+     // Give the target possiblity to handle special cases fallthrough otherwise
+     PHICopy = TII->createPHIDestinationCopy(
+         MBB, AfterPHIsIt, MPhi->getDebugLoc(), IncomingReg, DestReg);
++    if (copyorigin::enabled()) {
++      std::string N;
++      raw_string_ostream OS(N);
++      OS << "phielim-dst PHI " << printReg(DestReg) << " in "
++         << printMBBReference(MBB) << " preds=" << MBB.pred_size();
++      copyorigin::set(PHICopy, N);
++    }
+   }
+ 
+   if (MPhi->peekDebugInstrNum() && IncomingReg) {
+@@ -586,6 +594,14 @@ void PHIEliminationImpl::LowerPHINode(MachineBasicBlock &MBB,
+         // different basic block.
+         NewSrcInstr = TII->createPHISourceCopy(opBlock, InsertPos, nullptr,
+                                                SrcReg, SrcSubReg, IncomingReg);
++        if (copyorigin::enabled()) {
++          std::string N;
++          raw_string_ostream OS(N);
++          OS << "phielim-src PHI " << printReg(DestReg) << " in "
++             << printMBBReference(MBB) << " edge " << printMBBReference(opBlock)
++             << " src " << printReg(SrcReg) << " succs=" << opBlock.succ_size();
++          copyorigin::set(NewSrcInstr, N);
++        }
+       }
+     }
+ 
+diff --git a/llvm/lib/CodeGen/RegAllocGreedy.cpp b/llvm/lib/CodeGen/RegAllocGreedy.cpp
+index f7655e97b994..06d69373bf2e 100644
+--- a/llvm/lib/CodeGen/RegAllocGreedy.cpp
++++ b/llvm/lib/CodeGen/RegAllocGreedy.cpp
+@@ -12,6 +12,7 @@
+ //===----------------------------------------------------------------------===//
+ 
+ #include "RegAllocGreedy.h"
++#include "llvm/CodeGen/CopyOrigin.h"
+ #include "AllocationOrder.h"
+ #include "InlineSpiller.h"
+ #include "InterferenceCache.h"
+@@ -1242,6 +1243,7 @@ void RAGreedy::splitAroundRegion(LiveRangeEdit &LREdit,
+ MCRegister RAGreedy::tryRegionSplit(const LiveInterval &VirtReg,
+                                     AllocationOrder &Order,
+                                     SmallVectorImpl<Register> &NewVRegs) {
++  copyorigin::context() = "region";
+   if (!TRI->shouldRegionSplitForVirtReg(*MF, VirtReg))
+     return MCRegister::NoRegister;
+   unsigned NumCands = 0;
+@@ -1414,6 +1416,7 @@ bool RAGreedy::trySplitAroundHintReg(MCRegister Hint,
+                                      const LiveInterval &VirtReg,
+                                      SmallVectorImpl<Register> &NewVRegs,
+                                      AllocationOrder &Order) {
++  copyorigin::context() = "hint";
+   // Split the VirtReg may generate COPY instructions in multiple cold basic
+   // blocks, and increase code size. So we avoid it when the function is
+   // optimized for size.
+@@ -1506,6 +1509,7 @@ bool RAGreedy::trySplitAroundHintReg(MCRegister Hint,
+ MCRegister RAGreedy::tryBlockSplit(const LiveInterval &VirtReg,
+                                    AllocationOrder &Order,
+                                    SmallVectorImpl<Register> &NewVRegs) {
++  copyorigin::context() = "block";
+   assert(&SA->getParent() == &VirtReg && "Live range wasn't analyzed");
+   Register Reg = VirtReg.reg();
+   bool SingleInstrs = RegClassInfo->isProperSubClass(MRI->getRegClass(Reg));
+@@ -1628,6 +1632,7 @@ static bool readsLaneSubset(const MachineRegisterInfo &MRI,
+ MCRegister RAGreedy::tryInstructionSplit(const LiveInterval &VirtReg,
+                                          AllocationOrder &Order,
+                                          SmallVectorImpl<Register> &NewVRegs) {
++  copyorigin::context() = "instruction";
+   const TargetRegisterClass *CurRC = MRI->getRegClass(VirtReg.reg());
+   // There is no point to this if there are no larger sub-classes.
+ 
+@@ -1781,6 +1786,7 @@ void RAGreedy::calcGapWeights(MCRegister PhysReg,
+ MCRegister RAGreedy::tryLocalSplit(const LiveInterval &VirtReg,
+                                    AllocationOrder &Order,
+                                    SmallVectorImpl<Register> &NewVRegs) {
++  copyorigin::context() = "local";
+   // TODO: the function currently only handles a single UseBlock; it should be
+   // possible to generalize.
+   if (SA->getUseBlocks().size() != 1)
+diff --git a/llvm/lib/CodeGen/SplitKit.cpp b/llvm/lib/CodeGen/SplitKit.cpp
+index 536ed5638725..2b7bb44b9f28 100644
+--- a/llvm/lib/CodeGen/SplitKit.cpp
++++ b/llvm/lib/CodeGen/SplitKit.cpp
+@@ -12,6 +12,7 @@
+ //===----------------------------------------------------------------------===//
+ 
+ #include "SplitKit.h"
++#include "llvm/CodeGen/CopyOrigin.h"
+ #include "llvm/ADT/STLExtras.h"
+ #include "llvm/ADT/Statistic.h"
+ #include "llvm/CodeGen/LiveRangeEdit.h"
+@@ -549,6 +550,13 @@ SlotIndex SplitEditor::buildSingleSubRegCopy(
+           .addReg(FromReg, {}, SubIdx);
+ 
+   CopyMI->setFlag(MachineInstr::LRSplit);
++  if (copyorigin::enabled()) {
++    std::string N;
++    raw_string_ostream OS(N);
++    OS << "greedy-split[" << copyorigin::context() << "] subreg "
++       << printReg(Edit->getReg()) << " in " << printMBBReference(MBB);
++    copyorigin::set(CopyMI, N);
++  }
+   SlotIndexes &Indexes = *LIS.getSlotIndexes();
+   if (FirstCopy) {
+     Def = Indexes.insertMachineInstrInMaps(*CopyMI, Late).getRegSlot();
+@@ -569,6 +577,13 @@ SlotIndex SplitEditor::buildCopy(Register FromReg, Register ToReg,
+     MachineInstr *CopyMI =
+         BuildMI(MBB, InsertBefore, DebugLoc(), Desc, ToReg).addReg(FromReg);
+     CopyMI->setFlag(MachineInstr::LRSplit);
++    if (copyorigin::enabled()) {
++      std::string N;
++      raw_string_ostream OS(N);
++      OS << "greedy-split[" << copyorigin::context() << "] "
++         << printReg(Edit->getReg()) << " in " << printMBBReference(MBB);
++      copyorigin::set(CopyMI, N);
++    }
+     return Indexes.insertMachineInstrInMaps(*CopyMI, Late).getRegSlot();
+   }
+ 
+diff --git a/llvm/lib/CodeGen/TwoAddressInstructionPass.cpp b/llvm/lib/CodeGen/TwoAddressInstructionPass.cpp
+index f32b50974f7a..1afb6357b126 100644
+--- a/llvm/lib/CodeGen/TwoAddressInstructionPass.cpp
++++ b/llvm/lib/CodeGen/TwoAddressInstructionPass.cpp
+@@ -34,6 +34,7 @@
+ #include "llvm/ADT/iterator_range.h"
+ #include "llvm/CodeGen/LiveInterval.h"
+ #include "llvm/CodeGen/LiveIntervals.h"
++#include "llvm/CodeGen/CopyOrigin.h"
+ #include "llvm/CodeGen/MachineBasicBlock.h"
+ #include "llvm/CodeGen/MachineDominators.h"
+ #include "llvm/CodeGen/MachineFunction.h"
+@@ -1590,6 +1591,14 @@ void TwoAddressInstructionImpl::processTiedPairs(MachineInstr *MI,
+     // Emit a copy.
+     MachineInstrBuilder MIB = BuildMI(*MI->getParent(), MI, MI->getDebugLoc(),
+                                       TII->get(TargetOpcode::COPY), RegA);
++    if (copyorigin::enabled()) {
++      std::string N;
++      raw_string_ostream OS(N);
++      OS << "twoaddr-tied " << TII->getName(MI->getOpcode()) << " dst "
++         << printReg(RegA) << " src " << printReg(RegB) << " in "
++         << printMBBReference(*MI->getParent());
++      copyorigin::set(MIB.getInstr(), N);
++    }
+     // If this operand is folding a truncation, the truncation now moves to the
+     // copy so that the register classes remain valid for the operands.
+     MIB.addReg(RegB, {}, SubRegB);
+@@ -1924,6 +1933,9 @@ bool TwoAddressInstructionImpl::run() {
+         mi->removeOperand(1);
+         mi->setDesc(TII->get(TargetOpcode::COPY));
+         LLVM_DEBUG(dbgs() << "\t\tconvert to:\t" << *mi);
++        if (copyorigin::enabled())
++          copyorigin::set(&*mi, "twoaddr-insert_subreg in " +
++                                  mi->getParent()->getFullName());
+ 
+         if (UndefLanesAreLive) {
+           MachineInstr *ImpDef =
+@@ -2045,6 +2057,13 @@ void TwoAddressInstructionImpl::eliminateRegSequence(
+                                    TII->get(TargetOpcode::COPY))
+                                .addReg(DstReg, RegState::Define, SubIdx)
+                                .add(UseMO);
++    if (copyorigin::enabled()) {
++      std::string N;
++      raw_string_ostream OS(N);
++      OS << "twoaddr-regseq dst " << printReg(DstReg) << " src "
++         << printReg(UseMO.getReg()) << " in " << printMBBReference(*MI.getParent());
++      copyorigin::set(CopyMI, N);
++    }
+ 
+     // The first def needs an undef flag because there is no live register
+     // before it.
+-- 
+2.53.0
+

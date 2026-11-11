@@ -1,0 +1,402 @@
+[
+ {
+  "ui": "/home/jinpli/workspace/home/jinpli/.local/share/capture_att_trace/zyfa_fp8_d128_asm/2026-11-11-16-32-07-zyfa_fp8_d128_asm-baseline/ui_output_agent_55828_dispatch_74",
+  "waves": 8,
+  "target": "0x2c94",
+  "latch": "0x539c",
+  "static_instructions_in_span": 1197,
+  "mfma_in_span": 72,
+  "samples": 208,
+  "cycles_mean": 10142.25,
+  "cycles_median": 10106.0,
+  "cycles_p10": 10076,
+  "cycles_p90": 10160,
+  "cycles_min": 10056,
+  "cycles_max": 11044,
+  "wave_duration_mean": 373560,
+  "per_wave_iterations": [
+   [
+    "se0_sm0_sl0_wv0.json",
+    25
+   ],
+   [
+    "se0_sm0_sl1_wv0.json",
+    27
+   ],
+   [
+    "se0_sm1_sl0_wv0.json",
+    25
+   ],
+   [
+    "se0_sm1_sl1_wv0.json",
+    27
+   ],
+   [
+    "se0_sm2_sl0_wv0.json",
+    25
+   ],
+   [
+    "se0_sm2_sl1_wv0.json",
+    27
+   ],
+   [
+    "se0_sm3_sl0_wv0.json",
+    25
+   ],
+   [
+    "se0_sm3_sl1_wv0.json",
+    27
+   ]
+  ]
+ },
+ {
+  "ui": "/home/jinpli/workspace/home/jinpli/.local/share/capture_att_trace/zyfa_fp8_d128_hip/2026-11-11-16-32-04-zyfa_fp8_d128_hip-baseline/ui_output_agent_54862_dispatch_74",
+  "waves": 8,
+  "target": "0x2ee0",
+  "latch": "0x55e8",
+  "static_instructions_in_span": 1205,
+  "mfma_in_span": 72,
+  "samples": 208,
+  "cycles_mean": 10132.423076923076,
+  "cycles_median": 10052.0,
+  "cycles_p10": 10052,
+  "cycles_p90": 10128,
+  "cycles_min": 10044,
+  "cycles_max": 11588,
+  "wave_duration_mean": 381419,
+  "per_wave_iterations": [
+   [
+    "se0_sm0_sl0_wv0.json",
+    25
+   ],
+   [
+    "se0_sm0_sl1_wv0.json",
+    27
+   ],
+   [
+    "se0_sm1_sl0_wv0.json",
+    25
+   ],
+   [
+    "se0_sm1_sl1_wv0.json",
+    27
+   ],
+   [
+    "se0_sm2_sl0_wv0.json",
+    25
+   ],
+   [
+    "se0_sm2_sl1_wv0.json",
+    27
+   ],
+   [
+    "se0_sm3_sl0_wv0.json",
+    25
+   ],
+   [
+    "se0_sm3_sl1_wv0.json",
+    27
+   ]
+  ]
+ },
+ {
+  "ui": "/home/jinpli/workspace/home/jinpli/.local/share/capture_att_trace/zyfa_fp8_d128_hip/2026-11-11-16-40-41-zyfa_fp8_d128_hip-v1-d192-cvt-pack-poison/ui_output_agent_18485_dispatch_74",
+  "waves": 8,
+  "target": "0x2ee0",
+  "latch": "0x55e8",
+  "static_instructions_in_span": 1205,
+  "mfma_in_span": 72,
+  "samples": 208,
+  "cycles_mean": 10135.596153846154,
+  "cycles_median": 10060.0,
+  "cycles_p10": 10052,
+  "cycles_p90": 10148,
+  "cycles_min": 10048,
+  "cycles_max": 11608,
+  "wave_duration_mean": 380094.5,
+  "per_wave_iterations": [
+   [
+    "se0_sm0_sl0_wv0.json",
+    25
+   ],
+   [
+    "se0_sm0_sl1_wv0.json",
+    27
+   ],
+   [
+    "se0_sm1_sl0_wv0.json",
+    25
+   ],
+   [
+    "se0_sm1_sl1_wv0.json",
+    27
+   ],
+   [
+    "se0_sm2_sl0_wv0.json",
+    25
+   ],
+   [
+    "se0_sm2_sl1_wv0.json",
+    27
+   ],
+   [
+    "se0_sm3_sl0_wv0.json",
+    25
+   ],
+   [
+    "se0_sm3_sl1_wv0.json",
+    27
+   ]
+  ]
+ },
+ {
+  "ui": "/home/jinpli/workspace/home/jinpli/.local/share/capture_att_trace/zyfa_fp8_d128_hip/2026-11-11-16-40-47-zyfa_fp8_d128_hip-v2-o-zero-copy-anchors/ui_output_agent_7636_dispatch_74",
+  "waves": 8,
+  "target": "0x2cac",
+  "latch": "0x5394",
+  "static_instructions_in_span": 1197,
+  "mfma_in_span": 72,
+  "samples": 208,
+  "cycles_mean": 10106.26923076923,
+  "cycles_median": 10048.0,
+  "cycles_p10": 10028,
+  "cycles_p90": 10068,
+  "cycles_min": 10016,
+  "cycles_max": 11568,
+  "wave_duration_mean": 379888,
+  "per_wave_iterations": [
+   [
+    "se0_sm0_sl0_wv0.json",
+    25
+   ],
+   [
+    "se0_sm0_sl1_wv0.json",
+    27
+   ],
+   [
+    "se0_sm1_sl0_wv0.json",
+    25
+   ],
+   [
+    "se0_sm1_sl1_wv0.json",
+    27
+   ],
+   [
+    "se0_sm2_sl0_wv0.json",
+    25
+   ],
+   [
+    "se0_sm2_sl1_wv0.json",
+    27
+   ],
+   [
+    "se0_sm3_sl0_wv0.json",
+    25
+   ],
+   [
+    "se0_sm3_sl1_wv0.json",
+    27
+   ]
+  ]
+ },
+ {
+  "ui": "/home/jinpli/workspace/home/jinpli/.local/share/capture_att_trace/zyfa_fp8_d192_asm/2026-11-11-16-32-13-zyfa_fp8_d192_asm-baseline/ui_output_agent_43789_dispatch_74",
+  "waves": 8,
+  "target": "0x2810",
+  "latch": "0x3db8",
+  "static_instructions_in_span": 689,
+  "mfma_in_span": 44,
+  "samples": 456,
+  "cycles_mean": 7472.543859649123,
+  "cycles_median": 7436.0,
+  "cycles_p10": 7412,
+  "cycles_p90": 7528,
+  "cycles_min": 7396,
+  "cycles_max": 8056,
+  "wave_duration_mean": 535580,
+  "per_wave_iterations": [
+   [
+    "se0_sm0_sl0_wv0.json",
+    58
+   ],
+   [
+    "se0_sm0_sl1_wv0.json",
+    58
+   ],
+   [
+    "se0_sm1_sl0_wv0.json",
+    54
+   ],
+   [
+    "se0_sm1_sl1_wv0.json",
+    58
+   ],
+   [
+    "se0_sm2_sl0_wv0.json",
+    58
+   ],
+   [
+    "se0_sm2_sl1_wv0.json",
+    58
+   ],
+   [
+    "se0_sm3_sl0_wv0.json",
+    54
+   ],
+   [
+    "se0_sm3_sl1_wv0.json",
+    58
+   ]
+  ]
+ },
+ {
+  "ui": "/home/jinpli/workspace/home/jinpli/.local/share/capture_att_trace/zyfa_fp8_d192_hip/2026-11-11-16-32-10-zyfa_fp8_d192_hip-baseline/ui_output_agent_10340_dispatch_74",
+  "waves": 8,
+  "target": "0xb290",
+  "latch": "0xc888",
+  "static_instructions_in_span": 717,
+  "mfma_in_span": 44,
+  "samples": 456,
+  "cycles_mean": 7896.210526315789,
+  "cycles_median": 7884.0,
+  "cycles_p10": 7700,
+  "cycles_p90": 7964,
+  "cycles_min": 7612,
+  "cycles_max": 8712,
+  "wave_duration_mean": 567261.5,
+  "per_wave_iterations": [
+   [
+    "se0_sm0_sl0_wv0.json",
+    58
+   ],
+   [
+    "se0_sm0_sl1_wv0.json",
+    58
+   ],
+   [
+    "se0_sm1_sl0_wv0.json",
+    54
+   ],
+   [
+    "se0_sm1_sl1_wv0.json",
+    58
+   ],
+   [
+    "se0_sm2_sl0_wv0.json",
+    54
+   ],
+   [
+    "se0_sm2_sl1_wv0.json",
+    58
+   ],
+   [
+    "se0_sm3_sl0_wv0.json",
+    58
+   ],
+   [
+    "se0_sm3_sl1_wv0.json",
+    58
+   ]
+  ]
+ },
+ {
+  "ui": "/home/jinpli/workspace/home/jinpli/.local/share/capture_att_trace/zyfa_fp8_d192_hip/2026-11-11-16-40-44-zyfa_fp8_d192_hip-v1-d192-cvt-pack-poison/ui_output_agent_35392_dispatch_74",
+  "waves": 8,
+  "target": "0xb290",
+  "latch": "0xc808",
+  "static_instructions_in_span": 685,
+  "mfma_in_span": 44,
+  "samples": 456,
+  "cycles_mean": 7493.596491228071,
+  "cycles_median": 7444.0,
+  "cycles_p10": 7416,
+  "cycles_p90": 7460,
+  "cycles_min": 7400,
+  "cycles_max": 8736,
+  "wave_duration_mean": 545931.5,
+  "per_wave_iterations": [
+   [
+    "se0_sm0_sl0_wv0.json",
+    58
+   ],
+   [
+    "se0_sm0_sl1_wv0.json",
+    58
+   ],
+   [
+    "se0_sm1_sl0_wv0.json",
+    54
+   ],
+   [
+    "se0_sm1_sl1_wv0.json",
+    58
+   ],
+   [
+    "se0_sm2_sl0_wv0.json",
+    58
+   ],
+   [
+    "se0_sm2_sl1_wv0.json",
+    58
+   ],
+   [
+    "se0_sm3_sl0_wv0.json",
+    54
+   ],
+   [
+    "se0_sm3_sl1_wv0.json",
+    58
+   ]
+  ]
+ },
+ {
+  "ui": "/home/jinpli/workspace/home/jinpli/.local/share/capture_att_trace/zyfa_fp8_d192_hip/2026-11-11-16-40-51-zyfa_fp8_d192_hip-v2-o-zero-copy-anchors/ui_output_agent_13433_dispatch_74",
+  "waves": 8,
+  "target": "0xad60",
+  "latch": "0xc2d8",
+  "static_instructions_in_span": 685,
+  "mfma_in_span": 44,
+  "samples": 456,
+  "cycles_mean": 7473.8421052631575,
+  "cycles_median": 7412.0,
+  "cycles_p10": 7396,
+  "cycles_p90": 7444,
+  "cycles_min": 7372,
+  "cycles_max": 8700,
+  "wave_duration_mean": 542573,
+  "per_wave_iterations": [
+   [
+    "se0_sm0_sl0_wv0.json",
+    58
+   ],
+   [
+    "se0_sm0_sl1_wv0.json",
+    58
+   ],
+   [
+    "se0_sm1_sl0_wv0.json",
+    54
+   ],
+   [
+    "se0_sm1_sl1_wv0.json",
+    58
+   ],
+   [
+    "se0_sm2_sl0_wv0.json",
+    58
+   ],
+   [
+    "se0_sm2_sl1_wv0.json",
+    58
+   ],
+   [
+    "se0_sm3_sl0_wv0.json",
+    54
+   ],
+   [
+    "se0_sm3_sl1_wv0.json",
+    58
+   ]
+  ]
+ }
+]

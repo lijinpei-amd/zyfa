@@ -1,0 +1,113 @@
+{
+ "candidate_extension": "/home/jinpli/workspace/home/jinpli/development/zyfa/.claude/worktrees/agent-ac019c7f660da3916/build/292d02a/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+ "candidate_extension_sha256": "4d6bebacf84fcad845b1a64699288874fd8d07c63817e4ca5e1a7c758e7ea1e6",
+ "references": {
+  "ac8512a": {
+   "path": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/gpu-validation-292d02a/extensions/ac8512a-main.so",
+   "sha256": "8a0d5fb8994ebf2228b2e92e1e90ad8574cde41713fcc9814525128602d3cc6f"
+  },
+  "owning4dd38ce": {
+   "path": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/gpu-validation-292d02a/extensions/owning-4dd38ce.so",
+   "sha256": "dbb3ebfa0fe06a5dcda2ec453bf18d9bbd71336a45a00c0edfd5ace3d02298fb"
+  }
+ },
+ "device": "AMD Instinct MI350X",
+ "HIP_VISIBLE_DEVICES": "4",
+ "args": {
+  "reference": "['ac8512a=/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/gpu-validation-292d02a/extensions/ac8512a-main.so', 'owning4dd38ce=/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/gpu-validation-292d02a/extensions/owning-4dd38ce.so']",
+  "expect_sha": "4d6bebacf84fcad845b1a64699288874fd8d07c63817e4ca5e1a7c758e7ea1e6",
+  "output": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/gpu-validation-292d02a/tail-race-long",
+  "repeats": "500",
+  "diag_repeats": "20",
+  "stress_iters": "20000",
+  "seeds": "200",
+  "phases": "kernel,persistent,padded,diagonal,oclear,stress"
+ },
+ "start": "2026-11-12T01:06:13"
+}
+kernel phase done 7.2s
+persistent phase done 18.8s
+padded phase done 52.5s
+diagonal phase done 55.8s
+oclear phase done 66.1s
+stress phase done 132.5s
+{
+ "meta": {
+  "candidate_extension": "/home/jinpli/workspace/home/jinpli/development/zyfa/.claude/worktrees/agent-ac019c7f660da3916/build/292d02a/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+  "candidate_extension_sha256": "4d6bebacf84fcad845b1a64699288874fd8d07c63817e4ca5e1a7c758e7ea1e6",
+  "references": {
+   "ac8512a": {
+    "path": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/gpu-validation-292d02a/extensions/ac8512a-main.so",
+    "sha256": "8a0d5fb8994ebf2228b2e92e1e90ad8574cde41713fcc9814525128602d3cc6f"
+   },
+   "owning4dd38ce": {
+    "path": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/gpu-validation-292d02a/extensions/owning-4dd38ce.so",
+    "sha256": "dbb3ebfa0fe06a5dcda2ec453bf18d9bbd71336a45a00c0edfd5ace3d02298fb"
+   }
+  },
+  "device": "AMD Instinct MI350X",
+  "HIP_VISIBLE_DEVICES": "4",
+  "args": {
+   "reference": "['ac8512a=/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/gpu-validation-292d02a/extensions/ac8512a-main.so', 'owning4dd38ce=/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/gpu-validation-292d02a/extensions/owning-4dd38ce.so']",
+   "expect_sha": "4d6bebacf84fcad845b1a64699288874fd8d07c63817e4ca5e1a7c758e7ea1e6",
+   "output": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/gpu-validation-292d02a/tail-race-long",
+   "repeats": "500",
+   "diag_repeats": "20",
+   "stress_iters": "20000",
+   "seeds": "200",
+   "phases": "kernel,persistent,padded,diagonal,oclear,stress"
+  },
+  "start": "2026-11-12T01:06:13",
+  "negative_control": "single-bit flips in output and LSE detected",
+  "end": "2026-11-12T01:08:25",
+  "elapsed_s": 132.5073254108429
+ },
+ "cases": 1120,
+ "failures": 0,
+ "by_phase": {
+  "diagonal": {
+   "cases": 594,
+   "pass": 594
+  },
+  "kernel": {
+   "cases": 100,
+   "pass": 100
+  },
+  "oclear-seeds": {
+   "cases": 14,
+   "pass": 14
+  },
+  "padded": {
+   "cases": 336,
+   "pass": 336
+  },
+  "persistent": {
+   "cases": 48,
+   "pass": 48
+  },
+  "stress-fixed": {
+   "cases": 14,
+   "pass": 14
+  },
+  "stress-seeds": {
+   "cases": 14,
+   "pass": 14
+  }
+ },
+ "all_equal_checks_true": true,
+ "equal_checks": [
+  "equal_ac8512a_lse",
+  "equal_ac8512a_nolse",
+  "equal_api_raw_lse",
+  "equal_api_raw_nolse",
+  "equal_output_lse_vs_nolse",
+  "equal_owning4dd38ce_lse",
+  "equal_owning4dd38ce_nolse"
+ ],
+ "repeat_stable_all": true,
+ "total_candidate_launches": 795516,
+ "max_rel_rms": 0.02673099520108922,
+ "max_abs_err": 0.04236257436282298,
+ "max_lse_abs_err": 0.05005439362632447
+}
+FAILURES 0
