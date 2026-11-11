@@ -303,12 +303,9 @@ __device__ __forceinline__ Head<D> read_head(Lds<D> sm, int runtime_slot) {
     return h;
 }
 
-template <int D, int Half, int J, int Slot, bool Ordered = false>
-__device__ __forceinline__ i8 read_v(Lds<D> sm, int runtime_slot) {
-    const int slot = Slot < 0 ? runtime_slot : Slot;
-    const int c = laneid() & 31, gb = laneid() >> 5;
-    const int laneoff = (gb * (keys<D> / 2) + (c >> 4)) * 128 + (c & 15) * 8;
-    const auto p = sm.value(slot) + laneoff + 4096 * Half + 256 * J;
+template <int Half, int J, bool Ordered = false>
+__device__ __forceinline__ i8 read_v_fragment(byte_lds base) {
+    const auto p = base + 4096 * Half + 256 * J;
     const i2 a = __builtin_amdgcn_ds_read_tr8_b64_v2i32((i2_lds)(p));
     if constexpr (Ordered) SCHED_FENCE();
     const i2 b = __builtin_amdgcn_ds_read_tr8_b64_v2i32((i2_lds)(p + 1024));
@@ -318,6 +315,14 @@ __device__ __forceinline__ i8 read_v(Lds<D> sm, int runtime_slot) {
     const i2 d = __builtin_amdgcn_ds_read_tr8_b64_v2i32((i2_lds)(p + 3072));
     if constexpr (Ordered) SCHED_FENCE();
     return i8{a[0], a[1], b[0], b[1], c0[0], c0[1], d[0], d[1]};
+}
+
+template <int D, int Half, int J, int Slot, bool Ordered = false>
+__device__ __forceinline__ i8 read_v(Lds<D> sm, int runtime_slot) {
+    const int slot = Slot < 0 ? runtime_slot : Slot;
+    const int c = laneid() & 31, gb = laneid() >> 5;
+    const int laneoff = (gb * (keys<D> / 2) + (c >> 4)) * 128 + (c & 15) * 8;
+    return read_v_fragment<Half, J, Ordered>(sm.value(slot) + laneoff);
 }
 
 
@@ -487,27 +492,31 @@ __device__ __forceinline__ Probability<D> softmax(const Scores<D> &s, const Para
 template <int D, int Slot, typename Prefetch>
 __device__ __forceinline__ void pv(Lds<D> sm, int runtime_slot, const Probability<D> &p,
                                     const Params &params, o_tile &o, Prefetch prefetch) {
-    i8 a = read_v<D, 0, 0, Slot>(sm, runtime_slot);
-    i8 b = read_v<D, 0, 1, Slot>(sm, runtime_slot);
-    i8 c = read_v<D, 0, 2, Slot>(sm, runtime_slot);
+    const int slot = Slot < 0 ? runtime_slot : Slot;
+    const int c0 = laneid() & 31, gb = laneid() >> 5;
+    const int laneoff = (gb * (keys<D> / 2) + (c0 >> 4)) * 128 + (c0 & 15) * 8;
+    const auto vbase = sm.value(slot) + laneoff;
+    i8 a = read_v_fragment<0, 0>(vbase);
+    i8 b = read_v_fragment<0, 1>(vbase);
+    i8 c = read_v_fragment<0, 2>(vbase);
     wait_lds_fragments<4>();
     o.a = mma_scaled(a, p.a, o.a, params.sb_lo);
-    a = read_v<D, 0, 3, Slot>(sm, runtime_slot);
+    a = read_v_fragment<0, 3>(vbase);
     o.b = mma_scaled(b, p.a, o.b, params.sb_lo);
     if constexpr (D == 128)
-        b = read_v<D, 1, 0, Slot>(sm, runtime_slot);
+        b = read_v_fragment<1, 0>(vbase);
     else
         prefetch();
     wait_lds_fragments<D == 128 ? 4 : 0>();
     o.c = mma_scaled(c, p.a, o.c, params.sb_lo);
     if constexpr (D == 128)
-        c = read_v<D, 1, 1, Slot>(sm, runtime_slot);
+        c = read_v_fragment<1, 1>(vbase);
     o.d = mma_scaled(a, p.a, o.d, params.sb_lo);
     if constexpr (D == 128) {
-        a = read_v<D, 1, 2, Slot>(sm, runtime_slot);
+        a = read_v_fragment<1, 2>(vbase);
         wait_lds_fragments<4>();
         o.a = mma_scaled(b, p.b, o.a, params.sb_hi);
-        b = read_v<D, 1, 3, Slot>(sm, runtime_slot);
+        b = read_v_fragment<1, 3>(vbase);
         o.b = mma_scaled(c, p.b, o.b, params.sb_hi);
         prefetch();
         wait_lds_fragments<0>();

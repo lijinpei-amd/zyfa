@@ -171,6 +171,45 @@ def test_hip_group0_dma_rounds_reuse_lane_offsets(disassembled_kernels, dim):
 
 
 @pytest.mark.parametrize("dim", [128, 192])
+def test_hip_runtime_pv_reuses_one_v_address(disassembled_kernels, dim):
+    from benchmarks.compare_isa import parse_disassembly, select_function, steady_loop
+
+    code = select_function(parse_disassembly(disassembled_kernels[0]), dim)
+    loop_end = max(i.address for i in steady_loop(code, 72 if dim == 128 else 44))
+    tail = [i for i in code if i.address > loop_end]
+    reads = [i for i in tail if i.mnemonic == "ds_read_b64_tr_b8"]
+    definitions = {}
+    origins = {}
+    for instruction in tail:
+        operands = instruction.operands.split(",")
+        if instruction.mnemonic == "ds_read_b64_tr_b8":
+            address = operands[1].strip().split()[0]
+            assert address in definitions, instruction
+            origins[instruction.address] = definitions[address]
+        destination = operands[0].strip()
+        origin = instruction.address
+        if instruction.mnemonic in ("v_mov_b32_e32", "v_mov_b32_e64"):
+            origin = definitions.get(operands[1].strip(), origin)
+        if re.fullmatch(r"v\d+", destination):
+            definitions[destination] = origin
+        elif m := re.fullmatch(r"v\[(\d+):(\d+)\]", destination):
+            for register in range(int(m[1]), int(m[2]) + 1):
+                definitions[f"v{register}"] = origin
+    per_site = 32 if dim == 128 else 16
+    expected_offsets = [4096 * half + 256 * fragment + 1024 * word
+                        for half in range(2 if dim == 128 else 1)
+                        for fragment in range(4) for word in range(4)]
+    assert len(reads) == 6 * per_site
+    for site in range(6):
+        fragment_reads = reads[site * per_site:(site + 1) * per_site]
+        offsets = [int(m[1]) if (m := re.search(r"offset:(\d+)", i.operands)) else 0
+                   for i in fragment_reads]
+        assert offsets == expected_offsets, (site, offsets)
+        constructions = {origins[i.address] for i in fragment_reads}
+        assert len(constructions) == 1, (site, sorted(constructions))
+
+
+@pytest.mark.parametrize("dim", [128, 192])
 def test_hip_epilogue_scales_then_packs_then_swaps(disassembled_kernels, dim):
     from benchmarks.compare_isa import parse_disassembly, select_function
 
