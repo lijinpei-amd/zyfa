@@ -34,12 +34,12 @@ __device__ __forceinline__ float max3(float a, float b, float c) { return fmaxf(
 typedef int _v2i __attribute__((ext_vector_type(2)));
 __device__ __forceinline__ float xor32_max(float x) {
     const int xi = __float_as_int(x);
-    const _v2i r = __builtin_amdgcn_permlane32_swap(xi, xi, false, false);
+    const auto r = __builtin_amdgcn_permlane32_swap(xi, xi, false, false);
     return fmaxf(__int_as_float(r[0]), __int_as_float(r[1]));
 }
 __device__ __forceinline__ float xor32_sum(float x) {
     const int xi = __float_as_int(x);
-    const _v2i r = __builtin_amdgcn_permlane32_swap(xi, xi, false, false);
+    const auto r = __builtin_amdgcn_permlane32_swap(xi, xi, false, false);
     return __int_as_float(r[0]) + __int_as_float(r[1]);
 }
 

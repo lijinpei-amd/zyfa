@@ -1,0 +1,22 @@
+[
+  {
+    "dimension": 128,
+    "steady_loop_instruction_count": 1333,
+    "loop_counts_match": true,
+    "loop_sequence_match": true,
+    "whole_kernel_counts_match": false,
+    "whole_kernel_sequence_match": false,
+    "whole_kernel_reference_count": 5302,
+    "whole_kernel_llvm_count": 5187
+  },
+  {
+    "dimension": 192,
+    "steady_loop_instruction_count": 825,
+    "loop_counts_match": true,
+    "loop_sequence_match": true,
+    "whole_kernel_counts_match": false,
+    "whole_kernel_sequence_match": false,
+    "whole_kernel_reference_count": 3737,
+    "whole_kernel_llvm_count": 3531
+  }
+]

@@ -1,0 +1,87 @@
+import os
+import re
+import subprocess
+import sys
+from pathlib import Path
+
+from setuptools import find_packages, setup
+
+try:
+    import torch
+    from torch.utils.cpp_extension import BuildExtension, CUDAExtension
+except ImportError:
+    sys.exit("zyfa builds against the PyTorch that is already installed, so install a ROCm build of PyTorch first "
+             "and then run `pip install . --no-build-isolation`")
+
+ROOT = Path(__file__).resolve().parent
+VERSION = re.search(r'__version__ = "(.+)"', (ROOT / "zyfa" / "__init__.py").read_text()).group(1)
+GEN = ROOT / "build" / "include"
+NATIVE_OBJECT = ROOT / "build" / "native" / "fp8_native.o"
+
+if not torch.version.hip:
+    sys.exit("zyfa needs a ROCm build of PyTorch")
+
+# The kernels are written for gfx950 (MI355X) only.
+os.environ["PYTORCH_ROCM_ARCH"] = "gfx950"
+
+hip_flags = ["-O3", "-std=c++20", "-ffast-math", "-fgpu-flush-denormals-to-zero", "-Wno-unused-function",
+             "-Wno-nan-infinity-disabled", "-DKITTENS_CDNA4", "-U__HIP_NO_HALF_CONVERSIONS__",
+             "-U__HIP_NO_HALF_OPERATORS__"]
+
+
+class BuildExt(BuildExtension):
+    def run(self):
+        # Generate the two assembly kernels and embed their code objects as C headers.
+        subprocess.run([sys.executable, str(ROOT / "csrc" / "asm" / "build.py"), "--out-dir", str(GEN / "generated"),
+                        "--rocm", os.environ.get("ROCM_PATH", "/opt/rocm")], check=True)
+        NATIVE_OBJECT.parent.mkdir(parents=True, exist_ok=True)
+        rocm = Path(os.environ.get("ROCM_PATH", "/opt/rocm"))
+        llvm_root = os.environ.get("ZYFA_NATIVE_LLVM_ROOT")
+        compiler = Path(llvm_root) / "build/bin/clang++" if llvm_root else rocm / "bin/hipcc"
+        native_flags = [*hip_flags, "-fhonor-infinities", "-fno-slp-vectorize", "-fPIC",
+                        "-fno-gpu-rdc", "--offload-arch=gfx950"]
+        if llvm_root:
+            native_flags += ["-x", "hip", "--rocm-path=" + str(rocm),
+                             "-Xclang", "-target-feature", "-Xclang", "-dl-insts",
+                             "-Xclang", "-target-feature", "-Xclang", "-vop3-literal",
+                             "-Xclang", "-target-feature", "-Xclang", "-bitop3-insts",
+                             "-Xarch_device", "-mllvm=-rotation-max-header-size=0",
+                             "-Xarch_device", "-mllvm=-amdgpu-spill-sgpr-to-vgpr=true",
+                             "-Xarch_device", "-mllvm=-misched=gcn-max-ilp",
+                             "-Xarch_device", "-mllvm=-amdgpu-prefer-scc1-branches",
+                             "-Xarch_device", "-mllvm=-greedy-regclass-priority-trumps-globalness=true",
+                             "-Xarch_device", "-mllvm=-enable-tail-merge=false",
+                             "-Xarch_device", "-mllvm=-branch-folder-hoist-common-code=false",
+                             "-Xarch_device", "-mllvm=-amdgpu-preserve-uniform-irreducible",
+                             "-Xarch_device", "-mllvm=-amdgpu-shrink-late-compare-mask",
+                             "-Xarch_device", "-mllvm=-amdgpu-prefer-unsigned-add",
+                             "-Xarch_device", "-mllvm=-amdgpu-prefer-ge-scalar-bounds"]
+        subprocess.run([str(compiler), *native_flags, "-c", str(ROOT / "csrc/fp8_native.hip"),
+                        "-o", str(NATIVE_OBJECT)], check=True)
+        super().run()
+
+
+setup(
+    name="zyfa",
+    version=VERSION,
+    author="Zyphra",
+    description="FlashAttention kernels for the AMD Instinct MI355X, from the Zyphra Optimization Engine (ZOE)",
+    long_description=(ROOT / "README.md").read_text(),
+    long_description_content_type="text/markdown",
+    url="https://github.com/Zyphra/zyfa",
+    license="Apache-2.0",
+    license_files=["LICENSE", "third_party/hipkittens/LICENSE"],
+    packages=find_packages(include=["zyfa"]),
+    python_requires=">=3.10",
+    ext_modules=[
+        CUDAExtension(
+            name="zyfa._C",
+            sources=[f"csrc/{f}" for f in ("bindings.cpp", "bf16_d128.hip", "bf16_d192.hip", "fp8_d128.hip",
+                                           "fp8_d192.hip", "fp8_d128_asm.hip", "fp8_d192_asm.hip")],
+            extra_objects=[str(NATIVE_OBJECT)],
+            include_dirs=[str(ROOT / "csrc"), str(GEN), str(ROOT / "third_party" / "hipkittens" / "include")],
+            extra_compile_args={"cxx": ["-O3", "-std=c++20"], "nvcc": hip_flags},
+        )
+    ],
+    cmdclass={"build_ext": BuildExt},
+)

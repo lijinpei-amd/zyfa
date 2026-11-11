@@ -6,3 +6,4 @@ __pycache__/
 *_hip.hip
 *_hip.h
 .pytest_cache/
+benchmarks/results/

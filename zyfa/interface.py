@@ -22,6 +22,7 @@ except ImportError as e:
 FP8 = torch.float8_e4m3fn
 _KERNELS = {(torch.bfloat16, 128, 128): _C.bf16_d128, (torch.bfloat16, 192, 128): _C.bf16_d192,
             (FP8, 128, 128): _C.fp8_d128, (FP8, 192, 128): _C.fp8_d192}
+_HIP_KERNELS = {(FP8, 128, 128): _C.fp8_d128_hip, (FP8, 192, 128): _C.fp8_d192_hip}
 _ARCH_OK = set()
 
 
@@ -42,10 +43,23 @@ def _fwd(q: torch.Tensor, k: torch.Tensor, v: torch.Tensor, scale: float, v_scal
     return res[0], lse
 
 
+@torch.library.custom_op("zyfa::fwd_hip", mutates_args=())
+def _fwd_hip(q: torch.Tensor, k: torch.Tensor, v: torch.Tensor, scale: float, v_scale: float, return_lse: bool,
+             bshd: bool, q_descale: Optional[torch.Tensor], k_descale: Optional[torch.Tensor],
+             v_descale: Optional[torch.Tensor]) -> tuple[torch.Tensor, torch.Tensor]:
+    fn = _HIP_KERNELS[(q.dtype, q.shape[-1], v.shape[-1])]
+    res = fn(q, k, v, scale, True, return_lse, bshd, v_scale, q_descale, k_descale, v_descale)
+    lse = res[1].view(_lse_shape(q, bshd)) if return_lse else q.new_empty(0, dtype=torch.float32)
+    return res[0], lse
+
+
 @_fwd.register_fake
-def _(q, k, v, scale, v_scale, return_lse, bshd, q_descale, k_descale, v_descale):
+def _fwd_fake(q, k, v, scale, v_scale, return_lse, bshd, q_descale, k_descale, v_descale):
     out = q.new_empty((*q.shape[:-1], v.shape[-1]), dtype=torch.bfloat16)
     return out, q.new_empty(_lse_shape(q, bshd) if return_lse else 0, dtype=torch.float32)
+
+
+_fwd_hip.register_fake(_fwd_fake)
 
 
 @torch.library.custom_op("zyfa::no_backward", mutates_args=())
@@ -69,11 +83,12 @@ def _backward(ctx, dout, dlse):
 
 
 _fwd.register_autograd(_backward, setup_context=_setup_context)
+_fwd_hip.register_autograd(_backward, setup_context=_setup_context)
 
 
 def flash_attn_func(q, k, v, dropout_p=0.0, softmax_scale=None, causal=False, window_size=(-1, -1), softcap=0.0,
                     alibi_slopes=None, deterministic=False, return_attn_probs=False, *, return_lse=False,
-                    q_descale=None, k_descale=None, v_descale=None, layout="bshd"):
+                    q_descale=None, k_descale=None, v_descale=None, layout="bshd", backend="assembly"):
     """Causal attention forward pass with the arguments of ``flash_attn.flash_attn_func`` (flash-attn 2 order).
 
     Args:
@@ -96,6 +111,7 @@ def flash_attn_func(q, k, v, dropout_p=0.0, softmax_scale=None, causal=False, wi
             kernel reads tensor descales on the GPU and does not check their values, so they must be positive
             normal float32 values.
         layout: "bshd" (the default) or "bhsd".
+        backend: "assembly" (the default), or "hip" for the native HIP C++ FP8 kernels enabled at build time.
 
     Returns:
         out: bfloat16, with the shape of q and d_v as its last dimension.
@@ -108,6 +124,14 @@ def flash_attn_func(q, k, v, dropout_p=0.0, softmax_scale=None, causal=False, wi
         raise ValueError(f"layout must be 'bshd' or 'bhsd', got {layout!r}")
     bshd = layout == "bshd"
     _check(q, k, v, bshd)
+    if backend not in ("assembly", "hip"):
+        raise ValueError(f"backend must be 'assembly' or 'hip', got {backend!r}")
+    if backend == "hip" and q.dtype != FP8:
+        raise ValueError("the native HIP backend supports FP8 inputs")
+    if backend == "hip" and not getattr(_C, "native_fp8_enabled", False):
+        raise RuntimeError("the native HIP FP8 backend was not enabled in this build; rebuild with "
+                           "ZYFA_NATIVE_LLVM_ROOT pointing to the compatible LLVM checkout described in "
+                           "docs/hip-fp8-isa-match.md")
 
     scale = softmax_scale if softmax_scale is not None else 1.0 / math.sqrt(q.shape[-1])
     v_scale = 1.0
@@ -131,7 +155,8 @@ def flash_attn_func(q, k, v, dropout_p=0.0, softmax_scale=None, causal=False, wi
         if pad:
             q, k, v = (torch.cat([x, x.new_zeros((*x.shape[:sdim], pad, *x.shape[sdim + 1:]))], sdim)
                        for x in (q, k, v))
-        out, lse = torch.ops.zyfa.fwd(q, k, v, scale, v_scale, want_lse, bshd, q_descale, k_descale, v_descale)
+        op = torch.ops.zyfa.fwd_hip if backend == "hip" else torch.ops.zyfa.fwd
+        out, lse = op(q, k, v, scale, v_scale, want_lse, bshd, q_descale, k_descale, v_descale)
         if pad:
             out = out.narrow(sdim, 0, s).contiguous()
             lse = lse.narrow(2, 0, s).contiguous() if want_lse else lse

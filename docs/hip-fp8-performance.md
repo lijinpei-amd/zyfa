@@ -1,0 +1,211 @@
+# Native HIP FP8 attention
+
+Current LLVM results are in [LLVM FP8 ISA matching](hip-fp8-isa-match.md).
+
+The later [assembly-order schedule experiment](hip-fp8-instruction-order.md)
+adds explicit stage fences and matches the steady MFMA/DMA/refill/reduction
+order. The results below describe the earlier performance-tuned schedule;
+the experiment has separate assembly and timing artifacts.
+
+`csrc/fp8_native.hip` implements gfx950 HIP C++ versions of both ZYFA FP8
+assembly kernels. Select them with
+`flash_attn_func(..., causal=True, backend="hip")`. The assembly backend remains
+the default. Both native kernels support BHSD/BSHD, MHA and GQA, sequence
+padding, BF16 output, optional FP32 LSE, scalar device descales, CUDA graphs,
+and `torch.compile` through a separate `zyfa::fwd_hip` custom operator.
+
+On the final 24-case comparison, the HIP kernel is 28–29% slower than assembly
+for d128 at 32K tokens and 7.5–8.3% slower for d192. At 1K tokens the gaps are
+3.05–3.28× for d128 and 1.61× for d192. All 212 project tests pass. This is a
+native implementation of the main ZYFA pipeline with measured compiler and
+cross-pass scheduling differences, rather than a claim of equal performance.
+
+## Structure reproduced
+
+| Property | d128 | d192 |
+| --- | --- | --- |
+| QK dimension / V dimension | 128 / 128 | 192 / 128 |
+| Query rows per block, MHA | 256 | 256 |
+| Query rows per head, paired GQA | 128 on each of two heads | 128 on each of two heads |
+| Keys per tile | 128 | 64 |
+| Threads / wave64 waves per block | 512 / 8 | 512 / 8 |
+| Waves per SIMD for one resident block | 2 | 2 |
+| K LDS slots | 4 × 16 KiB | 4 × 16 KiB |
+| V LDS slots | 4 × 16 KiB | 4 × 8 KiB |
+| Output staging | 32 KiB | 32 KiB |
+| Total dynamic LDS | 160 KiB | 128 KiB |
+| Key steps per steady-loop iteration | 4 | 4 |
+| QK / PV / row-sum MFMAs per steady loop, per wave | 32 / 32 / 8 | 24 / 16 / 4 |
+
+K slots start at bytes 0, 16384, 32768, and 49152. V starts at byte 65536.
+The d192 K rows use a 256-byte LDS stride with 192 payload bytes. Output staging
+starts at byte 131072 for d128 and 98304 for d192. K bank swizzles, V transpose
+reads, and the output row/XOR swizzle follow the assembly layouts.
+
+Waves 0–3 and 4–7 form two groups staggered by one phase. SM(k) converts scores
+to FP8 probabilities and reads the initial K(k+1) fragments. MM(k) computes
+rounded-P row sums, QK(k+1), PV(k), and the next score statistics. K(k+4)
+is prefetched into slot k modulo 4, and V(k+2) into slot (k+2) modulo 4.
+The steady loop statically instantiates all four ring rotations; its eight
+barriers keep the groups in opposite SM/MM phases. The separately masked tail
+keeps the same barrier count even when a wave has no further visible keys.
+Each wave executes 2*n+3 barriers per pass, including startup/shutdown.
+
+Q remains resident as two/three eight-dword vectors. Each wave maintains four
+16-register FP32 O tiles and four/two 16-register score tiles. d128 uses the
+assembly's lean FP8-code approximation and separate E8M0 probability scales for
+each 64-key half. d192 uses exp2 and hardware FP8 conversion with a per-tile
+E8M0 scale. Both use a 0.125-log2-unit lazy-rescale threshold, normalize with
+rounded-P row sums, and use scaled FP8 MFMAs for PV.
+
+The native launchers share the existing assembly job tables, mirrored query
+passes, even-ratio GQA head pairing, odd-ratio unpaired head mapping, device
+validation, byte strides, and XCD-aware persistent grid. Descales are loaded
+on the device, so captured graphs observe updates.
+
+## Compiler and scheduling choices
+
+The kernels use HIP/LLVM builtins for MFMAs, transpose LDS reads, probability
+conversion, waits, priorities, barriers, and BF16 packing. Two external symbol
+aliases name `llvm.amdgcn.raw.buffer.load.lds` and `llvm.fake.use`; neither
+contains instruction assembly. There are no fixed-register declarations or
+instruction inline assembly in the native dependency path.
+
+The DMA LDS base is made wave-uniform before computing its address, matching
+m0's hardware semantics and reducing register pressure. Output lane indices
+use native mbcnt builtins. `llvm.fake.use` keeps packed probabilities on the
+SM side of the barrier; LLVM otherwise sinks their conversion into MM.
+
+Timing selected DMA placement after the last PV fragment reads for steady
+stages and d192. The masked d128 tail retains earlier DMA placement during QK.
+This preserves the same four-slot prefetch distances while reducing waits
+around current-tile LDS reads. Plain ternary masking, additional scheduler
+fences, static LDS declarations, output outlining, and alternate output
+staging were also investigated; the final source uses the measured schedule.
+
+## Generated code and remaining differences
+
+| Resource | HIP d128 | Assembly d128 | HIP d192 | Assembly d192 |
+| --- | ---: | ---: | ---: | ---: |
+| VGPRs per wave | 256 | 256 | 256 | 256 |
+| SGPRs | 106 | 102 | 106 | 102 |
+| AGPRs | 0 | 0 | 0 | 0 |
+| Scratch frame bytes per lane | 396 | 0 | 212 | 0 |
+| Total LDS bytes per block | 163840 | 163840 | 131072 | 131072 |
+
+LLVM reports register-limited occupancy of two waves per SIMD. The eight-wave
+block and LDS allocation permit one resident block per CU. LDS is allocated
+at launch, so the native code-object metadata reports zero **fixed** LDS;
+the launch supplies the total shown above.
+
+The d128 steady loop has four eight-byte scratch reload instructions per
+four-step iteration. The d192 steady loop has no scratch instructions. Both
+kernels still spill around startup, masked tails, and the epilogue; these
+costs matter most for short sequences. The scratch-frame sizes describe the
+compiled kernel, not just its steady loop.
+
+The HIP implementation restarts its ring and startup loads on each mirrored
+pass. It does not reproduce the assembly's next-pass prefetch, cross-pass ring
+rotation, or overlap of the previous epilogue with the next startup. LLVM also
+chooses different fragment read-ahead, instruction interleaving, and register
+allocation. These are material performance differences; the implementation
+reproduces the main tiling and four-slot SM/MM pipeline but does not match every
+assembly scheduling detail. Row/tile spans at or above 4 GiB are explicitly
+rejected by the native backend; the assembly default retains its legacy
+fallback for those shapes.
+
+The earlier capture's artifacts are in `benchmarks/results/hip_native/final/assembly/`:
+
+- `native.co`: the GPU code object extracted from the built native HIP object.
+- `metadata.txt` and `disassembly.s`: metadata and disassembly of that code object.
+- `generated-source.s`: LLVM assembly compiled with the extension's device flags.
+- `hip_d128/steady-loop.s` and `hip_d192/steady-loop.s`: the complete four-step
+  steady loops, identified by their back edges and 72/44 MFMA counts.
+- `manifest.json`: compiler, compilation command, source/object/code-object hashes,
+  and dynamic LDS sizes.
+
+The current inspector extracts `build/native/fp8_native.o` and saves loop bodies
+from that object's disassembly. It no longer generates `generated-source.s` by
+recompiling source; its manifest records object hashes and total LDS bytes.
+
+## Validation
+
+`python -m pytest -q` passed all **212 tests**, including 61 native HIP tests.
+The native tests cover both dimensions, MHA, GQA4, odd-ratio GQA3, both layouts,
+batching, persistent jobs, growing logits/rescaling, short/padded tails, LSE,
+null/unit descales, graph updates, fake tensors, and compiled determinism.
+Numerical checks use FP64 causal attention, output relative RMS below 0.05,
+and LSE maximum absolute error below 0.06. The final benchmark additionally
+checks sampled rows and heads for every measured shape.
+
+## Final measured performance
+
+Times are GPU kernel microseconds. HIP/assembly is a latency ratio; values
+above one mean the HIP kernel takes longer. These are the final warmed
+three-sample measurements, not the shorter exploratory runs.
+
+| Dimension | Heads | S | Assembly µs | HIP µs | HIP/assembly |
+| --- | --- | ---: | ---: | ---: | ---: |
+| 128 | MHA | 1024 | 54.21 | 165.45 | 3.052× |
+| 128 | MHA | 2048 | 87.51 | 193.09 | 2.207× |
+| 128 | MHA | 4096 | 138.98 | 267.49 | 1.925× |
+| 128 | MHA | 8192 | 270.17 | 409.03 | 1.514× |
+| 128 | MHA | 16384 | 1042.94 | 1424.50 | 1.366× |
+| 128 | MHA | 32768 | 4090.42 | 5237.47 | 1.280× |
+| 128 | GQA4 | 1024 | 54.79 | 179.85 | 3.282× |
+| 128 | GQA4 | 2048 | 83.38 | 205.38 | 2.463× |
+| 128 | GQA4 | 4096 | 142.13 | 294.81 | 2.074× |
+| 128 | GQA4 | 8192 | 270.84 | 426.09 | 1.573× |
+| 128 | GQA4 | 16384 | 1040.70 | 1447.02 | 1.390× |
+| 128 | GQA4 | 32768 | 4100.37 | 5280.26 | 1.288× |
+| 192 | MHA | 1024 | 75.79 | 122.17 | 1.612× |
+| 192 | MHA | 2048 | 113.98 | 174.33 | 1.529× |
+| 192 | MHA | 4096 | 213.51 | 257.56 | 1.206× |
+| 192 | MHA | 8192 | 378.55 | 436.42 | 1.153× |
+| 192 | MHA | 16384 | 1472.66 | 1643.77 | 1.116× |
+| 192 | MHA | 32768 | 5743.45 | 6219.01 | 1.083× |
+| 192 | GQA4 | 1024 | 71.92 | 115.91 | 1.612× |
+| 192 | GQA4 | 2048 | 111.94 | 168.16 | 1.502× |
+| 192 | GQA4 | 4096 | 200.19 | 245.21 | 1.225× |
+| 192 | GQA4 | 8192 | 370.01 | 426.11 | 1.152× |
+| 192 | GQA4 | 16384 | 1435.44 | 1585.42 | 1.104× |
+| 192 | GQA4 | 32768 | 5643.41 | 6068.11 | 1.075× |
+
+Maximum sampled output relative RMS across all cases: 0.616%.
+The full timing samples, kernel names, protocol, and hashes are in
+`benchmarks/results/hip_native/final/benchmark.json`; the corresponding CSV
+is `benchmarks/results/hip_native/final/benchmark.csv`.
+
+Exploratory runs in sibling directories used shorter warmups and fewer
+samples. They are tuning records; the table above is the final comparison.
+
+## Reproduction
+
+The commands below run the current source. The timings above describe the
+earlier capture; current timings are in [LLVM FP8 ISA matching](hip-fp8-isa-match.md).
+
+Build against the installed ROCm PyTorch, with `LLVM_ROOT` pointing to the
+compatible compiler described in [LLVM FP8 ISA matching](hip-fp8-isa-match.md):
+
+```sh
+ZYFA_NATIVE_LLVM_ROOT="$LLVM_ROOT" pip install . --no-build-isolation
+ZYFA_LLVM_ROOT="$LLVM_ROOT" python -m pytest -q
+python benchmarks/benchmark_hip.py --warmup 500 --iters 100 --repeats 3 \
+  --output benchmarks/results/hip_native/final
+python benchmarks/inspect_hip.py --output benchmarks/results/hip_native/final/assembly
+```
+
+Set `ROCM_PATH` to the intended ROCm installation. On this workspace the
+installation is `/home/jinpli/workspace/home/jinpli/.local/opt/rocm-7.2.3`;
+its `lib/compat` directory must be on `LD_LIBRARY_PATH` for LLVM tools.
+
+The comparison uses one MI350X (gfx950, 256 CUs), ROCm 7.2.3 / AMD LLVM 22,
+and PyTorch 2.14.1+rocm7.2. Inputs are identical quantized Gaussian tensors
+(seed 29, BF16 source standard deviation 0.1), BSHD, batch 1, causal,
+d_v=128. Heads are max(32, 262144/S), with MHA and GQA4 at each sequence length.
+
+Each backend gets 500 warmup launches and 100 measured launches per sample,
+with three samples and alternating backend order. Times are medians of GPU
+kernel durations from the PyTorch profiler, excluding Python/host launch,
+allocation, and initial job-table setup. Clocks are not forced. JSON includes
+all raw timing samples and source/extension hashes; CSV has one row per case.

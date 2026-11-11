@@ -13,6 +13,7 @@
 #include <vector>
 
 #include "descale.h"
+#include "fp8_native.h"
 #include "generated/fmha_fp8_d192_pp_co.h"
 #include "xcd_map.h"
 
@@ -26,16 +27,7 @@ namespace fmha_fp8_d192_asm {
 
 // Kernel argument block (dword offsets match d192.KA). The kernel multiplies sl2 by q_descale * k_descale and the
 // output by v_descale * v_scale; a null descale pointer reads as 1.
-struct alignas(8) Args {
-    const void *q, *k, *v;
-    void *o, *lse;
-    const void *tab;
-    float sl2;
-    uint32_t n_jobs, num_q, qw, pair, q_ss, k_ss, v_ss, o_ss, q_sh2, o_sh2, l_sh2, n_keys, grid;
-    float v_scale;
-    uint32_t pad[5];
-    const float *q_descale, *k_descale, *v_descale;
-};
+using Args = fmha_fp8_native::Args192;
 static_assert(sizeof(Args) == 152, "kernarg block is 152 bytes");
 static_assert(offsetof(Args, sl2) == 48 && offsetof(Args, grid) == 100 && offsetof(Args, v_scale) == 104 &&
                   offsetof(Args, q_descale) == 128 && offsetof(Args, v_descale) == 144,
@@ -138,10 +130,10 @@ static const Plan &plan(int dev, int B, int Hq, int Hkv, int M, bool bshd) {
     return g_plans.emplace(key, std::move(p)).first->second;
 }
 
-std::vector<torch::Tensor> forward(torch::Tensor q, torch::Tensor k, torch::Tensor v, double scale, bool causal,
+static std::vector<torch::Tensor> forward_impl(torch::Tensor q, torch::Tensor k, torch::Tensor v, double scale, bool causal,
                                    bool return_lse, bool bshd, double v_scale,
                                    c10::optional<torch::Tensor> q_descale, c10::optional<torch::Tensor> k_descale,
-                                   c10::optional<torch::Tensor> v_descale) {
+                                   c10::optional<torch::Tensor> v_descale, bool native) {
     TORCH_CHECK(causal, "fmha_fp8 is causal-only");
     TORCH_CHECK(q.is_cuda() && k.is_cuda() && v.is_cuda());
     TORCH_CHECK(k.device() == q.device() && v.device() == q.device(), "q, k, v must be on the same device");
@@ -179,8 +171,10 @@ std::vector<torch::Tensor> forward(torch::Tensor q, torch::Tensor k, torch::Tens
                                   (uint64_t)N * (bshd ? Hkv : 1) * 192, (uint64_t)N * (bshd ? Hkv : 1) * 128,
                                   (uint64_t)B * Hq * M * 4};
         for (uint64_t x : spans)
-            if (x >= lim)
+            if (x >= lim) {
+                TORCH_CHECK(!native, "fmha_fp8 native HIP needs row and tile spans below 4 GiB");
                 return fmha_fp8_d192::forward(q, k, v, scale, causal, return_lse, bshd, v_scale, qd, kd, vd);
+            }
     }
     auto O = bshd ? torch::empty({B, M, Hq, Dv}, q.options().dtype(at::kBFloat16))
                   : torch::empty({B, Hq, M, Dv}, q.options().dtype(at::kBFloat16));
@@ -190,11 +184,12 @@ std::vector<torch::Tensor> forward(torch::Tensor q, torch::Tensor k, torch::Tens
     if (B == 0 || Hq == 0 || M == 0)
         return return_lse ? std::vector<torch::Tensor>{O, Lse} : std::vector<torch::Tensor>{O};
     const int dev = q.get_device();
-    hipFunction_t fn;
+    hipFunction_t fn = nullptr;
     const Plan *p;
     {
         std::lock_guard<std::mutex> lock(g_mu);
-        fn = kernel_fn(dev);
+        if (!native)
+            fn = kernel_fn(dev);
         p = &plan(dev, B, Hq, Hkv, M, bshd);
     }
     // Same scale arithmetic as fmha_fp8_d192::forward (scale * log2(e) in fp32).
@@ -228,11 +223,37 @@ std::vector<torch::Tensor> forward(torch::Tensor q, torch::Tensor k, torch::Tens
     size_t sz = sizeof(a);
     void *extra[] = {HIP_LAUNCH_PARAM_BUFFER_POINTER, &a, HIP_LAUNCH_PARAM_BUFFER_SIZE, &sz, HIP_LAUNCH_PARAM_END};
     hipStream_t stream = at::cuda::getCurrentCUDAStream();
-    const hipError_t err = hipModuleLaunchKernel(fn, p->grid, 1, 1, 512, 1, 1, 0, stream, nullptr, extra);
-    TORCH_CHECK(err == hipSuccess, "fmha_fp8 d192 asm launch: ", hipGetErrorString(err));
+    hipError_t err;
+#ifdef ZYFA_ENABLE_NATIVE_FP8
+    if (native)
+        err = fmha_fp8_native::launch_d192(a, stream);
+    else
+#endif
+        err = hipModuleLaunchKernel(fn, p->grid, 1, 1, 512, 1, 1, 0, stream, nullptr, extra);
+    TORCH_CHECK(err == hipSuccess, native ? "fmha_fp8 d192 native HIP launch: " : "fmha_fp8 d192 asm launch: ",
+                hipGetErrorString(err));
     if (return_lse)
         return {O, Lse};
     return {O};
+}
+
+std::vector<torch::Tensor> forward(torch::Tensor q, torch::Tensor k, torch::Tensor v, double scale, bool causal,
+                                   bool return_lse, bool bshd, double v_scale,
+                                   c10::optional<torch::Tensor> q_descale, c10::optional<torch::Tensor> k_descale,
+                                   c10::optional<torch::Tensor> v_descale) {
+    return forward_impl(q, k, v, scale, causal, return_lse, bshd, v_scale, q_descale, k_descale, v_descale, false);
+}
+
+std::vector<torch::Tensor> forward_hip(torch::Tensor q, torch::Tensor k, torch::Tensor v, double scale, bool causal,
+                                       bool return_lse, bool bshd, double v_scale,
+                                       c10::optional<torch::Tensor> q_descale, c10::optional<torch::Tensor> k_descale,
+                                       c10::optional<torch::Tensor> v_descale) {
+#ifndef ZYFA_ENABLE_NATIVE_FP8
+    TORCH_CHECK(false, "the native HIP FP8 backend was not enabled in this build; rebuild with "
+                       "ZYFA_NATIVE_LLVM_ROOT pointing to the compatible LLVM checkout described in "
+                       "docs/hip-fp8-isa-match.md");
+#endif
+    return forward_impl(q, k, v, scale, causal, return_lse, bshd, v_scale, q_descale, k_descale, v_descale, true);
 }
 
 }  // namespace fmha_fp8_d192_asm

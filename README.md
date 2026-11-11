@@ -34,6 +34,17 @@ pip install . --no-build-isolation
 The build compiles against the PyTorch that is already installed, so keep `--no-build-isolation`. It also assembles
 the FP8 kernels with the ROCm compiler, which it looks for in `$ROCM_PATH` (default `/opt/rocm`).
 
+The optional native HIP FP8 backend requires the compatible LLVM checkout described in
+[`docs/hip-fp8-isa-match.md`](docs/hip-fp8-isa-match.md). Enable it when building by setting
+`ZYFA_NATIVE_LLVM_ROOT` to that checkout; its compiler must be at `build/bin/clang++`:
+
+```sh
+ZYFA_NATIVE_LLVM_ROOT=/path/to/llvm-project pip install . --no-build-isolation
+```
+
+The default build provides the assembly backend. Calling `backend="hip"` without opting in raises an error
+with the build requirement.
+
 ## Usage
 
 ```python
@@ -51,8 +62,18 @@ out = flash_attn_func(q, k, v, causal=True)
 # FP8 with one power-of-two scale per tensor, BF16 output
 (q8, q_s), (k8, k_s), (v8, v_s) = fp8_quantize(q), fp8_quantize(k), fp8_quantize(v)
 out = flash_attn_func(q8, k8, v8, causal=True, q_descale=q_s, k_descale=k_s, v_descale=v_s)
+
+# Native HIP C++ implementation of the FP8 assembly tiling and pipeline
+out_hip = flash_attn_func(q8, k8, v8, causal=True, backend="hip",
+                          q_descale=q_s, k_descale=k_s, v_descale=v_s)
 ```
 
+- `backend="assembly"` is the default. `backend="hip"` selects the native HIP C++ FP8 kernels for
+  d_qk=128/192 and d_v=128 when enabled at build time, including padding, device descales, LSE, graphs, and
+  `torch.compile`.
+  The native kernels use LLVM intrinsics, eight wave64 waves, four K/V LDS slots, staggered wave groups,
+  and four unrolled key steps. Their measured performance and generated code are recorded in
+  [`docs/hip-fp8-isa-match.md`](docs/hip-fp8-isa-match.md).
 - `layout="bhsd"` takes (batch, heads, seqlen, head_dim) tensors instead.
 - `return_lse=True` also returns the log-sum-exp of each row of scaled scores (natural log), with shape
   (batch, heads, seqlen).
@@ -292,11 +313,16 @@ The paper describes each part in detail. The main ideas are the following.
 ```sh
 python -m pytest tests
 python benchmarks/benchmark.py --dtype fp8 --dims 128
+# Build with ZYFA_NATIVE_LLVM_ROOT to enable the following native comparisons.
+python benchmarks/benchmark_hip.py --output benchmarks/results/hip_native/final
+python benchmarks/inspect_hip.py --output benchmarks/results/hip_native/final/assembly
 ```
 
 The tests compare every kernel with fp64 attention. The benchmark follows the protocol of the
 [kernel benchmarks](#kernel-benchmarks) and compares with AITER when it is installed. After editing anything under
 `csrc/`, delete `build/` before rebuilding, because the build does not track the headers or the assembly generators.
+The native inspector reads `build/native/fp8_native.o` and saves its embedded code object's disassembly and steady
+loops. It uses the object produced by the native build; `--object PATH` selects another object explicitly.
 
 ## Repository layout
 

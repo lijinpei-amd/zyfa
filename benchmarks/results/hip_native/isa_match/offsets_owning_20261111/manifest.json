@@ -1,0 +1,122 @@
+{
+  "commands": [
+    [
+      "/home/jinpli/workspace/home/jinpli/development/workspace/01/llvm-project/build/bin/llvm-objcopy",
+      "--dump-section",
+      ".hip_fatbin=/home/jinpli/workspace/home/jinpli/development/zyfa/benchmarks/results/hip_native/isa_match/offsets_owning_20261111/native.fatbin",
+      "/home/jinpli/workspace/home/jinpli/development/zyfa/build/native/fp8_native.o",
+      "/home/jinpli/workspace/home/jinpli/development/zyfa/benchmarks/results/hip_native/isa_match/offsets_owning_20261111/host-copy.o"
+    ],
+    [
+      "/home/jinpli/workspace/home/jinpli/.local/opt/rocm-7.2.3/llvm/bin/clang-offload-bundler",
+      "--unbundle",
+      "--type=o",
+      "--targets=hipv4-amdgcn-amd-amdhsa--gfx950",
+      "--input=/home/jinpli/workspace/home/jinpli/development/zyfa/benchmarks/results/hip_native/isa_match/offsets_owning_20261111/native.fatbin",
+      "--output=/home/jinpli/workspace/home/jinpli/development/zyfa/benchmarks/results/hip_native/isa_match/offsets_owning_20261111/native.co"
+    ],
+    [
+      "/home/jinpli/workspace/home/jinpli/development/workspace/01/llvm-project/build/bin/llvm-objdump",
+      "--disassemble",
+      "--mcpu=gfx950",
+      "/home/jinpli/workspace/home/jinpli/development/zyfa/benchmarks/results/hip_native/isa_match/offsets_owning_20261111/native.co"
+    ],
+    [
+      "/home/jinpli/workspace/home/jinpli/development/workspace/01/llvm-project/build/bin/llvm-readobj",
+      "--notes",
+      "/home/jinpli/workspace/home/jinpli/development/zyfa/benchmarks/results/hip_native/isa_match/offsets_owning_20261111/native.co"
+    ],
+    [
+      "/home/jinpli/workspace/home/jinpli/venv/01/bin/python",
+      "/home/jinpli/workspace/home/jinpli/development/zyfa/benchmarks/compare_isa.py",
+      "--llvm",
+      "/home/jinpli/workspace/home/jinpli/development/zyfa/benchmarks/results/hip_native/isa_match/offsets_owning_20261111/disassembly.s",
+      "--assembly",
+      "/home/jinpli/workspace/home/jinpli/development/zyfa/benchmarks/results/hip_native/isa_match/baseline/assembly_d128.s",
+      "--dim",
+      "128",
+      "--scope",
+      "loop",
+      "--output",
+      "/home/jinpli/workspace/home/jinpli/development/zyfa/benchmarks/results/hip_native/isa_match/offsets_owning_20261111/d128-loop",
+      "--allow-mismatch"
+    ],
+    [
+      "/home/jinpli/workspace/home/jinpli/venv/01/bin/python",
+      "/home/jinpli/workspace/home/jinpli/development/zyfa/benchmarks/compare_isa.py",
+      "--llvm",
+      "/home/jinpli/workspace/home/jinpli/development/zyfa/benchmarks/results/hip_native/isa_match/offsets_owning_20261111/disassembly.s",
+      "--assembly",
+      "/home/jinpli/workspace/home/jinpli/development/zyfa/benchmarks/results/hip_native/isa_match/baseline/assembly_d128.s",
+      "--dim",
+      "128",
+      "--scope",
+      "kernel",
+      "--output",
+      "/home/jinpli/workspace/home/jinpli/development/zyfa/benchmarks/results/hip_native/isa_match/offsets_owning_20261111/d128-kernel",
+      "--allow-mismatch"
+    ],
+    [
+      "/home/jinpli/workspace/home/jinpli/venv/01/bin/python",
+      "/home/jinpli/workspace/home/jinpli/development/zyfa/benchmarks/compare_isa.py",
+      "--llvm",
+      "/home/jinpli/workspace/home/jinpli/development/zyfa/benchmarks/results/hip_native/isa_match/offsets_owning_20261111/disassembly.s",
+      "--assembly",
+      "/home/jinpli/workspace/home/jinpli/development/zyfa/benchmarks/results/hip_native/isa_match/baseline/assembly_d192.s",
+      "--dim",
+      "192",
+      "--scope",
+      "loop",
+      "--output",
+      "/home/jinpli/workspace/home/jinpli/development/zyfa/benchmarks/results/hip_native/isa_match/offsets_owning_20261111/d192-loop",
+      "--allow-mismatch"
+    ],
+    [
+      "/home/jinpli/workspace/home/jinpli/venv/01/bin/python",
+      "/home/jinpli/workspace/home/jinpli/development/zyfa/benchmarks/compare_isa.py",
+      "--llvm",
+      "/home/jinpli/workspace/home/jinpli/development/zyfa/benchmarks/results/hip_native/isa_match/offsets_owning_20261111/disassembly.s",
+      "--assembly",
+      "/home/jinpli/workspace/home/jinpli/development/zyfa/benchmarks/results/hip_native/isa_match/baseline/assembly_d192.s",
+      "--dim",
+      "192",
+      "--scope",
+      "kernel",
+      "--output",
+      "/home/jinpli/workspace/home/jinpli/development/zyfa/benchmarks/results/hip_native/isa_match/offsets_owning_20261111/d192-kernel",
+      "--allow-mismatch"
+    ],
+    [
+      "git",
+      "-C",
+      "/home/jinpli/workspace/home/jinpli/development/workspace/01/llvm-project",
+      "rev-parse",
+      "HEAD"
+    ],
+    [
+      "git",
+      "-C",
+      "/home/jinpli/workspace/home/jinpli/development/workspace/01/llvm-project",
+      "status",
+      "--short"
+    ]
+  ],
+  "llvm_head": "18b60c731b48ff66de22e5379a24dea6ad8e1b77",
+  "llvm_dirty": "",
+  "sha256": {
+    "/home/jinpli/workspace/home/jinpli/development/zyfa/build/native/fp8_native.o": "80e6b90a93959b176d9f10742dd54bbc0168d3c8c9985b046a26d3ce450a6913",
+    "/home/jinpli/workspace/home/jinpli/development/zyfa/benchmarks/results/hip_native/isa_match/offsets_owning_20261111/native.co": "7b04a1fed062b4bc5ca430689f1d6ec8a71c1fbe609b8261fe17be89bc44c330",
+    "/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.hip": "a95b74aa50962a06b8fef7aea87c64f98d3d5dff0f25b85f0add4a3b6efea29a",
+    "/home/jinpli/workspace/home/jinpli/development/workspace/01/llvm-project/build/bin/llc": "96b49882c1f362615b755109156337ee35c02433098d7d5245f5658440d2cb71",
+    "/home/jinpli/workspace/home/jinpli/development/workspace/01/llvm-project/build/bin/clang++": "03a7940dfbf572bec099f832697aa0171ac1885384d14abc4f7ba0ccf54f181f",
+    "/home/jinpli/workspace/home/jinpli/development/workspace/01/llvm-project/build/lib/libLLVMAMDGPUCodeGen.so.24.0git": "3e0859ba309231c35c10fe3c6096b0c817112adaf664f378dd954de585c90d84"
+  },
+  "validation_sha256": {
+    "tests.log": "0f46facd74ec47a675059d7c933f669eb664c269808e1a9b9b971584aada37f3",
+    "codegen-tests.log": "80c07e42655f0cb598ba60f59efbf1afd6a9fc6d763212df0e6ee7eedf434236",
+    "build.log": "cef594ff2ca68b14cc307ce70dace52e33cb89ba094d07638290545893433dd2",
+    "packaged-checks.log": "ce95d68f899f39d2f46f784e07eb00b1014fb0a6b716864d80b973888393980c",
+    "offset-layout-audit.json": "2464dd62f320036827066d37def02d8dacb20c57bd4c49e034bda6d7064bb15a",
+    "performance.log": "12a4eaf5f9da5851d00ff282cb727ef31fbcf6b7ac6b91f4e0c64c04728e8b43"
+  }
+}

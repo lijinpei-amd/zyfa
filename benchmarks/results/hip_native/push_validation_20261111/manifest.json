@@ -1,0 +1,50 @@
+{
+  "branch": "2026-11-11-hip-fp8-isa-match",
+  "llvm_revision": "18b60c731b48ff66de22e5379a24dea6ad8e1b77",
+  "default_build": {
+    "exit_code": 0,
+    "tests_passed": 167,
+    "tests_skipped": 127
+  },
+  "native_build": {
+    "exit_code": 0,
+    "tests_passed": 292,
+    "tests_skipped": 2
+  },
+  "code_object_sha256": "7b04a1fed062b4bc5ca430689f1d6ec8a71c1fbe609b8261fe17be89bc44c330",
+  "code_object_matches_recorded_capture": true,
+  "recorded_capture": "benchmarks/results/hip_native/isa_match/offsets_owning_20261111",
+  "extension_sha256": "60251a7e0b9f24d1437c67469b2fa571da18399daf0dd1f051e0931d7c731e72",
+  "source_sha256": {
+    "csrc/fp8_native.hip": "a95b74aa50962a06b8fef7aea87c64f98d3d5dff0f25b85f0add4a3b6efea29a",
+    "csrc/fp8_native.h": "88a4383510d87bfb88ce7e12bb942b8d6ba7d24caf0db7f21ac7e0df8909dae2",
+    "csrc/rt.h": "a4e94765354f7a42fc97b265307ca8c29b850ace4c2d6ace1dd0f6c552064f74",
+    "csrc/bindings.cpp": "fce99c67e019541e00bedfd9998110952411a90472d73323ceafbb030f28b905",
+    "csrc/fp8_d128_asm.hip": "8609dc863bdaea0c4093ba042478a54d42361c627d72f5ba70531601dbb38479",
+    "csrc/fp8_d192_asm.hip": "49fc4c8ffc54b89bcfbce7b49b01d99b731dcf3f320a49d555125d9812af2e93",
+    "setup.py": "277bc3e51c83a7bd5e4664d9008ead0c1c1f23e94a0d9c54882f4e1f89b479c5",
+    "zyfa/interface.py": "7829d25d8a0f40e2a1bae0433ecc2b0b6285ae34150c943301f4b14b17cfa3f1",
+    "benchmarks/inspect_hip.py": "d18dfb63e6f05ec555fed598a2e9670f23789a52fd5d9f2ce551244977adcaf1",
+    "benchmarks/compare_isa.py": "7f5e19593322649da1a0f29b3506b067934b24ee6937de486f1e408e3b0820cc"
+  },
+  "validation_sha256": {
+    "default-build.log": "01a0084a5a9492ed4a2142c65d8e0b47498b92284dc9c0929fe3e1043425e6bf",
+    "default-tests.log": "ca876324bbd042036122ae3224ee7c67972b14963bbc512aaa3b6b02da10a814",
+    "native-build.log": "f40bb2059e75fe72089b53b41f87d9e1f3a6bb77745d27e5153becff28ad0881",
+    "native-tests.log": "fcf61f05c82554f94a3f7ddb83c5078588cfd8b833c2e48b3fb4d7e161649dc5",
+    "inspection.log": "3308a3ea0aa27123ec4f10adcbf5b594326c721504139036c0f732bd8283c420",
+    "isa-checks.json": "1e0e7ae360abc799bc028843e541a3de7da0e6f93d81dafedcdce4bc5972202d"
+  },
+  "inspection": {
+    "native_source_sha256": "a95b74aa50962a06b8fef7aea87c64f98d3d5dff0f25b85f0add4a3b6efea29a",
+    "object_sha256": "80e6b90a93959b176d9f10742dd54bbc0168d3c8c9985b046a26d3ce450a6913",
+    "code_object_sha256": "7b04a1fed062b4bc5ca430689f1d6ec8a71c1fbe609b8261fe17be89bc44c330",
+    "object": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/native/fp8_native.o",
+    "assembly_origin": "disassembly of the selected object's embedded code object",
+    "inspection_tool_version": "AMD LLVM version 22.0.0git\n  Optimized build.\n\n\n  Registered Targets:\n    amdgcn - AMD GCN GPUs\n    r600   - AMD GPUs HD2XXX-HD6XXX\n    x86    - 32-bit X86: Pentium-Pro and above\n    x86-64 - 64-bit X86: EM64T and AMD64",
+    "lds_bytes_per_block": {
+      "d128": 163840,
+      "d192": 131072
+    }
+  }
+}
