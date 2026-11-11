@@ -395,20 +395,20 @@ __device__ __forceinline__ float code_bias(float m, float off) {
 }
 
 template <int D>
-__device__ __forceinline__ float add_tail_sum(float l, float row, int sb) {
+__device__ __forceinline__ float add_tail_sum(float l, float row, float scale) {
     if constexpr (D == 192)
-        return __builtin_fmaf(row, __int_as_float(sb << 23), l);
+        return __builtin_fmaf(row, scale, l);
     else {
 #pragma clang fp contract(off)
 #pragma clang fp reassociate(off)
-        return l + row * __int_as_float(sb << 23);
+        return l + row * scale;
     }
 }
 
-__device__ __forceinline__ float add_scaled_sum(float l, float row, int sb) {
+__device__ __forceinline__ float add_scaled_sum(float l, float row, float scale) {
 #pragma clang fp contract(off)
 #pragma clang fp reassociate(off)
-    return l + row * __int_as_float(sb << 23);
+    return l + row * scale;
 }
 
 __device__ __forceinline__ float add_scaled_sum_float(float l, float row, float scale) {
@@ -1409,9 +1409,9 @@ do { \
     if constexpr (D == 128) { \
         const auto rs_hi = row_sum_vector(data.p.b, sel); \
         FP8_SCHEDULE_POINT(rs_hi); \
-        l = add_scaled_sum(l, rs_lo[0], params.sb_lo); \
+        l = add_scaled_sum(l, rs_lo[0], params.sum_scale_lo); \
         FP8_SCHEDULE_POINT(__float_as_int(l)); \
-        l = add_scaled_sum(l, rs_hi[0], params.sb_hi); \
+        l = add_scaled_sum(l, rs_hi[0], params.sum_scale_hi); \
         FP8_SCHEDULE_POINT(__float_as_int(l)); \
     } else { \
         l = __builtin_fmaf(rs_lo[0], __int_as_float(params.sb_lo << 23), l); \
@@ -1591,7 +1591,7 @@ __global__ __launch_bounds__(512, 1) void attend(Args<D> kernel_args) {
     Params params;
     o_tile o{};
     float l = 0.f;
-    bool have_next = false;
+    uint32_t have_next = 0;
     const uint32_t k_step = keys<D> * k_stride, v_step = keys<D> * v_stride;
     uint32_t k_max = 0, v_max = 0, k_future = 0, v_future = 0;
     u8 jobdata{};
@@ -1618,7 +1618,9 @@ __global__ __launch_bounds__(512, 1) void attend(Args<D> kernel_args) {
         kh = (const_global_byte)args.k + ko;
         vh = (const_global_byte)args.v + vo;
         oh = (global_byte)args.o + oo + (size_t)paired_head * args.o_sh2;
-        lh = args.lse ? (global_float)args.lse + lse_offset + paired_head * args.l_sh2 : nullptr;
+        // Host validation bounds the complete LSE span below 4 GiB.
+        const uint32_t lse_byte_offset = (lse_offset + paired_head * args.l_sh2) * 4u;
+        lh = args.lse ? (global_float)((global_byte)args.lse + lse_byte_offset) : nullptr;
         kr = make_srsrc((const void *)(uintptr_t)kh, args.n_keys * k_stride);
         vr = make_srsrc((const void *)(uintptr_t)vh, args.n_keys * v_stride);
 
@@ -1779,8 +1781,8 @@ tail:
             phase_barrier();
             [[clang::nomerge]] __builtin_amdgcn_s_setprio(1);
             wait_dma();
-            l = add_tail_sum<D>(l, row_sum(p.a, sel), params.sb_lo);
-            if constexpr (D == 128) l = add_tail_sum<D>(l, row_sum(p.b, sel), params.sb_hi);
+            l = add_tail_sum<D>(l, row_sum(p.a, sel), D == 128 ? params.sum_scale_lo : __int_as_float(params.sb_lo << 23));
+            if constexpr (D == 128) l = add_tail_sum<D>(l, row_sum(p.b, sel), params.sum_scale_hi);
             pv<D, -1>(sm, (base + k) & 3, p, params, o, [&]() {
                 if (k + 4 < n) load_k<D>(sm, kr, (base + k) & 3, k + 4, k_stride, tid);
                 if (k + 2 < n) load_v<D>(sm, vr, (base + k + 2) & 3, k + 2, v_stride, tid);
@@ -1810,24 +1812,27 @@ tail:
     saved_oh = oh;
     saved_lh = lh;
     next_base = (base + n) & 3;
-    if (pass == 0 && qx_saved != args.num_q - 1 - qx_saved) {
-        pass = 1;
-        have_next = true;
-    } else {
-        job = scalar_add(job, args.grid);
-        pass = 0;
-        have_next = job < args.n_jobs;
-        if (have_next) load_job();
-    }
-    if (have_next) {
-        set_pass();
-        if (group == 0) load_first_tiles_group0(next_base);
-        FP8_LOAD_QUERY();
-    }
+    have_next = 1;
+    if (pass != 0) goto advance_last0;
+    if (qx_saved == args.num_q - 1u - qx_saved) goto advance_last0;
+    pass = 1;
+    goto prepare_last0;
+advance_last0:
+    job = scalar_add(job, args.grid);
+    pass = 0;
+    have_next = 0;
+    if (job >= args.n_jobs) goto finished_last0;
+    load_job();
+    have_next = 1;
+prepare_last0:
+    set_pass();
+    if (group == 0) load_first_tiles_group0(next_base);
+    FP8_LOAD_QUERY();
+finished_last0:
 
             [[clang::nomerge]] __builtin_amdgcn_s_setprio(1);
-            l = add_tail_sum<D>(l, row_sum(p.a, sel), params.sb_lo);
-            if constexpr (D == 128) l = add_tail_sum<D>(l, row_sum(p.b, sel), params.sb_hi);
+            l = add_tail_sum<D>(l, row_sum(p.a, sel), D == 128 ? params.sum_scale_lo : __int_as_float(params.sb_lo << 23));
+            if constexpr (D == 128) l = add_tail_sum<D>(l, row_sum(p.b, sel), params.sum_scale_hi);
             pv<D, -1>(sm, (base + k) & 3, p, params, o, []() {});
             goto pass_done0;
         }
@@ -1839,20 +1844,23 @@ tail:
     saved_oh = oh;
     saved_lh = lh;
     next_base = (base + n) & 3;
-    if (pass == 0 && qx_saved != args.num_q - 1 - qx_saved) {
-        pass = 1;
-        have_next = true;
-    } else {
-        job = scalar_add(job, args.grid);
-        pass = 0;
-        have_next = job < args.n_jobs;
-        if (have_next) load_job();
-    }
-    if (have_next) {
-        set_pass();
-        if (group == 0) load_first_tiles_group0(next_base);
-        FP8_LOAD_QUERY();
-    }
+    have_next = 1;
+    if (pass != 0) goto advance_dead_last0;
+    if (qx_saved == args.num_q - 1u - qx_saved) goto advance_dead_last0;
+    pass = 1;
+    goto prepare_dead_last0;
+advance_dead_last0:
+    job = scalar_add(job, args.grid);
+    pass = 0;
+    have_next = 0;
+    if (job >= args.n_jobs) goto finished_dead_last0;
+    load_job();
+    have_next = 1;
+prepare_dead_last0:
+    set_pass();
+    if (group == 0) load_first_tiles_group0(next_base);
+    FP8_LOAD_QUERY();
+finished_dead_last0:
 
             goto pass_done0;
         }
@@ -1876,8 +1884,8 @@ tail:
             phase_barrier();
             [[clang::nomerge]] __builtin_amdgcn_s_setprio(1);
             wait_dma();
-            l = add_tail_sum<D>(l, row_sum(p.a, sel), params.sb_lo);
-            if constexpr (D == 128) l = add_tail_sum<D>(l, row_sum(p.b, sel), params.sb_hi);
+            l = add_tail_sum<D>(l, row_sum(p.a, sel), D == 128 ? params.sum_scale_lo : __int_as_float(params.sb_lo << 23));
+            if constexpr (D == 128) l = add_tail_sum<D>(l, row_sum(p.b, sel), params.sum_scale_hi);
             pv<D, -1>(sm, (base + k) & 3, p, params, o, [&]() {
                 if (k + 4 < n) load_k<D>(sm, kr, (base + k) & 3, k + 4, k_stride, tid);
                 if (k + 2 < n) load_v<D>(sm, vr, (base + k + 2) & 3, k + 2, v_stride, tid);
@@ -1907,24 +1915,27 @@ tail:
     saved_oh = oh;
     saved_lh = lh;
     next_base = (base + n) & 3;
-    if (pass == 0 && qx_saved != args.num_q - 1 - qx_saved) {
-        pass = 1;
-        have_next = true;
-    } else {
-        job = scalar_add(job, args.grid);
-        pass = 0;
-        have_next = job < args.n_jobs;
-        if (have_next) load_job();
-    }
-    if (have_next) {
-        set_pass();
-        if (group == 0) load_first_tiles_group0(next_base);
-        FP8_LOAD_QUERY();
-    }
+    have_next = 1;
+    if (pass != 0) goto advance_last1;
+    if (qx_saved == args.num_q - 1u - qx_saved) goto advance_last1;
+    pass = 1;
+    goto prepare_last1;
+advance_last1:
+    job = scalar_add(job, args.grid);
+    pass = 0;
+    have_next = 0;
+    if (job >= args.n_jobs) goto finished_last1;
+    load_job();
+    have_next = 1;
+prepare_last1:
+    set_pass();
+    if (group == 0) load_first_tiles_group0(next_base);
+    FP8_LOAD_QUERY();
+finished_last1:
 
             [[clang::nomerge]] __builtin_amdgcn_s_setprio(1);
-            l = add_tail_sum<D>(l, row_sum(p.a, sel), params.sb_lo);
-            if constexpr (D == 128) l = add_tail_sum<D>(l, row_sum(p.b, sel), params.sb_hi);
+            l = add_tail_sum<D>(l, row_sum(p.a, sel), D == 128 ? params.sum_scale_lo : __int_as_float(params.sb_lo << 23));
+            if constexpr (D == 128) l = add_tail_sum<D>(l, row_sum(p.b, sel), params.sum_scale_hi);
             pv<D, -1>(sm, (base + k) & 3, p, params, o, []() {});
             goto pass_done1;
         }
@@ -1936,20 +1947,23 @@ tail:
     saved_oh = oh;
     saved_lh = lh;
     next_base = (base + n) & 3;
-    if (pass == 0 && qx_saved != args.num_q - 1 - qx_saved) {
-        pass = 1;
-        have_next = true;
-    } else {
-        job = scalar_add(job, args.grid);
-        pass = 0;
-        have_next = job < args.n_jobs;
-        if (have_next) load_job();
-    }
-    if (have_next) {
-        set_pass();
-        if (group == 0) load_first_tiles_group0(next_base);
-        FP8_LOAD_QUERY();
-    }
+    have_next = 1;
+    if (pass != 0) goto advance_dead_last1;
+    if (qx_saved == args.num_q - 1u - qx_saved) goto advance_dead_last1;
+    pass = 1;
+    goto prepare_dead_last1;
+advance_dead_last1:
+    job = scalar_add(job, args.grid);
+    pass = 0;
+    have_next = 0;
+    if (job >= args.n_jobs) goto finished_dead_last1;
+    load_job();
+    have_next = 1;
+prepare_dead_last1:
+    set_pass();
+    if (group == 0) load_first_tiles_group0(next_base);
+    FP8_LOAD_QUERY();
+finished_dead_last1:
 
             goto pass_done1;
         }
@@ -1969,6 +1983,7 @@ pass_done1:
     [[clang::nomerge]] pipeline_barrier();
     SCHED_FENCE();
 pass_done:
+    phase_use(have_next);
     if (have_next) goto pass_top;
     FP8_OUTPUT();
     if (group == 0) phase_barrier();

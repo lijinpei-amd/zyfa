@@ -308,6 +308,25 @@ def test_hip_lse_stores_use_scalar_base_and_32bit_offset(disassembled_kernels, d
 
 
 @pytest.mark.parametrize("dim", [128, 192])
+def test_hip_lse_indexing_needs_no_extra_wide_shifts(disassembled_kernels, dim):
+    from benchmarks.compare_isa import parse_disassembly, select_function
+
+    counts = [sum(i.mnemonic == "s_lshl_b64"
+                  for i in select_function(parse_disassembly(text), dim))
+              for text in (disassembled_kernels[1 if dim == 128 else 2], disassembled_kernels[0])]
+    assert counts[0] == counts[1], counts
+
+
+def test_hip_d128_tail_reuses_materialized_sum_scales(disassembled_kernels):
+    from benchmarks.compare_isa import parse_disassembly, select_function
+
+    counts = [sum(i.mnemonic == "v_lshlrev_b32_e32" and i.operands.split(",")[1].strip() == "23"
+                  for i in select_function(parse_disassembly(text), 128))
+              for text in (disassembled_kernels[1], disassembled_kernels[0])]
+    assert counts[0] == counts[1], counts
+
+
+@pytest.mark.parametrize("dim", [128, 192])
 def test_hip_mfma_accumulator_has_no_partial_overlap(disassembled_kernels, dim):
     from benchmarks.compare_isa import parse_disassembly, select_function
 
