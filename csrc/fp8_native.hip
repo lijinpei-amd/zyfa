@@ -1605,7 +1605,7 @@ __global__ __launch_bounds__(512, 1) void attend(Args<D> kernel_args) {
                    (byte_lds)v0, (byte_lds)v1, (byte_lds)v2, (byte_lds)v3, (byte_lds)output_storage,
                    wave * 1024, klane0, klane1, klane2, koffsets[0], koffsets[1], voffsets[0], voffsets[1]};
     const int vlane = (lgb * (keys<D> / 2) + (lc >> 4)) * 128 + (lc & 15) * 8;
-    const byte_lds invariant_vbase = sm.v0 + vlane;
+    const uint32_t invariant_vbase = (uint32_t)(uintptr_t)sm.v0 + (uint32_t)vlane;
     byte_lds tail_vbase = nullptr;
     const i8 sel = selector();
 
@@ -1794,7 +1794,7 @@ tail:
     if ((base + k) & 1) goto tail1;
         tail0: {
             if (scalar_increment(k) >= n) goto last0;
-            tail_vbase = invariant_vbase + sm.value_offset(base + k);
+            tail_vbase = (byte_lds)(uintptr_t)(invariant_vbase + sm.value_offset(base + k));
             if (k < fm) goto normal0;
             if (k == fm) goto pvo0;
             phase_barrier();
@@ -1833,7 +1833,7 @@ tail:
 
         last0: {
             if (fm < k) goto dead_last0;
-            tail_vbase = invariant_vbase + sm.value_offset(base + k);
+            tail_vbase = (byte_lds)(uintptr_t)(invariant_vbase + sm.value_offset(base + k));
             [[clang::nomerge]] __builtin_amdgcn_s_setprio(0);
             Probability<D> p = softmax<D>(s, params, p_scale);
             phase_use(p.a);
@@ -1899,7 +1899,7 @@ finished_dead_last0:
         }
         tail1: {
             if (scalar_increment(k) >= n) goto last1;
-            tail_vbase = invariant_vbase + sm.value_offset(base + k);
+            tail_vbase = (byte_lds)(uintptr_t)(invariant_vbase + sm.value_offset(base + k));
             if (k < fm) goto normal1;
             if (k == fm) goto pvo1;
             phase_barrier();
@@ -1938,7 +1938,7 @@ finished_dead_last0:
 
         last1: {
             if (fm < k) goto dead_last1;
-            tail_vbase = invariant_vbase + sm.value_offset(base + k);
+            tail_vbase = (byte_lds)(uintptr_t)(invariant_vbase + sm.value_offset(base + k));
             [[clang::nomerge]] __builtin_amdgcn_s_setprio(0);
             Probability<D> p = softmax<D>(s, params, p_scale);
             phase_use(p.a);

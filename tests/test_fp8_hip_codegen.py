@@ -76,6 +76,48 @@ def test_hip_raw_kernarg_alignment_matches_abi(native_codegen):
 
 
 @pytest.fixture(scope="module")
+def native_frontend_ir(tmp_path_factory):
+    if not LLVM:
+        pytest.skip("requires ZYFA_LLVM_ROOT for frontend IR inspection")
+    output = tmp_path_factory.mktemp("native_frontend") / "native.ll"
+    command = [str(LLVM / "build/bin/clang++"), "-O3", "-std=c++20", "-ffast-math",
+               "-fhonor-infinities", "-DKITTENS_CDNA4", "--offload-arch=gfx950",
+               "--rocm-path=" + str(ROCM), "--cuda-device-only", "-S", "-emit-llvm",
+               "-Xclang", "-disable-llvm-passes", "-fno-discard-value-names",
+               str(ROOT / "csrc/fp8_native.hip"), "-o", str(output)]
+    result = subprocess.run(command, capture_output=True, text=True)
+    assert result.returncode == 0, result.stderr
+    return output.read_text()
+
+
+@pytest.mark.parametrize("dim", [128, 192])
+def test_hip_runtime_v_selection_uses_numeric_lds_addresses(native_frontend_ir, dim):
+    if not LLVM:
+        pytest.skip("requires ZYFA_LLVM_ROOT for LDS address IR inspection")
+    ir = native_frontend_ir
+    body = re.search(rf"^define[^\n]+@_ZN15fmha_fp8_native6attendILi{dim}E[^\n]+\{{\n(.*?)^\}}",
+                     ir, re.MULTILINE | re.DOTALL)
+    assert body
+    assert re.search(r"%invariant_vbase = alloca i32,", body[1])
+    definitions = dict(re.findall(r"^\s*(%[\w.$]+) = (.*)$", body[1], re.MULTILINE))
+    invariant = re.findall(r"store i32 (%[\w.$]+), ptr %invariant_vbase(?:\.ascast)?,", body[1])
+    assert len(invariant) == 1, invariant
+    assert re.fullmatch(r"add i32 %[\w.$]+, %[\w.$]+", definitions[invariant[0]])
+    stores = re.findall(r"store ptr addrspace\(3\) (%[\w.$]+), ptr %tail_vbase(?:\.ascast)?,", body[1])
+    assert len(stores) == 4, stores
+    for pointer in stores:
+        conversion = re.fullmatch(r"inttoptr i(?:32|64) (%[\w.$]+) to ptr addrspace\(3\)", definitions[pointer])
+        assert conversion, definitions[pointer]
+        address = conversion[1]
+        while cast := re.fullmatch(r"(?:zext|trunc) i(?:32|64) (%[\w.$]+) to i(?:32|64)", definitions[address]):
+            address = cast[1]
+        addition = re.fullmatch(r"add i32 (%[\w.$]+), (%[\w.$]+)", definitions[address])
+        assert addition, definitions[address]
+        assert any(re.match(r"load i32, ptr %invariant_vbase(?:\.ascast)?,", definitions[value])
+                   for value in addition.groups()), definitions[address]
+
+
+@pytest.fixture(scope="module")
 def disassembled_kernels(native_assembly, tmp_path_factory):
     if not LLVM:
         pytest.skip("requires ZYFA_LLVM_ROOT for exact ISA matching")
