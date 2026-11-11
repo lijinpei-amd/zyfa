@@ -449,6 +449,13 @@ __device__ __forceinline__ int pack_code(float a, float b, float c, float d) {
     return (int)__builtin_amdgcn_cvt_pk_u8_f32(d, 3, x);
 }
 
+// An unspecified value: poison in IR, no instruction. The low-half FP8 pack keeps its operand's
+// high half and the high-half pack then overwrites it, so that operand is never observed. A live
+// register there (such as the scale) would be copied into each P register by two-address lowering.
+__device__ __forceinline__ int unspecified_int() {
+    return __builtin_shufflevector(i2{}, i2{}, -1, -1)[0];
+}
+
 __device__ __forceinline__ int pack_exp(float a, float b, float c, float d) {
     const int lo = __builtin_amdgcn_cvt_pk_fp8_f32(exp2_hw(a), exp2_hw(b), 0, false);
     return __builtin_amdgcn_cvt_pk_fp8_f32(exp2_hw(c), exp2_hw(d), lo, true);
@@ -911,7 +918,7 @@ do { \
     SCHED_FENCE(); \
 } while (false)
 #define FP8_CODE_FP8(P, J, V, I, HIGH) do { \
-    (P)[J] = __builtin_amdgcn_cvt_pk_fp8_f32((V)[I], (V)[(I)+1], (HIGH) ? (P)[J] : params.sb_lo, HIGH); \
+    (P)[J] = __builtin_amdgcn_cvt_pk_fp8_f32((V)[I], (V)[(I)+1], (HIGH) ? (P)[J] : unspecified_int(), HIGH); \
     phase_use((P)[J]); \
     SCHED_FENCE(); \
 } while (false)
