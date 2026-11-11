@@ -183,6 +183,19 @@ def test_hip_steady_disassembled_mnemonics_match(disassembled_kernels, dim, inde
 
 
 @pytest.mark.parametrize("dim,index,mfmas", [(128, 1, 72), (192, 2, 44)])
+def test_hip_steady_register_copies_do_not_exceed_assembly(disassembled_kernels, dim, index, mfmas):
+    # The mnemonic match excludes register copies, but they still issue every iteration. Tied
+    # pack operands and paired fake uses once added 4 (d128) and 24 (d192) per iteration.
+    from benchmarks.compare_isa import excluded_reason, parse_disassembly, select_function, steady_loop
+
+    copies = [sum(excluded_reason(i) == "register_copy"
+                  for i in steady_loop(select_function(parse_disassembly(text), dim), mfmas))
+              for text in (disassembled_kernels[index], disassembled_kernels[0])]
+    reference, llvm = copies
+    assert llvm <= reference, copies
+
+
+@pytest.mark.parametrize("dim,index,mfmas", [(128, 1, 72), (192, 2, 44)])
 def test_hip_steady_dma_m0_uses_assembly_immediates(disassembled_kernels, dim, index, mfmas):
     from benchmarks.compare_isa import parse_disassembly, select_function, steady_loop
 
