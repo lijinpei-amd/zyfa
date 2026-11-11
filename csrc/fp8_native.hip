@@ -69,6 +69,16 @@ template <int D> struct Lds {
                                     + (low & high) * (p3 - p2 - p1 + p0));
     }
 
+    __device__ __forceinline__ uint32_t value_offset(int slot) const {
+        const uint32_t bits = (uint32_t)slot & 3;
+        const uint32_t low = bits & 1, high = bits >> 1;
+        const uint32_t p0 = (uint32_t)(uintptr_t)v0, p1 = (uint32_t)(uintptr_t)v1;
+        const uint32_t p2 = (uint32_t)(uintptr_t)v2, p3 = (uint32_t)(uintptr_t)v3;
+        const uint32_t step = p1 - p0;
+        return bits * step + high * (p2 - p0 - 2 * step)
+                           + (low & high) * (p3 - p2 - p1 + p0);
+    }
+
     __device__ __forceinline__ byte_lds value(int slot) const {
         if (__builtin_constant_p(slot)) {
             switch (slot & 3) {
@@ -78,14 +88,7 @@ template <int D> struct Lds {
             default: return v3;
             }
         }
-        const uint32_t bits = (uint32_t)slot & 3;
-        const uint32_t low = bits & 1, high = bits >> 1;
-        const uint32_t p0 = (uint32_t)(uintptr_t)v0, p1 = (uint32_t)(uintptr_t)v1;
-        const uint32_t p2 = (uint32_t)(uintptr_t)v2, p3 = (uint32_t)(uintptr_t)v3;
-        const uint32_t step = p1 - p0;
-        const uint32_t offset = bits * step + high * (p2 - p0 - 2 * step)
-                                           + (low & high) * (p3 - p2 - p1 + p0);
-        return (byte_lds)(uintptr_t)scalar_add(p0, offset);
+        return (byte_lds)(uintptr_t)scalar_add((uint32_t)(uintptr_t)v0, value_offset(slot));
     }
 };
 
@@ -489,13 +492,9 @@ __device__ __forceinline__ Probability<D> softmax(const Scores<D> &s, const Para
     return p;
 }
 
-template <int D, int Slot, typename Prefetch>
-__device__ __forceinline__ void pv(Lds<D> sm, int runtime_slot, const Probability<D> &p,
+template <int D, typename Prefetch>
+__device__ __forceinline__ void pv(byte_lds vbase, const Probability<D> &p,
                                     const Params &params, o_tile &o, Prefetch prefetch) {
-    const int slot = Slot < 0 ? runtime_slot : Slot;
-    const int c0 = laneid() & 31, gb = laneid() >> 5;
-    const int laneoff = (gb * (keys<D> / 2) + (c0 >> 4)) * 128 + (c0 & 15) * 8;
-    const auto vbase = sm.value(slot) + laneoff;
     i8 a = read_v_fragment<0, 0>(vbase);
     i8 b = read_v_fragment<0, 1>(vbase);
     i8 c = read_v_fragment<0, 2>(vbase);
@@ -1474,7 +1473,7 @@ do { \
     } \
     Params np; \
     FP8_COMPUTE_STATS(np, false); \
-    pv<D, -1>(sm, cur, data.p, params, o, [&]() { if constexpr (D == 192) prefetch(); }); \
+    pv<D>(tail_vbase, data.p, params, o, [&]() { if constexpr (D == 192) prefetch(); }); \
     prepare_scores<D>(s, np, p_scale); \
     if constexpr (D == 192) { FP8_SCHEDULE_POINT(s.a, s.b); } \
     if (np.rescale) { \
@@ -1605,6 +1604,9 @@ __global__ __launch_bounds__(512, 1) void attend(Args<D> kernel_args) {
     const Lds<D> sm{(byte_lds)k0, (byte_lds)k1, (byte_lds)k2, (byte_lds)k3,
                    (byte_lds)v0, (byte_lds)v1, (byte_lds)v2, (byte_lds)v3, (byte_lds)output_storage,
                    wave * 1024, klane0, klane1, klane2, koffsets[0], koffsets[1], voffsets[0], voffsets[1]};
+    const int vlane = (lgb * (keys<D> / 2) + (lc >> 4)) * 128 + (lc & 15) * 8;
+    const byte_lds invariant_vbase = sm.v0 + vlane;
+    byte_lds tail_vbase = nullptr;
     const i8 sel = selector();
 
     uint32_t job = blockIdx.x, pass = 0, base = 0, next_base = 0;
@@ -1792,6 +1794,7 @@ tail:
     if ((base + k) & 1) goto tail1;
         tail0: {
             if (scalar_increment(k) >= n) goto last0;
+            tail_vbase = invariant_vbase + sm.value_offset(base + k);
             if (k < fm) goto normal0;
             if (k == fm) goto pvo0;
             phase_barrier();
@@ -1812,7 +1815,7 @@ tail:
             wait_dma();
             l = add_tail_sum<D>(l, row_sum(p.a, sel), D == 128 ? params.sum_scale_lo : __int_as_float(params.sb_lo << 23));
             if constexpr (D == 128) l = add_tail_sum<D>(l, row_sum(p.b, sel), params.sum_scale_hi);
-            pv<D, -1>(sm, (base + k) & 3, p, params, o, [&]() {
+            pv<D>(tail_vbase, p, params, o, [&]() {
                 if (k + 4 < n) load_k<D>(sm, kr, (base + k) & 3, k + 4, k_stride, tid);
                 if (k + 2 < n) load_v<D>(sm, vr, (base + k + 2) & 3, k + 2, v_stride, tid);
             });
@@ -1830,6 +1833,7 @@ tail:
 
         last0: {
             if (fm < k) goto dead_last0;
+            tail_vbase = invariant_vbase + sm.value_offset(base + k);
             [[clang::nomerge]] __builtin_amdgcn_s_setprio(0);
             Probability<D> p = softmax<D>(s, params, p_scale);
             phase_use(p.a);
@@ -1862,7 +1866,7 @@ finished_last0:
             [[clang::nomerge]] __builtin_amdgcn_s_setprio(1);
             l = add_tail_sum<D>(l, row_sum(p.a, sel), D == 128 ? params.sum_scale_lo : __int_as_float(params.sb_lo << 23));
             if constexpr (D == 128) l = add_tail_sum<D>(l, row_sum(p.b, sel), params.sum_scale_hi);
-            pv<D, -1>(sm, (base + k) & 3, p, params, o, []() {});
+            pv<D>(tail_vbase, p, params, o, []() {});
             goto pass_done0;
         }
         dead_last0: {
@@ -1895,6 +1899,7 @@ finished_dead_last0:
         }
         tail1: {
             if (scalar_increment(k) >= n) goto last1;
+            tail_vbase = invariant_vbase + sm.value_offset(base + k);
             if (k < fm) goto normal1;
             if (k == fm) goto pvo1;
             phase_barrier();
@@ -1915,7 +1920,7 @@ finished_dead_last0:
             wait_dma();
             l = add_tail_sum<D>(l, row_sum(p.a, sel), D == 128 ? params.sum_scale_lo : __int_as_float(params.sb_lo << 23));
             if constexpr (D == 128) l = add_tail_sum<D>(l, row_sum(p.b, sel), params.sum_scale_hi);
-            pv<D, -1>(sm, (base + k) & 3, p, params, o, [&]() {
+            pv<D>(tail_vbase, p, params, o, [&]() {
                 if (k + 4 < n) load_k<D>(sm, kr, (base + k) & 3, k + 4, k_stride, tid);
                 if (k + 2 < n) load_v<D>(sm, vr, (base + k + 2) & 3, k + 2, v_stride, tid);
             });
@@ -1933,6 +1938,7 @@ finished_dead_last0:
 
         last1: {
             if (fm < k) goto dead_last1;
+            tail_vbase = invariant_vbase + sm.value_offset(base + k);
             [[clang::nomerge]] __builtin_amdgcn_s_setprio(0);
             Probability<D> p = softmax<D>(s, params, p_scale);
             phase_use(p.a);
@@ -1965,7 +1971,7 @@ finished_last1:
             [[clang::nomerge]] __builtin_amdgcn_s_setprio(1);
             l = add_tail_sum<D>(l, row_sum(p.a, sel), D == 128 ? params.sum_scale_lo : __int_as_float(params.sb_lo << 23));
             if constexpr (D == 128) l = add_tail_sum<D>(l, row_sum(p.b, sel), params.sum_scale_hi);
-            pv<D, -1>(sm, (base + k) & 3, p, params, o, []() {});
+            pv<D>(tail_vbase, p, params, o, []() {});
             goto pass_done1;
         }
         dead_last1: {

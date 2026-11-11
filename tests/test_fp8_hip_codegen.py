@@ -171,42 +171,95 @@ def test_hip_group0_dma_rounds_reuse_lane_offsets(disassembled_kernels, dim):
 
 
 @pytest.mark.parametrize("dim", [128, 192])
-def test_hip_runtime_pv_reuses_one_v_address(disassembled_kernels, dim):
-    from benchmarks.compare_isa import parse_disassembly, select_function, steady_loop
+def test_hip_whole_kernel_has_no_three_input_address_adds(disassembled_kernels, dim):
+    from benchmarks.compare_isa import parse_disassembly, select_function
 
     code = select_function(parse_disassembly(disassembled_kernels[0]), dim)
-    loop_end = max(i.address for i in steady_loop(code, 72 if dim == 128 else 44))
-    tail = [i for i in code if i.address > loop_end]
-    reads = [i for i in tail if i.mnemonic == "ds_read_b64_tr_b8"]
-    definitions = {}
-    origins = {}
-    for instruction in tail:
-        operands = instruction.operands.split(",")
-        if instruction.mnemonic == "ds_read_b64_tr_b8":
-            address = operands[1].strip().split()[0]
-            assert address in definitions, instruction
-            origins[instruction.address] = definitions[address]
-        destination = operands[0].strip()
-        origin = instruction.address
-        if instruction.mnemonic in ("v_mov_b32_e32", "v_mov_b32_e64"):
-            origin = definitions.get(operands[1].strip(), origin)
+    assert not [i for i in code if i.mnemonic == "v_add3_u32"]
+
+
+def runtime_pv_address_sites(code, dim):
+    from benchmarks.compare_isa import steady_loop
+
+    positions = {i.address: position for position, i in enumerate(code)}
+    predecessors = [set() for _ in code]
+    writes = []
+    for position, instruction in enumerate(code):
+        if instruction.branch_target in positions:
+            predecessors[positions[instruction.branch_target]].add(position)
+        if instruction.mnemonic not in ("s_branch", "s_endpgm") and position + 1 < len(code):
+            predecessors[position + 1].add(position)
+        destination = instruction.operands.split(",")[0].strip()
+        registers = set()
         if re.fullmatch(r"v\d+", destination):
-            definitions[destination] = origin
+            registers.add(destination)
         elif m := re.fullmatch(r"v\[(\d+):(\d+)\]", destination):
-            for register in range(int(m[1]), int(m[2]) + 1):
-                definitions[f"v{register}"] = origin
+            registers.update(f"v{r}" for r in range(int(m[1]), int(m[2]) + 1))
+        if instruction.mnemonic.startswith(("global_store", "buffer_store", "ds_write")):
+            registers.clear()
+        writes.append(registers)
+
+    def origins(position, register):
+        pending = [(p, register) for p in predecessors[position]]
+        visited, result = set(), set()
+        while pending:
+            p, r = pending.pop()
+            if (p, r) in visited:
+                continue
+            visited.add((p, r))
+            if r in writes[p]:
+                instruction = code[p]
+                if instruction.mnemonic in ("v_mov_b32_e32", "v_mov_b32_e64"):
+                    source = instruction.operands.split(",")[1].strip()
+                    if re.fullmatch(r"v\d+", source):
+                        pending.extend((pred, source) for pred in predecessors[p])
+                        continue
+                result.add(instruction.address)
+            else:
+                pending.extend((pred, r) for pred in predecessors[p])
+        return result
+
+    loop_end = max(i.address for i in steady_loop(code, 72 if dim == 128 else 44))
+    reads = [i for i in code if i.address > loop_end and i.mnemonic == "ds_read_b64_tr_b8"]
     per_site = 32 if dim == 128 else 16
+    assert len(reads) == 6 * per_site
+    sites = []
+    for site in range(6):
+        consumers = reads[site * per_site:(site + 1) * per_site]
+        producers = set()
+        for instruction in consumers:
+            register = instruction.operands.split(",")[1].strip().split()[0]
+            producers.update(origins(positions[instruction.address], register))
+        sites.append((consumers, producers))
+    return sites
+
+
+@pytest.mark.parametrize("dim", [128, 192])
+def test_hip_runtime_pv_reuses_one_v_address(disassembled_kernels, dim):
+    from benchmarks.compare_isa import parse_disassembly, select_function
+
+    code = select_function(parse_disassembly(disassembled_kernels[0]), dim)
     expected_offsets = [4096 * half + 256 * fragment + 1024 * word
                         for half in range(2 if dim == 128 else 1)
                         for fragment in range(4) for word in range(4)]
-    assert len(reads) == 6 * per_site
-    for site in range(6):
-        fragment_reads = reads[site * per_site:(site + 1) * per_site]
+    updates = set()
+    for site, (fragment_reads, constructions) in enumerate(runtime_pv_address_sites(code, dim)):
         offsets = [int(m[1]) if (m := re.search(r"offset:(\d+)", i.operands)) else 0
                    for i in fragment_reads]
         assert offsets == expected_offsets, (site, offsets)
-        constructions = {origins[i.address] for i in fragment_reads}
         assert len(constructions) == 1, (site, sorted(constructions))
+        updates.update(constructions)
+    producers = {i.address: i for i in code}
+    assert all(producers[address].mnemonic in ("v_add_u32_e32", "v_add_u32_e64", "v_lshl_add_u32")
+               for address in updates), [producers[address] for address in sorted(updates)]
+    assert len(updates) == 4, [producers[address] for address in sorted(updates)]
+    invariant_registers = set()
+    for address in updates:
+        sources = producers[address].operands.split(",")[1:]
+        vector_sources = re.findall(r"\bv\d+\b", ",".join(sources))
+        assert len(vector_sources) == 1, producers[address]
+        invariant_registers.update(vector_sources)
+    assert len(invariant_registers) == 1, invariant_registers
 
 
 @pytest.mark.parametrize("dim", [128, 192])
