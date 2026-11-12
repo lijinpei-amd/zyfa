@@ -411,16 +411,20 @@ __device__ __forceinline__ float lane_max(fx16 s) {
     return m;
 }
 
-template <int D, int Block>
+// Weighted gives the elementwise path a 0.85 branch weight (see below). By default only d128 has it:
+// the d192 pass-start masked QK keeps its -inf fill in line, which timed 0.8% faster at length 256;
+// the d192 masked MM passes true.
+template <int D, int Block, bool Weighted = D == 128>
 __device__ __forceinline__ void mask(fx16 &s, int q_start, int tile, float ninf) {
     const int delta = scalar_mask_sub<Block * 32>(scalar_sub((uint32_t)q_start, (uint32_t)tile * keys<D>));
     if (delta >= 32)
         return;
     // The elementwise path comes first, so it is the fall-through of the delta < 0 branch, as in
-    // the assembly. For d128 the 0.85 weight lets block placement fall from it into the merge and
-    // move the -inf fill out of line; at the default 62.5/37.5 the fill competes for the merge and
-    // placement puts the pvo stage between the elementwise path and the fill.
-    if (D == 128 ? __builtin_expect_with_probability(delta >= 0, 1, 0.85) : delta >= 0) {
+    // the assembly. The 0.85 weight lets block placement fall from it into the merge and move the
+    // -inf fill out of line; at the default 62.5/37.5 the fill competes for the merge and placement
+    // puts other tail stages after the elementwise path (for d128, the pvo stage; for the d192
+    // masked MM, between its QK and PV MFMAs).
+    if (Weighted ? __builtin_expect_with_probability(delta >= 0, 1, 0.85) : delta >= 0) {
         const int threshold = delta + (laneid() & 31) - (laneid() >> 5) * 4;
 #pragma unroll
         for (int j = 0; j < 4; ++j)
@@ -1612,10 +1616,7 @@ do { \
 // As the assembly's masked MM, this waits at its start for the previous phase's tile loads and leaves
 // its own K(k+4)/V(k+2) loads in flight across the closing barrier; every following tail phase
 // (masked MM, PV-only, load-only, last tile) waits before it reads or issues.
-// d192 issues its four PV MFMAs right after the QK MFMAs: they need only the previous tile's
-// probabilities, and the mask and statistics VALU then follows them instead of separating the two
-// MFMA groups (with LLVM's MFMA-result wait states before the first mask). d128 uses the interleaved
-// FP8_MASKED_MM_D128 above.
+// Both dimensions interleave the mask and statistics VALU with the MFMAs, as the assembly does.
 #define FP8_MASKED_MM() do { \
     if constexpr (D == 128) { \
         FP8_MASKED_MM_D128(); \
@@ -1623,57 +1624,85 @@ do { \
         FP8_MASKED_MM_D192(); \
     } \
 } while (false)
+
+// d192 masked MM, interleaved as csrc/asm/d192.py::seg_mm builds its "mmm" variant: the steady MM's
+// MFMA order, refills and LDS waits with runtime slots, K(k+4) issued after the second QK MFMA and
+// V(k+2) after the third, block 0's mask and row max after the last QK MFMA, block 1's and the
+// statistics under the first two PV MFMAs, and the score preparation after the last PV MFMA.
 #define FP8_MASKED_MM_D192() do { \
     const uint32_t cur = (base + sk) & 3u; \
     const uint32_t next = (cur + 1u) & 3u; \
+    const auto &p = data.p; \
     [[clang::nomerge]] __builtin_amdgcn_s_setprio(1); \
     wait_dma(); \
-    const auto prefetch = [&]() { \
-        if (sk + 4u < n) load_k<D>(sm, kr, cur, sk + 4u, k_stride, tid); \
-        if (sk + 2u < n) load_v<D>(sm, vr, (cur + 2u) & 3u, sk + 2u, v_stride, tid); \
-    }; \
-    const auto rs_lo = row_sum_vector(data.p.a, sel); \
-    FP8_SCHEDULE_POINT(rs_lo); \
-    if constexpr (D == 128) { \
-        const auto rs_hi = row_sum_vector(data.p.b, sel); \
-        FP8_SCHEDULE_POINT(rs_hi); \
-        l = add_scaled_sum(l, rs_lo[0], params.sum_scale_lo); \
-        FP8_SCHEDULE_POINT(__float_as_int(l)); \
-        l = add_scaled_sum(l, rs_hi[0], params.sum_scale_hi); \
-        FP8_SCHEDULE_POINT(__float_as_int(l)); \
-    } else { \
-        l = __builtin_fmaf(rs_lo[0], __int_as_float(params.sb_lo << 23), l); \
-        FP8_SCHEDULE_POINT(__float_as_int(l)); \
-    } \
-    s = qk<D, -1>(sm, next, q, data.head, [&]() { if constexpr (D == 128) prefetch(); }); \
+    const f4 rs_lo_vector = row_sum_vector(p.a, sel); \
+    FP8_SCHEDULE_POINT(rs_lo_vector); \
+    Params np{}; \
+    i8 r0 = data.head.a, r1 = data.head.b, r2 = data.head.c, r3 = data.head.d, r4, r5; \
+    r4 = read_k<D, 0, 2, -1>(sm, next); \
+    FP8_SCHEDULE_POINT(r4); \
+    FP8_LDS_WAIT(6); \
+    s.a = mma(r0, q.a, fx16{}); \
+    r5 = read_k<D, 1, 2, -1>(sm, next); \
+    FP8_SCHEDULE_POINT(s.a, r5); \
+    s.b = mma(r1, q.a, fx16{}); \
+    r0 = read_v_fragment<0, 0, true>(tail_vbase); \
+    FP8_SCHEDULE_POINT(s.b, r0); \
+    if (sk + 4u < n) load_k<D>(sm, kr, cur, sk + 4u, k_stride, tid); \
+    SCHED_FENCE(); \
+    l = __builtin_fmaf(rs_lo_vector[0], __int_as_float(params.sb_lo << 23), l); \
+    FP8_SCHEDULE_POINT(__float_as_int(l)); \
+    FP8_ANCHOR1(rs_lo_vector); \
+    FP8_LDS_WAIT(8); \
+    s.a = mma(r2, q.b, s.a); \
+    r1 = read_v_fragment<0, 1, true>(tail_vbase); \
+    FP8_SCHEDULE_POINT(s.a, r1); \
+    if (sk + 2u < n) load_v<D>(sm, vr, (cur + 2u) & 3u, sk + 2u, v_stride, tid); \
+    SCHED_FENCE(); \
+    s.b = mma(r3, q.b, s.b); \
+    FP8_SCHEDULE_POINT(s.b); \
+    FP8_LDS_WAIT(8); \
+    s.a = mma(r4, q.c, s.a); \
+    r2 = read_v_fragment<0, 2, true>(tail_vbase); \
+    FP8_SCHEDULE_POINT(s.a, r2); \
+    s.b = mma(r5, q.c, s.b); \
+    FP8_SCHEDULE_POINT(s.b); \
+    mask<D, 0, true>(s.a, q_start, sk + 1u, kc.ninf); \
     [[clang::nomerge]] phase_use(s.a); \
-    [[clang::nomerge]] phase_use(s.b); \
-    if constexpr (D == 128) { \
-        [[clang::nomerge]] phase_use(s.c); \
-        [[clang::nomerge]] phase_use(s.d); \
-    } \
     SCHED_FENCE(); \
-    if constexpr (D == 192) pv<D>(tail_vbase, data.p, params, o, kc.scale_one, prefetch); \
-    mask<D, 0>(s.a, q_start, sk + 1u, kc.ninf); \
-    [[clang::nomerge]] phase_use(s.a); \
-    SCHED_FENCE(); \
-    mask<D, 1>(s.b, q_start, sk + 1u, kc.ninf); \
+    FP8_MAX16(ma, s.a); \
+    FP8_LDS_WAIT(4); \
+    o.a = mma_scaled(r0, p.a, o.a, kc.scale_one, params.sb_lo); \
+    r3 = read_v_fragment<0, 3, true>(tail_vbase); \
+    FP8_SCHEDULE_POINT(o.a, r3); \
+    mask<D, 1, true>(s.b, q_start, sk + 1u, kc.ninf); \
     [[clang::nomerge]] phase_use(s.b); \
     SCHED_FENCE(); \
-    if constexpr (D == 128) { \
-        mask<D, 2>(s.c, q_start, sk + 1u, kc.ninf); \
-        [[clang::nomerge]] phase_use(s.c); \
-        SCHED_FENCE(); \
-        mask<D, 3>(s.d, q_start, sk + 1u, kc.ninf); \
-        [[clang::nomerge]] phase_use(s.d); \
-        SCHED_FENCE(); \
-    } \
-    Params np; \
-    FP8_COMPUTE_STATS(np, false); \
-    if constexpr (D == 128) pv<D>(tail_vbase, data.p, params, o, kc.scale_one, []() {}); \
+    FP8_MAX16(mb, s.b); \
+    const float lo = xor32_max(fmaxf(ma, mb)); \
+    const float m = fmaxf(params.m, lo * scale); \
+    np.rescale = __builtin_amdgcn_ballot_w64(m - params.m > kc.vote) != 0; \
+    const uint64_t rescale_mask = np.rescale ? -1ULL : 0ULL; \
+    FP8_ANCHOR1(rescale_mask); \
+    FP8_SCHEDULE_POINT(__float_as_int(lo), __float_as_int(m), np.rescale); \
+    np.m = select_wave_mask(rescale_mask, params.m, m); \
+    const float off_lo = block_offset(lo, scale, np.m, kc.neg_127); \
+    FP8_SCHEDULE_POINT(__float_as_int(np.m), __float_as_int(off_lo)); \
+    o.b = mma_scaled(r1, p.a, o.b, kc.scale_one, params.sb_lo); \
+    FP8_SCHEDULE_POINT(o.b); \
+    np.sb_lo = 127 + (int)off_lo; \
+    np.sb_hi = np.sb_lo; \
+    np.bias_lo = code_bias(np.m, off_lo); \
+    np.bias_hi = np.bias_lo; \
+    FP8_SCHEDULE_POINT(np.sb_lo, __float_as_int(np.bias_lo)); \
+    FP8_LDS_WAIT(0); \
+    o.c = mma_scaled(r2, p.a, o.c, kc.scale_one, params.sb_lo); \
+    FP8_SCHEDULE_POINT(o.c); \
+    o.d = mma_scaled(r3, p.a, o.d, kc.scale_one, params.sb_lo); \
+    FP8_SCHEDULE_POINT(o.d); \
     prepare_scores<D>(s, np, p_scale); \
-    if constexpr (D == 192) { FP8_SCHEDULE_POINT(s.a, s.b); } \
-    if (np.rescale) { \
+    FP8_SCHEDULE_POINT(s.a, s.b); \
+    if (__builtin_expect(__builtin_amdgcn_readfirstlane(np.rescale), 1)) { \
         np.corr = exp2_hw(params.m - np.m); \
         o.a *= np.corr; \
         o.b *= np.corr; \
