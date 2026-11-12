@@ -1,0 +1,5782 @@
+{
+  "counts_match": true,
+  "sequence_match": false,
+  "reference_instruction_count": 4974,
+  "llvm_instruction_count": 4974,
+  "reference_counts": {
+    "buffer_load_dwordx4": 106,
+    "ds_read_b128": 140,
+    "ds_read_b64_tr_b8": 320,
+    "ds_write_b128": 16,
+    "global_load_dwordx4": 20,
+    "global_store_dword": 2,
+    "global_store_dwordx4": 16,
+    "s_add_u32": 237,
+    "s_addc_u32": 35,
+    "s_addk_i32": 11,
+    "s_and_b32": 20,
+    "s_and_b64": 18,
+    "s_barrier": 30,
+    "s_bfe_u32": 4,
+    "s_bitcmp1_b32": 2,
+    "s_branch": 37,
+    "s_cbranch_scc0": 17,
+    "s_cbranch_scc1": 77,
+    "s_cbranch_vccz": 2,
+    "s_cmp_eq_u32": 17,
+    "s_cmp_eq_u64": 8,
+    "s_cmp_ge_i32": 12,
+    "s_cmp_ge_u32": 29,
+    "s_cmp_lg_u32": 6,
+    "s_cmp_lg_u64": 6,
+    "s_cmp_lt_i32": 14,
+    "s_cmp_lt_u32": 8,
+    "s_cselect_b32": 22,
+    "s_cselect_b64": 16,
+    "s_endpgm": 1,
+    "s_load_dword": 3,
+    "s_load_dwordx16": 2,
+    "s_load_dwordx2": 1,
+    "s_load_dwordx4": 1,
+    "s_load_dwordx8": 5,
+    "s_lshl_b32": 67,
+    "s_lshr_b32": 9,
+    "s_min_u32": 13,
+    "s_mov_b32": 40,
+    "s_movk_i32": 1,
+    "s_mul_i32": 57,
+    "s_nop": 286,
+    "s_not_b32": 9,
+    "s_or_b32": 12,
+    "s_or_b64": 4,
+    "s_setprio": 22,
+    "s_sub_i32": 12,
+    "s_sub_u32": 12,
+    "s_waitcnt": 117,
+    "s_xor_b32": 7,
+    "v_add_f32_e32": 26,
+    "v_add_u32_e32": 59,
+    "v_and_b32_e32": 22,
+    "v_and_or_b32": 1,
+    "v_bfe_u32": 5,
+    "v_cmp_eq_u32_e32": 1,
+    "v_cmp_gt_i32_e32": 192,
+    "v_cmp_lt_f32_e32": 6,
+    "v_cndmask_b32_e32": 1,
+    "v_cndmask_b32_e64": 198,
+    "v_cvt_i32_f32_e32": 16,
+    "v_cvt_pk_bf16_f32": 64,
+    "v_cvt_pk_u8_f32": 640,
+    "v_exp_f32_e32": 6,
+    "v_floor_f32_e32": 16,
+    "v_fma_f32": 680,
+    "v_log_f32_e32": 2,
+    "v_lshl_add_u32": 2,
+    "v_lshl_or_b32": 2,
+    "v_lshlrev_b32_e32": 36,
+    "v_lshrrev_b32_e32": 9,
+    "v_mad_u32_u24": 4,
+    "v_max3_f32": 224,
+    "v_max_f32_e32": 78,
+    "v_med3_f32": 16,
+    "v_mfma_f32_16x16x128_f8f6f4": 20,
+    "v_mfma_f32_32x32x64_f8f6f4": 64,
+    "v_mfma_scale_f32_32x32x64_f8f6f4": 80,
+    "v_mov_b32_e32": 73,
+    "v_mul_f32_e32": 170,
+    "v_mul_lo_u32": 7,
+    "v_or3_b32": 5,
+    "v_or_b32_e32": 24,
+    "v_permlane32_swap_b32_e32": 48,
+    "v_pk_mul_f32": 192,
+    "v_rcp_f32_e32": 2,
+    "v_readfirstlane_b32": 1,
+    "v_sub_f32_e32": 12,
+    "v_sub_u32_e32": 12,
+    "v_xor_b32_e32": 29
+  },
+  "llvm_counts": {
+    "buffer_load_dwordx4": 106,
+    "ds_read_b128": 140,
+    "ds_read_b64_tr_b8": 320,
+    "ds_write_b128": 16,
+    "global_load_dwordx4": 20,
+    "global_store_dword": 2,
+    "global_store_dwordx4": 16,
+    "s_add_u32": 237,
+    "s_addc_u32": 35,
+    "s_addk_i32": 11,
+    "s_and_b32": 20,
+    "s_and_b64": 18,
+    "s_barrier": 30,
+    "s_bfe_u32": 4,
+    "s_bitcmp1_b32": 2,
+    "s_branch": 37,
+    "s_cbranch_scc0": 17,
+    "s_cbranch_scc1": 77,
+    "s_cbranch_vccz": 2,
+    "s_cmp_eq_u32": 17,
+    "s_cmp_eq_u64": 8,
+    "s_cmp_ge_i32": 12,
+    "s_cmp_ge_u32": 29,
+    "s_cmp_lg_u32": 6,
+    "s_cmp_lg_u64": 6,
+    "s_cmp_lt_i32": 14,
+    "s_cmp_lt_u32": 8,
+    "s_cselect_b32": 22,
+    "s_cselect_b64": 16,
+    "s_endpgm": 1,
+    "s_load_dword": 3,
+    "s_load_dwordx16": 2,
+    "s_load_dwordx2": 1,
+    "s_load_dwordx4": 1,
+    "s_load_dwordx8": 5,
+    "s_lshl_b32": 67,
+    "s_lshr_b32": 9,
+    "s_min_u32": 13,
+    "s_mov_b32": 40,
+    "s_movk_i32": 1,
+    "s_mul_i32": 57,
+    "s_nop": 286,
+    "s_not_b32": 9,
+    "s_or_b32": 12,
+    "s_or_b64": 4,
+    "s_setprio": 22,
+    "s_sub_i32": 12,
+    "s_sub_u32": 12,
+    "s_waitcnt": 117,
+    "s_xor_b32": 7,
+    "v_add_f32_e32": 26,
+    "v_add_u32_e32": 59,
+    "v_and_b32_e32": 22,
+    "v_and_or_b32": 1,
+    "v_bfe_u32": 5,
+    "v_cmp_eq_u32_e32": 1,
+    "v_cmp_gt_i32_e32": 192,
+    "v_cmp_lt_f32_e32": 6,
+    "v_cndmask_b32_e32": 1,
+    "v_cndmask_b32_e64": 198,
+    "v_cvt_i32_f32_e32": 16,
+    "v_cvt_pk_bf16_f32": 64,
+    "v_cvt_pk_u8_f32": 640,
+    "v_exp_f32_e32": 6,
+    "v_floor_f32_e32": 16,
+    "v_fma_f32": 680,
+    "v_log_f32_e32": 2,
+    "v_lshl_add_u32": 2,
+    "v_lshl_or_b32": 2,
+    "v_lshlrev_b32_e32": 36,
+    "v_lshrrev_b32_e32": 9,
+    "v_mad_u32_u24": 4,
+    "v_max3_f32": 224,
+    "v_max_f32_e32": 78,
+    "v_med3_f32": 16,
+    "v_mfma_f32_16x16x128_f8f6f4": 20,
+    "v_mfma_f32_32x32x64_f8f6f4": 64,
+    "v_mfma_scale_f32_32x32x64_f8f6f4": 80,
+    "v_mov_b32_e32": 73,
+    "v_mul_f32_e32": 170,
+    "v_mul_lo_u32": 7,
+    "v_or3_b32": 5,
+    "v_or_b32_e32": 24,
+    "v_permlane32_swap_b32_e32": 48,
+    "v_pk_mul_f32": 192,
+    "v_rcp_f32_e32": 2,
+    "v_readfirstlane_b32": 1,
+    "v_sub_f32_e32": 12,
+    "v_sub_u32_e32": 12,
+    "v_xor_b32_e32": 29
+  },
+  "count_differences": {},
+  "first_mismatch": {
+    "index": 596,
+    "reference": {
+      "mnemonic": "v_mov_b32_e32",
+      "operands": "v66, 0",
+      "address": 10288,
+      "line": 622,
+      "branch_target": null
+    },
+    "llvm": {
+      "mnemonic": "s_cbranch_scc1",
+      "operands": "37",
+      "address": 10288,
+      "line": 622,
+      "branch_target": 10440
+    }
+  },
+  "excluded": {
+    "reference": [
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v2, s3",
+        "address": 7032,
+        "line": 29,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v4, s1",
+        "address": 7076,
+        "line": 39,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s30, s26",
+        "address": 7396,
+        "line": 102,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s31, s27",
+        "address": 7488,
+        "line": 125,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v4, s34",
+        "address": 7700,
+        "line": 163,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v147, v146",
+        "address": 7820,
+        "line": 189,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v148, v146",
+        "address": 7824,
+        "line": 190,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v149, v146",
+        "address": 7828,
+        "line": 191,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v150, v146",
+        "address": 7832,
+        "line": 192,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v151, v146",
+        "address": 7836,
+        "line": 193,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v152, v146",
+        "address": 7840,
+        "line": 194,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v153, v146",
+        "address": 7844,
+        "line": 195,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b64",
+        "operands": "s[10:11], s[48:49]",
+        "address": 7912,
+        "line": 207,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v7, v6",
+        "address": 8368,
+        "line": 273,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v5, v4",
+        "address": 8380,
+        "line": 276,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v7, v6",
+        "address": 10124,
+        "line": 590,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v5, v4",
+        "address": 10136,
+        "line": 593,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s30, s26",
+        "address": 10260,
+        "line": 615,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s31, s27",
+        "address": 10284,
+        "line": 621,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v188, v16",
+        "address": 10776,
+        "line": 731,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v189, v17",
+        "address": 10780,
+        "line": 732,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s53, s62",
+        "address": 11036,
+        "line": 773,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v188, v16",
+        "address": 11040,
+        "line": 774,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v189, v17",
+        "address": 11044,
+        "line": 775,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v3, v2",
+        "address": 11052,
+        "line": 777,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v4, v2",
+        "address": 11056,
+        "line": 778,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v5, v2",
+        "address": 11060,
+        "line": 779,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v6, v2",
+        "address": 11064,
+        "line": 780,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v7, v2",
+        "address": 11068,
+        "line": 781,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v8, v2",
+        "address": 11072,
+        "line": 782,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v9, v2",
+        "address": 11076,
+        "line": 783,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v10, v2",
+        "address": 11080,
+        "line": 784,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v11, v2",
+        "address": 11084,
+        "line": 785,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v12, v2",
+        "address": 11088,
+        "line": 786,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v13, v2",
+        "address": 11092,
+        "line": 787,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v14, v2",
+        "address": 11096,
+        "line": 788,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v15, v2",
+        "address": 11100,
+        "line": 789,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v16, v2",
+        "address": 11104,
+        "line": 790,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v17, v2",
+        "address": 11108,
+        "line": 791,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[144:145], v[16:17]",
+        "address": 11112,
+        "line": 792,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[142:143], v[14:15]",
+        "address": 11116,
+        "line": 793,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[140:141], v[12:13]",
+        "address": 11120,
+        "line": 794,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[138:139], v[10:11]",
+        "address": 11124,
+        "line": 795,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[136:137], v[8:9]",
+        "address": 11128,
+        "line": 796,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[134:135], v[6:7]",
+        "address": 11132,
+        "line": 797,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[132:133], v[4:5]",
+        "address": 11136,
+        "line": 798,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[130:131], v[2:3]",
+        "address": 11140,
+        "line": 799,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v3, v2",
+        "address": 11148,
+        "line": 801,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v4, v2",
+        "address": 11152,
+        "line": 802,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v5, v2",
+        "address": 11156,
+        "line": 803,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v6, v2",
+        "address": 11160,
+        "line": 804,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v7, v2",
+        "address": 11164,
+        "line": 805,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v8, v2",
+        "address": 11168,
+        "line": 806,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v9, v2",
+        "address": 11172,
+        "line": 807,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v10, v2",
+        "address": 11176,
+        "line": 808,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v11, v2",
+        "address": 11180,
+        "line": 809,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v12, v2",
+        "address": 11184,
+        "line": 810,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v13, v2",
+        "address": 11188,
+        "line": 811,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v14, v2",
+        "address": 11192,
+        "line": 812,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v15, v2",
+        "address": 11196,
+        "line": 813,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v16, v2",
+        "address": 11200,
+        "line": 814,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v17, v2",
+        "address": 11204,
+        "line": 815,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[128:129], v[16:17]",
+        "address": 11208,
+        "line": 816,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[126:127], v[14:15]",
+        "address": 11212,
+        "line": 817,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[124:125], v[12:13]",
+        "address": 11216,
+        "line": 818,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[122:123], v[10:11]",
+        "address": 11220,
+        "line": 819,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[120:121], v[8:9]",
+        "address": 11224,
+        "line": 820,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[118:119], v[6:7]",
+        "address": 11228,
+        "line": 821,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[116:117], v[4:5]",
+        "address": 11232,
+        "line": 822,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[114:115], v[2:3]",
+        "address": 11236,
+        "line": 823,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v3, v2",
+        "address": 11244,
+        "line": 825,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v4, v2",
+        "address": 11248,
+        "line": 826,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v5, v2",
+        "address": 11252,
+        "line": 827,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v6, v2",
+        "address": 11256,
+        "line": 828,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v7, v2",
+        "address": 11260,
+        "line": 829,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v8, v2",
+        "address": 11264,
+        "line": 830,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v9, v2",
+        "address": 11268,
+        "line": 831,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v10, v2",
+        "address": 11272,
+        "line": 832,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v11, v2",
+        "address": 11276,
+        "line": 833,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v12, v2",
+        "address": 11280,
+        "line": 834,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v13, v2",
+        "address": 11284,
+        "line": 835,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v14, v2",
+        "address": 11288,
+        "line": 836,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v15, v2",
+        "address": 11292,
+        "line": 837,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v16, v2",
+        "address": 11296,
+        "line": 838,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v17, v2",
+        "address": 11300,
+        "line": 839,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[112:113], v[16:17]",
+        "address": 11304,
+        "line": 840,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[110:111], v[14:15]",
+        "address": 11308,
+        "line": 841,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[108:109], v[12:13]",
+        "address": 11312,
+        "line": 842,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[106:107], v[10:11]",
+        "address": 11316,
+        "line": 843,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[104:105], v[8:9]",
+        "address": 11320,
+        "line": 844,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[102:103], v[6:7]",
+        "address": 11324,
+        "line": 845,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[100:101], v[4:5]",
+        "address": 11328,
+        "line": 846,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[98:99], v[2:3]",
+        "address": 11332,
+        "line": 847,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v3, v2",
+        "address": 11340,
+        "line": 849,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v4, v2",
+        "address": 11344,
+        "line": 850,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v5, v2",
+        "address": 11348,
+        "line": 851,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v6, v2",
+        "address": 11352,
+        "line": 852,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v7, v2",
+        "address": 11356,
+        "line": 853,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v8, v2",
+        "address": 11360,
+        "line": 854,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v9, v2",
+        "address": 11364,
+        "line": 855,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v10, v2",
+        "address": 11368,
+        "line": 856,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v11, v2",
+        "address": 11372,
+        "line": 857,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v12, v2",
+        "address": 11376,
+        "line": 858,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v13, v2",
+        "address": 11380,
+        "line": 859,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v14, v2",
+        "address": 11384,
+        "line": 860,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v15, v2",
+        "address": 11388,
+        "line": 861,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v16, v2",
+        "address": 11392,
+        "line": 862,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v17, v2",
+        "address": 11396,
+        "line": 863,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[96:97], v[16:17]",
+        "address": 11400,
+        "line": 864,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[94:95], v[14:15]",
+        "address": 11404,
+        "line": 865,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[92:93], v[12:13]",
+        "address": 11408,
+        "line": 866,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[90:91], v[10:11]",
+        "address": 11412,
+        "line": 867,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[88:89], v[8:9]",
+        "address": 11416,
+        "line": 868,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[86:87], v[6:7]",
+        "address": 11420,
+        "line": 869,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[84:85], v[4:5]",
+        "address": 11424,
+        "line": 870,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[82:83], v[2:3]",
+        "address": 11428,
+        "line": 871,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v13, v12",
+        "address": 13264,
+        "line": 1115,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v15, v14",
+        "address": 13268,
+        "line": 1116,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v13, v12",
+        "address": 15756,
+        "line": 1450,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v15, v14",
+        "address": 15760,
+        "line": 1451,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v13, v12",
+        "address": 18244,
+        "line": 1785,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v15, v14",
+        "address": 18248,
+        "line": 1786,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v13, v12",
+        "address": 20736,
+        "line": 2120,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v15, v14",
+        "address": 20740,
+        "line": 2121,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v188, v16",
+        "address": 21400,
+        "line": 2214,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v189, v17",
+        "address": 21404,
+        "line": 2215,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v188, v16",
+        "address": 21424,
+        "line": 2220,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v189, v17",
+        "address": 21428,
+        "line": 2221,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v7, v6",
+        "address": 24360,
+        "line": 2697,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v5, v4",
+        "address": 24372,
+        "line": 2700,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v188, v5",
+        "address": 25216,
+        "line": 2813,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v187, v6",
+        "address": 25220,
+        "line": 2814,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v189, v7",
+        "address": 25224,
+        "line": 2815,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v7, v6",
+        "address": 29904,
+        "line": 3528,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v5, v4",
+        "address": 29916,
+        "line": 3531,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v188, v5",
+        "address": 30760,
+        "line": 3644,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v187, v6",
+        "address": 30764,
+        "line": 3645,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v189, v7",
+        "address": 30768,
+        "line": 3646,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v3, v2",
+        "address": 32536,
+        "line": 3888,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v4, v2",
+        "address": 32540,
+        "line": 3889,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v5, v2",
+        "address": 32544,
+        "line": 3890,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v6, v2",
+        "address": 32548,
+        "line": 3891,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v7, v2",
+        "address": 32552,
+        "line": 3892,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v8, v2",
+        "address": 32556,
+        "line": 3893,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v9, v2",
+        "address": 32560,
+        "line": 3894,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v10, v2",
+        "address": 32564,
+        "line": 3895,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v11, v2",
+        "address": 32568,
+        "line": 3896,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v12, v2",
+        "address": 32572,
+        "line": 3897,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v13, v2",
+        "address": 32576,
+        "line": 3898,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v14, v2",
+        "address": 32580,
+        "line": 3899,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v15, v2",
+        "address": 32584,
+        "line": 3900,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v16, v2",
+        "address": 32588,
+        "line": 3901,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v17, v2",
+        "address": 32592,
+        "line": 3902,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[144:145], v[16:17]",
+        "address": 32596,
+        "line": 3903,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[142:143], v[14:15]",
+        "address": 32600,
+        "line": 3904,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[140:141], v[12:13]",
+        "address": 32604,
+        "line": 3905,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[138:139], v[10:11]",
+        "address": 32608,
+        "line": 3906,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[136:137], v[8:9]",
+        "address": 32612,
+        "line": 3907,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[134:135], v[6:7]",
+        "address": 32616,
+        "line": 3908,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[132:133], v[4:5]",
+        "address": 32620,
+        "line": 3909,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[130:131], v[2:3]",
+        "address": 32624,
+        "line": 3910,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v3, v2",
+        "address": 32632,
+        "line": 3912,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v4, v2",
+        "address": 32636,
+        "line": 3913,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v5, v2",
+        "address": 32640,
+        "line": 3914,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v6, v2",
+        "address": 32644,
+        "line": 3915,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v7, v2",
+        "address": 32648,
+        "line": 3916,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v8, v2",
+        "address": 32652,
+        "line": 3917,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v9, v2",
+        "address": 32656,
+        "line": 3918,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v10, v2",
+        "address": 32660,
+        "line": 3919,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v11, v2",
+        "address": 32664,
+        "line": 3920,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v12, v2",
+        "address": 32668,
+        "line": 3921,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v13, v2",
+        "address": 32672,
+        "line": 3922,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v14, v2",
+        "address": 32676,
+        "line": 3923,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v15, v2",
+        "address": 32680,
+        "line": 3924,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v16, v2",
+        "address": 32684,
+        "line": 3925,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v17, v2",
+        "address": 32688,
+        "line": 3926,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[144:145], v[16:17]",
+        "address": 32692,
+        "line": 3927,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[142:143], v[14:15]",
+        "address": 32696,
+        "line": 3928,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[140:141], v[12:13]",
+        "address": 32700,
+        "line": 3929,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[138:139], v[10:11]",
+        "address": 32704,
+        "line": 3930,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[136:137], v[8:9]",
+        "address": 32708,
+        "line": 3931,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[134:135], v[6:7]",
+        "address": 32712,
+        "line": 3932,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[132:133], v[4:5]",
+        "address": 32716,
+        "line": 3933,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[130:131], v[2:3]",
+        "address": 32720,
+        "line": 3934,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v3, v2",
+        "address": 32728,
+        "line": 3936,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v4, v2",
+        "address": 32732,
+        "line": 3937,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v5, v2",
+        "address": 32736,
+        "line": 3938,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v6, v2",
+        "address": 32740,
+        "line": 3939,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v7, v2",
+        "address": 32744,
+        "line": 3940,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v8, v2",
+        "address": 32748,
+        "line": 3941,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v9, v2",
+        "address": 32752,
+        "line": 3942,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v10, v2",
+        "address": 32756,
+        "line": 3943,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v11, v2",
+        "address": 32760,
+        "line": 3944,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v12, v2",
+        "address": 32764,
+        "line": 3945,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v13, v2",
+        "address": 32768,
+        "line": 3946,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v14, v2",
+        "address": 32772,
+        "line": 3947,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v15, v2",
+        "address": 32776,
+        "line": 3948,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v16, v2",
+        "address": 32780,
+        "line": 3949,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v17, v2",
+        "address": 32784,
+        "line": 3950,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[96:97], v[16:17]",
+        "address": 32788,
+        "line": 3951,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[94:95], v[14:15]",
+        "address": 32792,
+        "line": 3952,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[92:93], v[12:13]",
+        "address": 32796,
+        "line": 3953,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[90:91], v[10:11]",
+        "address": 32800,
+        "line": 3954,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[88:89], v[8:9]",
+        "address": 32804,
+        "line": 3955,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[86:87], v[6:7]",
+        "address": 32808,
+        "line": 3956,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[84:85], v[4:5]",
+        "address": 32812,
+        "line": 3957,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[82:83], v[2:3]",
+        "address": 32816,
+        "line": 3958,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v3, v2",
+        "address": 32824,
+        "line": 3960,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v4, v2",
+        "address": 32828,
+        "line": 3961,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v5, v2",
+        "address": 32832,
+        "line": 3962,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v6, v2",
+        "address": 32836,
+        "line": 3963,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v7, v2",
+        "address": 32840,
+        "line": 3964,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v8, v2",
+        "address": 32844,
+        "line": 3965,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v9, v2",
+        "address": 32848,
+        "line": 3966,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v10, v2",
+        "address": 32852,
+        "line": 3967,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v11, v2",
+        "address": 32856,
+        "line": 3968,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v12, v2",
+        "address": 32860,
+        "line": 3969,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v13, v2",
+        "address": 32864,
+        "line": 3970,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v14, v2",
+        "address": 32868,
+        "line": 3971,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v15, v2",
+        "address": 32872,
+        "line": 3972,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v16, v2",
+        "address": 32876,
+        "line": 3973,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v17, v2",
+        "address": 32880,
+        "line": 3974,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[96:97], v[16:17]",
+        "address": 32884,
+        "line": 3975,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[94:95], v[14:15]",
+        "address": 32888,
+        "line": 3976,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[92:93], v[12:13]",
+        "address": 32892,
+        "line": 3977,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[90:91], v[10:11]",
+        "address": 32896,
+        "line": 3978,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[88:89], v[8:9]",
+        "address": 32900,
+        "line": 3979,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[86:87], v[6:7]",
+        "address": 32904,
+        "line": 3980,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[84:85], v[4:5]",
+        "address": 32908,
+        "line": 3981,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[82:83], v[2:3]",
+        "address": 32912,
+        "line": 3982,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v3, v2",
+        "address": 32920,
+        "line": 3984,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v4, v2",
+        "address": 32924,
+        "line": 3985,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v5, v2",
+        "address": 32928,
+        "line": 3986,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v6, v2",
+        "address": 32932,
+        "line": 3987,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v7, v2",
+        "address": 32936,
+        "line": 3988,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v8, v2",
+        "address": 32940,
+        "line": 3989,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v9, v2",
+        "address": 32944,
+        "line": 3990,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v10, v2",
+        "address": 32948,
+        "line": 3991,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v11, v2",
+        "address": 32952,
+        "line": 3992,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v12, v2",
+        "address": 32956,
+        "line": 3993,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v13, v2",
+        "address": 32960,
+        "line": 3994,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v14, v2",
+        "address": 32964,
+        "line": 3995,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v15, v2",
+        "address": 32968,
+        "line": 3996,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v16, v2",
+        "address": 32972,
+        "line": 3997,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v17, v2",
+        "address": 32976,
+        "line": 3998,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[112:113], v[16:17]",
+        "address": 32980,
+        "line": 3999,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[110:111], v[14:15]",
+        "address": 32984,
+        "line": 4000,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[108:109], v[12:13]",
+        "address": 32988,
+        "line": 4001,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[106:107], v[10:11]",
+        "address": 32992,
+        "line": 4002,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[104:105], v[8:9]",
+        "address": 32996,
+        "line": 4003,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[102:103], v[6:7]",
+        "address": 33000,
+        "line": 4004,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[100:101], v[4:5]",
+        "address": 33004,
+        "line": 4005,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[98:99], v[2:3]",
+        "address": 33008,
+        "line": 4006,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v3, v2",
+        "address": 33016,
+        "line": 4008,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v4, v2",
+        "address": 33020,
+        "line": 4009,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v5, v2",
+        "address": 33024,
+        "line": 4010,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v6, v2",
+        "address": 33028,
+        "line": 4011,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v7, v2",
+        "address": 33032,
+        "line": 4012,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v8, v2",
+        "address": 33036,
+        "line": 4013,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v9, v2",
+        "address": 33040,
+        "line": 4014,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v10, v2",
+        "address": 33044,
+        "line": 4015,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v11, v2",
+        "address": 33048,
+        "line": 4016,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v12, v2",
+        "address": 33052,
+        "line": 4017,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v13, v2",
+        "address": 33056,
+        "line": 4018,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v14, v2",
+        "address": 33060,
+        "line": 4019,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v15, v2",
+        "address": 33064,
+        "line": 4020,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v16, v2",
+        "address": 33068,
+        "line": 4021,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v17, v2",
+        "address": 33072,
+        "line": 4022,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[112:113], v[16:17]",
+        "address": 33076,
+        "line": 4023,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[110:111], v[14:15]",
+        "address": 33080,
+        "line": 4024,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[108:109], v[12:13]",
+        "address": 33084,
+        "line": 4025,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[106:107], v[10:11]",
+        "address": 33088,
+        "line": 4026,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[104:105], v[8:9]",
+        "address": 33092,
+        "line": 4027,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[102:103], v[6:7]",
+        "address": 33096,
+        "line": 4028,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[100:101], v[4:5]",
+        "address": 33100,
+        "line": 4029,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[98:99], v[2:3]",
+        "address": 33104,
+        "line": 4030,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v3, v2",
+        "address": 33112,
+        "line": 4032,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v4, v2",
+        "address": 33116,
+        "line": 4033,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v5, v2",
+        "address": 33120,
+        "line": 4034,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v6, v2",
+        "address": 33124,
+        "line": 4035,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v7, v2",
+        "address": 33128,
+        "line": 4036,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v8, v2",
+        "address": 33132,
+        "line": 4037,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v9, v2",
+        "address": 33136,
+        "line": 4038,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v10, v2",
+        "address": 33140,
+        "line": 4039,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v11, v2",
+        "address": 33144,
+        "line": 4040,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v12, v2",
+        "address": 33148,
+        "line": 4041,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v13, v2",
+        "address": 33152,
+        "line": 4042,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v14, v2",
+        "address": 33156,
+        "line": 4043,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v15, v2",
+        "address": 33160,
+        "line": 4044,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v16, v2",
+        "address": 33164,
+        "line": 4045,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v17, v2",
+        "address": 33168,
+        "line": 4046,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[128:129], v[16:17]",
+        "address": 33172,
+        "line": 4047,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[126:127], v[14:15]",
+        "address": 33176,
+        "line": 4048,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[124:125], v[12:13]",
+        "address": 33180,
+        "line": 4049,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[122:123], v[10:11]",
+        "address": 33184,
+        "line": 4050,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[120:121], v[8:9]",
+        "address": 33188,
+        "line": 4051,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[118:119], v[6:7]",
+        "address": 33192,
+        "line": 4052,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[116:117], v[4:5]",
+        "address": 33196,
+        "line": 4053,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[114:115], v[2:3]",
+        "address": 33200,
+        "line": 4054,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v3, v2",
+        "address": 33208,
+        "line": 4056,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v4, v2",
+        "address": 33212,
+        "line": 4057,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v5, v2",
+        "address": 33216,
+        "line": 4058,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v6, v2",
+        "address": 33220,
+        "line": 4059,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v7, v2",
+        "address": 33224,
+        "line": 4060,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v8, v2",
+        "address": 33228,
+        "line": 4061,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v9, v2",
+        "address": 33232,
+        "line": 4062,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v10, v2",
+        "address": 33236,
+        "line": 4063,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v11, v2",
+        "address": 33240,
+        "line": 4064,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v12, v2",
+        "address": 33244,
+        "line": 4065,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v13, v2",
+        "address": 33248,
+        "line": 4066,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v14, v2",
+        "address": 33252,
+        "line": 4067,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v15, v2",
+        "address": 33256,
+        "line": 4068,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v16, v2",
+        "address": 33260,
+        "line": 4069,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v17, v2",
+        "address": 33264,
+        "line": 4070,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[128:129], v[16:17]",
+        "address": 33268,
+        "line": 4071,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[126:127], v[14:15]",
+        "address": 33272,
+        "line": 4072,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[124:125], v[12:13]",
+        "address": 33276,
+        "line": 4073,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[122:123], v[10:11]",
+        "address": 33280,
+        "line": 4074,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[120:121], v[8:9]",
+        "address": 33284,
+        "line": 4075,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[118:119], v[6:7]",
+        "address": 33288,
+        "line": 4076,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[116:117], v[4:5]",
+        "address": 33292,
+        "line": 4077,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[114:115], v[2:3]",
+        "address": 33296,
+        "line": 4078,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s30, s26",
+        "address": 34776,
+        "line": 4308,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s31, s27",
+        "address": 34780,
+        "line": 4309,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s30, s26",
+        "address": 36412,
+        "line": 4553,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s31, s27",
+        "address": 36416,
+        "line": 4554,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s30, s26",
+        "address": 36916,
+        "line": 4645,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s31, s27",
+        "address": 36920,
+        "line": 4646,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s30, s26",
+        "address": 37420,
+        "line": 4737,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s31, s27",
+        "address": 37424,
+        "line": 4738,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b64",
+        "operands": "s[30:31], s[0:1]",
+        "address": 37768,
+        "line": 4798,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b64",
+        "operands": "s[48:49], s[10:11]",
+        "address": 37772,
+        "line": 4799,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s66, s3",
+        "address": 37776,
+        "line": 4800,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b64",
+        "operands": "s[30:31], s[0:1]",
+        "address": 37788,
+        "line": 4803,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b64",
+        "operands": "s[48:49], s[10:11]",
+        "address": 37792,
+        "line": 4804,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s66, s3",
+        "address": 37796,
+        "line": 4805,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b64",
+        "operands": "s[30:31], s[0:1]",
+        "address": 37808,
+        "line": 4808,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b64",
+        "operands": "s[48:49], s[10:11]",
+        "address": 37812,
+        "line": 4809,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s66, s3",
+        "address": 37820,
+        "line": 4811,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s52, s67",
+        "address": 38272,
+        "line": 4866,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b64",
+        "operands": "s[30:31], s[0:1]",
+        "address": 38296,
+        "line": 4872,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b64",
+        "operands": "s[48:49], s[10:11]",
+        "address": 38300,
+        "line": 4873,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s66, s3",
+        "address": 38308,
+        "line": 4875,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s52, s67",
+        "address": 38760,
+        "line": 4930,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b64",
+        "operands": "s[0:1], s[30:31]",
+        "address": 39828,
+        "line": 5125,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s3, s66",
+        "address": 39832,
+        "line": 5126,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b64",
+        "operands": "s[0:1], s[30:31]",
+        "address": 39848,
+        "line": 5129,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s3, s66",
+        "address": 39852,
+        "line": 5130,
+        "branch_target": null,
+        "reason": "register_copy"
+      }
+    ],
+    "llvm": [
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v2, s3",
+        "address": 7032,
+        "line": 29,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v4, s1",
+        "address": 7076,
+        "line": 39,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s30, s26",
+        "address": 7396,
+        "line": 102,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s31, s27",
+        "address": 7488,
+        "line": 125,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v4, s34",
+        "address": 7700,
+        "line": 163,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v147, v146",
+        "address": 7820,
+        "line": 189,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v148, v146",
+        "address": 7824,
+        "line": 190,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v149, v146",
+        "address": 7828,
+        "line": 191,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v150, v146",
+        "address": 7832,
+        "line": 192,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v151, v146",
+        "address": 7836,
+        "line": 193,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v152, v146",
+        "address": 7840,
+        "line": 194,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v153, v146",
+        "address": 7844,
+        "line": 195,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b64",
+        "operands": "s[10:11], s[48:49]",
+        "address": 7912,
+        "line": 207,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v7, v6",
+        "address": 8368,
+        "line": 273,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v5, v4",
+        "address": 8380,
+        "line": 276,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v7, v6",
+        "address": 10124,
+        "line": 590,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v5, v4",
+        "address": 10136,
+        "line": 593,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s30, s26",
+        "address": 10260,
+        "line": 615,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s31, s27",
+        "address": 10284,
+        "line": 621,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v188, v16",
+        "address": 10776,
+        "line": 731,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v189, v17",
+        "address": 10780,
+        "line": 732,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s53, s62",
+        "address": 11036,
+        "line": 773,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v188, v16",
+        "address": 11040,
+        "line": 774,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v189, v17",
+        "address": 11044,
+        "line": 775,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v3, v2",
+        "address": 11052,
+        "line": 777,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v4, v2",
+        "address": 11056,
+        "line": 778,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v5, v2",
+        "address": 11060,
+        "line": 779,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v6, v2",
+        "address": 11064,
+        "line": 780,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v7, v2",
+        "address": 11068,
+        "line": 781,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v8, v2",
+        "address": 11072,
+        "line": 782,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v9, v2",
+        "address": 11076,
+        "line": 783,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v10, v2",
+        "address": 11080,
+        "line": 784,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v11, v2",
+        "address": 11084,
+        "line": 785,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v12, v2",
+        "address": 11088,
+        "line": 786,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v13, v2",
+        "address": 11092,
+        "line": 787,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v14, v2",
+        "address": 11096,
+        "line": 788,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v15, v2",
+        "address": 11100,
+        "line": 789,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v16, v2",
+        "address": 11104,
+        "line": 790,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v17, v2",
+        "address": 11108,
+        "line": 791,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[144:145], v[16:17]",
+        "address": 11112,
+        "line": 792,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[142:143], v[14:15]",
+        "address": 11116,
+        "line": 793,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[140:141], v[12:13]",
+        "address": 11120,
+        "line": 794,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[138:139], v[10:11]",
+        "address": 11124,
+        "line": 795,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[136:137], v[8:9]",
+        "address": 11128,
+        "line": 796,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[134:135], v[6:7]",
+        "address": 11132,
+        "line": 797,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[132:133], v[4:5]",
+        "address": 11136,
+        "line": 798,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[130:131], v[2:3]",
+        "address": 11140,
+        "line": 799,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v3, v2",
+        "address": 11148,
+        "line": 801,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v4, v2",
+        "address": 11152,
+        "line": 802,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v5, v2",
+        "address": 11156,
+        "line": 803,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v6, v2",
+        "address": 11160,
+        "line": 804,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v7, v2",
+        "address": 11164,
+        "line": 805,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v8, v2",
+        "address": 11168,
+        "line": 806,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v9, v2",
+        "address": 11172,
+        "line": 807,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v10, v2",
+        "address": 11176,
+        "line": 808,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v11, v2",
+        "address": 11180,
+        "line": 809,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v12, v2",
+        "address": 11184,
+        "line": 810,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v13, v2",
+        "address": 11188,
+        "line": 811,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v14, v2",
+        "address": 11192,
+        "line": 812,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v15, v2",
+        "address": 11196,
+        "line": 813,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v16, v2",
+        "address": 11200,
+        "line": 814,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v17, v2",
+        "address": 11204,
+        "line": 815,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[128:129], v[16:17]",
+        "address": 11208,
+        "line": 816,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[126:127], v[14:15]",
+        "address": 11212,
+        "line": 817,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[124:125], v[12:13]",
+        "address": 11216,
+        "line": 818,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[122:123], v[10:11]",
+        "address": 11220,
+        "line": 819,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[120:121], v[8:9]",
+        "address": 11224,
+        "line": 820,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[118:119], v[6:7]",
+        "address": 11228,
+        "line": 821,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[116:117], v[4:5]",
+        "address": 11232,
+        "line": 822,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[114:115], v[2:3]",
+        "address": 11236,
+        "line": 823,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v3, v2",
+        "address": 11244,
+        "line": 825,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v4, v2",
+        "address": 11248,
+        "line": 826,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v5, v2",
+        "address": 11252,
+        "line": 827,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v6, v2",
+        "address": 11256,
+        "line": 828,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v7, v2",
+        "address": 11260,
+        "line": 829,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v8, v2",
+        "address": 11264,
+        "line": 830,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v9, v2",
+        "address": 11268,
+        "line": 831,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v10, v2",
+        "address": 11272,
+        "line": 832,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v11, v2",
+        "address": 11276,
+        "line": 833,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v12, v2",
+        "address": 11280,
+        "line": 834,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v13, v2",
+        "address": 11284,
+        "line": 835,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v14, v2",
+        "address": 11288,
+        "line": 836,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v15, v2",
+        "address": 11292,
+        "line": 837,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v16, v2",
+        "address": 11296,
+        "line": 838,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v17, v2",
+        "address": 11300,
+        "line": 839,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[112:113], v[16:17]",
+        "address": 11304,
+        "line": 840,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[110:111], v[14:15]",
+        "address": 11308,
+        "line": 841,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[108:109], v[12:13]",
+        "address": 11312,
+        "line": 842,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[106:107], v[10:11]",
+        "address": 11316,
+        "line": 843,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[104:105], v[8:9]",
+        "address": 11320,
+        "line": 844,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[102:103], v[6:7]",
+        "address": 11324,
+        "line": 845,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[100:101], v[4:5]",
+        "address": 11328,
+        "line": 846,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[98:99], v[2:3]",
+        "address": 11332,
+        "line": 847,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v3, v2",
+        "address": 11340,
+        "line": 849,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v4, v2",
+        "address": 11344,
+        "line": 850,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v5, v2",
+        "address": 11348,
+        "line": 851,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v6, v2",
+        "address": 11352,
+        "line": 852,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v7, v2",
+        "address": 11356,
+        "line": 853,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v8, v2",
+        "address": 11360,
+        "line": 854,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v9, v2",
+        "address": 11364,
+        "line": 855,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v10, v2",
+        "address": 11368,
+        "line": 856,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v11, v2",
+        "address": 11372,
+        "line": 857,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v12, v2",
+        "address": 11376,
+        "line": 858,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v13, v2",
+        "address": 11380,
+        "line": 859,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v14, v2",
+        "address": 11384,
+        "line": 860,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v15, v2",
+        "address": 11388,
+        "line": 861,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v16, v2",
+        "address": 11392,
+        "line": 862,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v17, v2",
+        "address": 11396,
+        "line": 863,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[96:97], v[16:17]",
+        "address": 11400,
+        "line": 864,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[94:95], v[14:15]",
+        "address": 11404,
+        "line": 865,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[92:93], v[12:13]",
+        "address": 11408,
+        "line": 866,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[90:91], v[10:11]",
+        "address": 11412,
+        "line": 867,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[88:89], v[8:9]",
+        "address": 11416,
+        "line": 868,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[86:87], v[6:7]",
+        "address": 11420,
+        "line": 869,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[84:85], v[4:5]",
+        "address": 11424,
+        "line": 870,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[82:83], v[2:3]",
+        "address": 11428,
+        "line": 871,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v13, v12",
+        "address": 13264,
+        "line": 1115,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v15, v14",
+        "address": 13268,
+        "line": 1116,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v13, v12",
+        "address": 15756,
+        "line": 1450,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v15, v14",
+        "address": 15760,
+        "line": 1451,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v13, v12",
+        "address": 18244,
+        "line": 1785,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v15, v14",
+        "address": 18248,
+        "line": 1786,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v13, v12",
+        "address": 20736,
+        "line": 2120,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v15, v14",
+        "address": 20740,
+        "line": 2121,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v188, v16",
+        "address": 21400,
+        "line": 2214,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v189, v17",
+        "address": 21404,
+        "line": 2215,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v188, v16",
+        "address": 21424,
+        "line": 2220,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v189, v17",
+        "address": 21428,
+        "line": 2221,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v7, v6",
+        "address": 24360,
+        "line": 2697,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v5, v4",
+        "address": 24372,
+        "line": 2700,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v188, v5",
+        "address": 25216,
+        "line": 2813,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v187, v6",
+        "address": 25220,
+        "line": 2814,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v189, v7",
+        "address": 25224,
+        "line": 2815,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v7, v6",
+        "address": 29904,
+        "line": 3528,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v5, v4",
+        "address": 29916,
+        "line": 3531,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v188, v5",
+        "address": 30760,
+        "line": 3644,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v187, v6",
+        "address": 30764,
+        "line": 3645,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v189, v7",
+        "address": 30768,
+        "line": 3646,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v3, v2",
+        "address": 32536,
+        "line": 3888,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v4, v2",
+        "address": 32540,
+        "line": 3889,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v5, v2",
+        "address": 32544,
+        "line": 3890,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v6, v2",
+        "address": 32548,
+        "line": 3891,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v7, v2",
+        "address": 32552,
+        "line": 3892,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v8, v2",
+        "address": 32556,
+        "line": 3893,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v9, v2",
+        "address": 32560,
+        "line": 3894,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v10, v2",
+        "address": 32564,
+        "line": 3895,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v11, v2",
+        "address": 32568,
+        "line": 3896,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v12, v2",
+        "address": 32572,
+        "line": 3897,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v13, v2",
+        "address": 32576,
+        "line": 3898,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v14, v2",
+        "address": 32580,
+        "line": 3899,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v15, v2",
+        "address": 32584,
+        "line": 3900,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v16, v2",
+        "address": 32588,
+        "line": 3901,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v17, v2",
+        "address": 32592,
+        "line": 3902,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[144:145], v[16:17]",
+        "address": 32596,
+        "line": 3903,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[142:143], v[14:15]",
+        "address": 32600,
+        "line": 3904,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[140:141], v[12:13]",
+        "address": 32604,
+        "line": 3905,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[138:139], v[10:11]",
+        "address": 32608,
+        "line": 3906,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[136:137], v[8:9]",
+        "address": 32612,
+        "line": 3907,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[134:135], v[6:7]",
+        "address": 32616,
+        "line": 3908,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[132:133], v[4:5]",
+        "address": 32620,
+        "line": 3909,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[130:131], v[2:3]",
+        "address": 32624,
+        "line": 3910,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v3, v2",
+        "address": 32632,
+        "line": 3912,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v4, v2",
+        "address": 32636,
+        "line": 3913,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v5, v2",
+        "address": 32640,
+        "line": 3914,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v6, v2",
+        "address": 32644,
+        "line": 3915,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v7, v2",
+        "address": 32648,
+        "line": 3916,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v8, v2",
+        "address": 32652,
+        "line": 3917,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v9, v2",
+        "address": 32656,
+        "line": 3918,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v10, v2",
+        "address": 32660,
+        "line": 3919,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v11, v2",
+        "address": 32664,
+        "line": 3920,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v12, v2",
+        "address": 32668,
+        "line": 3921,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v13, v2",
+        "address": 32672,
+        "line": 3922,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v14, v2",
+        "address": 32676,
+        "line": 3923,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v15, v2",
+        "address": 32680,
+        "line": 3924,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v16, v2",
+        "address": 32684,
+        "line": 3925,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v17, v2",
+        "address": 32688,
+        "line": 3926,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[144:145], v[16:17]",
+        "address": 32692,
+        "line": 3927,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[142:143], v[14:15]",
+        "address": 32696,
+        "line": 3928,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[140:141], v[12:13]",
+        "address": 32700,
+        "line": 3929,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[138:139], v[10:11]",
+        "address": 32704,
+        "line": 3930,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[136:137], v[8:9]",
+        "address": 32708,
+        "line": 3931,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[134:135], v[6:7]",
+        "address": 32712,
+        "line": 3932,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[132:133], v[4:5]",
+        "address": 32716,
+        "line": 3933,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[130:131], v[2:3]",
+        "address": 32720,
+        "line": 3934,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v3, v2",
+        "address": 32728,
+        "line": 3936,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v4, v2",
+        "address": 32732,
+        "line": 3937,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v5, v2",
+        "address": 32736,
+        "line": 3938,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v6, v2",
+        "address": 32740,
+        "line": 3939,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v7, v2",
+        "address": 32744,
+        "line": 3940,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v8, v2",
+        "address": 32748,
+        "line": 3941,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v9, v2",
+        "address": 32752,
+        "line": 3942,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v10, v2",
+        "address": 32756,
+        "line": 3943,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v11, v2",
+        "address": 32760,
+        "line": 3944,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v12, v2",
+        "address": 32764,
+        "line": 3945,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v13, v2",
+        "address": 32768,
+        "line": 3946,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v14, v2",
+        "address": 32772,
+        "line": 3947,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v15, v2",
+        "address": 32776,
+        "line": 3948,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v16, v2",
+        "address": 32780,
+        "line": 3949,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v17, v2",
+        "address": 32784,
+        "line": 3950,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[96:97], v[16:17]",
+        "address": 32788,
+        "line": 3951,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[94:95], v[14:15]",
+        "address": 32792,
+        "line": 3952,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[92:93], v[12:13]",
+        "address": 32796,
+        "line": 3953,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[90:91], v[10:11]",
+        "address": 32800,
+        "line": 3954,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[88:89], v[8:9]",
+        "address": 32804,
+        "line": 3955,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[86:87], v[6:7]",
+        "address": 32808,
+        "line": 3956,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[84:85], v[4:5]",
+        "address": 32812,
+        "line": 3957,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[82:83], v[2:3]",
+        "address": 32816,
+        "line": 3958,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v3, v2",
+        "address": 32824,
+        "line": 3960,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v4, v2",
+        "address": 32828,
+        "line": 3961,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v5, v2",
+        "address": 32832,
+        "line": 3962,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v6, v2",
+        "address": 32836,
+        "line": 3963,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v7, v2",
+        "address": 32840,
+        "line": 3964,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v8, v2",
+        "address": 32844,
+        "line": 3965,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v9, v2",
+        "address": 32848,
+        "line": 3966,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v10, v2",
+        "address": 32852,
+        "line": 3967,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v11, v2",
+        "address": 32856,
+        "line": 3968,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v12, v2",
+        "address": 32860,
+        "line": 3969,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v13, v2",
+        "address": 32864,
+        "line": 3970,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v14, v2",
+        "address": 32868,
+        "line": 3971,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v15, v2",
+        "address": 32872,
+        "line": 3972,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v16, v2",
+        "address": 32876,
+        "line": 3973,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v17, v2",
+        "address": 32880,
+        "line": 3974,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[96:97], v[16:17]",
+        "address": 32884,
+        "line": 3975,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[94:95], v[14:15]",
+        "address": 32888,
+        "line": 3976,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[92:93], v[12:13]",
+        "address": 32892,
+        "line": 3977,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[90:91], v[10:11]",
+        "address": 32896,
+        "line": 3978,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[88:89], v[8:9]",
+        "address": 32900,
+        "line": 3979,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[86:87], v[6:7]",
+        "address": 32904,
+        "line": 3980,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[84:85], v[4:5]",
+        "address": 32908,
+        "line": 3981,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[82:83], v[2:3]",
+        "address": 32912,
+        "line": 3982,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v3, v2",
+        "address": 32920,
+        "line": 3984,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v4, v2",
+        "address": 32924,
+        "line": 3985,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v5, v2",
+        "address": 32928,
+        "line": 3986,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v6, v2",
+        "address": 32932,
+        "line": 3987,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v7, v2",
+        "address": 32936,
+        "line": 3988,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v8, v2",
+        "address": 32940,
+        "line": 3989,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v9, v2",
+        "address": 32944,
+        "line": 3990,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v10, v2",
+        "address": 32948,
+        "line": 3991,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v11, v2",
+        "address": 32952,
+        "line": 3992,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v12, v2",
+        "address": 32956,
+        "line": 3993,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v13, v2",
+        "address": 32960,
+        "line": 3994,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v14, v2",
+        "address": 32964,
+        "line": 3995,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v15, v2",
+        "address": 32968,
+        "line": 3996,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v16, v2",
+        "address": 32972,
+        "line": 3997,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v17, v2",
+        "address": 32976,
+        "line": 3998,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[112:113], v[16:17]",
+        "address": 32980,
+        "line": 3999,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[110:111], v[14:15]",
+        "address": 32984,
+        "line": 4000,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[108:109], v[12:13]",
+        "address": 32988,
+        "line": 4001,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[106:107], v[10:11]",
+        "address": 32992,
+        "line": 4002,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[104:105], v[8:9]",
+        "address": 32996,
+        "line": 4003,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[102:103], v[6:7]",
+        "address": 33000,
+        "line": 4004,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[100:101], v[4:5]",
+        "address": 33004,
+        "line": 4005,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[98:99], v[2:3]",
+        "address": 33008,
+        "line": 4006,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v3, v2",
+        "address": 33016,
+        "line": 4008,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v4, v2",
+        "address": 33020,
+        "line": 4009,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v5, v2",
+        "address": 33024,
+        "line": 4010,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v6, v2",
+        "address": 33028,
+        "line": 4011,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v7, v2",
+        "address": 33032,
+        "line": 4012,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v8, v2",
+        "address": 33036,
+        "line": 4013,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v9, v2",
+        "address": 33040,
+        "line": 4014,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v10, v2",
+        "address": 33044,
+        "line": 4015,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v11, v2",
+        "address": 33048,
+        "line": 4016,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v12, v2",
+        "address": 33052,
+        "line": 4017,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v13, v2",
+        "address": 33056,
+        "line": 4018,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v14, v2",
+        "address": 33060,
+        "line": 4019,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v15, v2",
+        "address": 33064,
+        "line": 4020,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v16, v2",
+        "address": 33068,
+        "line": 4021,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v17, v2",
+        "address": 33072,
+        "line": 4022,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[112:113], v[16:17]",
+        "address": 33076,
+        "line": 4023,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[110:111], v[14:15]",
+        "address": 33080,
+        "line": 4024,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[108:109], v[12:13]",
+        "address": 33084,
+        "line": 4025,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[106:107], v[10:11]",
+        "address": 33088,
+        "line": 4026,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[104:105], v[8:9]",
+        "address": 33092,
+        "line": 4027,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[102:103], v[6:7]",
+        "address": 33096,
+        "line": 4028,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[100:101], v[4:5]",
+        "address": 33100,
+        "line": 4029,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[98:99], v[2:3]",
+        "address": 33104,
+        "line": 4030,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v3, v2",
+        "address": 33112,
+        "line": 4032,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v4, v2",
+        "address": 33116,
+        "line": 4033,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v5, v2",
+        "address": 33120,
+        "line": 4034,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v6, v2",
+        "address": 33124,
+        "line": 4035,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v7, v2",
+        "address": 33128,
+        "line": 4036,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v8, v2",
+        "address": 33132,
+        "line": 4037,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v9, v2",
+        "address": 33136,
+        "line": 4038,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v10, v2",
+        "address": 33140,
+        "line": 4039,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v11, v2",
+        "address": 33144,
+        "line": 4040,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v12, v2",
+        "address": 33148,
+        "line": 4041,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v13, v2",
+        "address": 33152,
+        "line": 4042,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v14, v2",
+        "address": 33156,
+        "line": 4043,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v15, v2",
+        "address": 33160,
+        "line": 4044,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v16, v2",
+        "address": 33164,
+        "line": 4045,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v17, v2",
+        "address": 33168,
+        "line": 4046,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[128:129], v[16:17]",
+        "address": 33172,
+        "line": 4047,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[126:127], v[14:15]",
+        "address": 33176,
+        "line": 4048,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[124:125], v[12:13]",
+        "address": 33180,
+        "line": 4049,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[122:123], v[10:11]",
+        "address": 33184,
+        "line": 4050,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[120:121], v[8:9]",
+        "address": 33188,
+        "line": 4051,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[118:119], v[6:7]",
+        "address": 33192,
+        "line": 4052,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[116:117], v[4:5]",
+        "address": 33196,
+        "line": 4053,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[114:115], v[2:3]",
+        "address": 33200,
+        "line": 4054,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v3, v2",
+        "address": 33208,
+        "line": 4056,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v4, v2",
+        "address": 33212,
+        "line": 4057,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v5, v2",
+        "address": 33216,
+        "line": 4058,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v6, v2",
+        "address": 33220,
+        "line": 4059,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v7, v2",
+        "address": 33224,
+        "line": 4060,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v8, v2",
+        "address": 33228,
+        "line": 4061,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v9, v2",
+        "address": 33232,
+        "line": 4062,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v10, v2",
+        "address": 33236,
+        "line": 4063,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v11, v2",
+        "address": 33240,
+        "line": 4064,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v12, v2",
+        "address": 33244,
+        "line": 4065,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v13, v2",
+        "address": 33248,
+        "line": 4066,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v14, v2",
+        "address": 33252,
+        "line": 4067,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v15, v2",
+        "address": 33256,
+        "line": 4068,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v16, v2",
+        "address": 33260,
+        "line": 4069,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b32_e32",
+        "operands": "v17, v2",
+        "address": 33264,
+        "line": 4070,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[128:129], v[16:17]",
+        "address": 33268,
+        "line": 4071,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[126:127], v[14:15]",
+        "address": 33272,
+        "line": 4072,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[124:125], v[12:13]",
+        "address": 33276,
+        "line": 4073,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[122:123], v[10:11]",
+        "address": 33280,
+        "line": 4074,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[120:121], v[8:9]",
+        "address": 33284,
+        "line": 4075,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[118:119], v[6:7]",
+        "address": 33288,
+        "line": 4076,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[116:117], v[4:5]",
+        "address": 33292,
+        "line": 4077,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "v_mov_b64_e32",
+        "operands": "v[114:115], v[2:3]",
+        "address": 33296,
+        "line": 4078,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s30, s26",
+        "address": 34776,
+        "line": 4308,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s31, s27",
+        "address": 34780,
+        "line": 4309,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s30, s26",
+        "address": 36412,
+        "line": 4553,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s31, s27",
+        "address": 36416,
+        "line": 4554,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s30, s26",
+        "address": 36916,
+        "line": 4645,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s31, s27",
+        "address": 36920,
+        "line": 4646,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s30, s26",
+        "address": 37420,
+        "line": 4737,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s31, s27",
+        "address": 37424,
+        "line": 4738,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b64",
+        "operands": "s[30:31], s[0:1]",
+        "address": 37768,
+        "line": 4798,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b64",
+        "operands": "s[48:49], s[10:11]",
+        "address": 37772,
+        "line": 4799,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s66, s3",
+        "address": 37776,
+        "line": 4800,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b64",
+        "operands": "s[30:31], s[0:1]",
+        "address": 37788,
+        "line": 4803,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b64",
+        "operands": "s[48:49], s[10:11]",
+        "address": 37792,
+        "line": 4804,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s66, s3",
+        "address": 37796,
+        "line": 4805,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b64",
+        "operands": "s[30:31], s[0:1]",
+        "address": 37808,
+        "line": 4808,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b64",
+        "operands": "s[48:49], s[10:11]",
+        "address": 37812,
+        "line": 4809,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s66, s3",
+        "address": 37820,
+        "line": 4811,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s52, s67",
+        "address": 38272,
+        "line": 4866,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b64",
+        "operands": "s[30:31], s[0:1]",
+        "address": 38296,
+        "line": 4872,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b64",
+        "operands": "s[48:49], s[10:11]",
+        "address": 38300,
+        "line": 4873,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s66, s3",
+        "address": 38308,
+        "line": 4875,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s52, s67",
+        "address": 38760,
+        "line": 4930,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b64",
+        "operands": "s[0:1], s[30:31]",
+        "address": 39828,
+        "line": 5125,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s3, s66",
+        "address": 39832,
+        "line": 5126,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b64",
+        "operands": "s[0:1], s[30:31]",
+        "address": 39848,
+        "line": 5129,
+        "branch_target": null,
+        "reason": "register_copy"
+      },
+      {
+        "mnemonic": "s_mov_b32",
+        "operands": "s3, s66",
+        "address": 39852,
+        "line": 5130,
+        "branch_target": null,
+        "reason": "register_copy"
+      }
+    ]
+  }
+}

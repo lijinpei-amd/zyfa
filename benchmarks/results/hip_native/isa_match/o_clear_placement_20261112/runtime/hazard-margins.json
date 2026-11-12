@@ -1,0 +1,56 @@
+{
+  "128": {
+    "o_clear_runs": [
+      {
+        "start": "0x28dc",
+        "length": 64
+      }
+    ],
+    "static_zero_moves_v_mov_b32_0": 69,
+    "backward_targets": 65,
+    "backward_nearest_ws": [
+      108,
+      "WAR",
+      "0x1fac",
+      "v[82:97], v[28:35], v[236:243], v[82:97]",
+      "0x295c",
+      "v34, 0"
+    ],
+    "forward_nearest_ws": [
+      185,
+      "RAW",
+      "0x7d38",
+      "v[18:33], v[162:169], v[154:161], v[18:33], v173, v187 op_se",
+      "0x29d8",
+      "v33, 0"
+    ],
+    "outside_window_19": true
+  },
+  "192": {
+    "o_clear_runs": [
+      {
+        "start": "0xab44",
+        "length": 64
+      }
+    ],
+    "static_zero_moves_v_mov_b32_0": 117,
+    "backward_targets": 65,
+    "backward_nearest_ws": [
+      75,
+      "WAR",
+      "0xa4a8",
+      "v[2:17], v[52:59], v[182:189], v[2:17]",
+      "0xab4c",
+      "v52, 0"
+    ],
+    "forward_nearest_ws": [
+      115,
+      "RAW",
+      "0xc8cc",
+      "v[2:17], v[146:153], v[106:113], v[2:17], v125, v136 op_sel_",
+      "0xac40",
+      "v17, 0"
+    ],
+    "outside_window_19": true
+  }
+}

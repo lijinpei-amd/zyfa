@@ -1,0 +1,145 @@
+{
+ "candidate_extension": "/home/jinpli/workspace/home/jinpli/development/zyfa/.claude/worktrees/agent-ac019c7f660da3916/build/9cf4ce9/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+ "candidate_extension_sha256": "733a2eda77b11abb13ecc073dbfac1b7024ea24d61f33b28b2f9bd4a2c3148c5",
+ "references": {
+  "b73e505": {
+   "path": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/gpu-validation-9cf4ce9/extensions/b73e505-main.so",
+   "sha256": "e948f140b7fe34bcdac1256f0a687cfa32e7cca573d6ce7f1e14017cfb343642"
+  },
+  "de29ef9": {
+   "path": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/gpu-validation-9cf4ce9/extensions/candidate-de29ef9.so",
+   "sha256": "8415c313c1389886e5a36acb985049a25b45ca5b6e2eddcadda054f9e66ed70a"
+  },
+  "ac8512a": {
+   "path": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/gpu-validation-9cf4ce9/extensions/ac8512a-main.so",
+   "sha256": "8a0d5fb8994ebf2228b2e92e1e90ad8574cde41713fcc9814525128602d3cc6f"
+  },
+  "owning4dd38ce": {
+   "path": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/gpu-validation-9cf4ce9/extensions/owning-4dd38ce.so",
+   "sha256": "dbb3ebfa0fe06a5dcda2ec453bf18d9bbd71336a45a00c0edfd5ace3d02298fb"
+  },
+  "main9cf4ce9": {
+   "path": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/gpu-validation-9cf4ce9/extensions/main-9cf4ce9-fbbae15b.so",
+   "sha256": "fbbae15bbbbc87485130f4d3c3732206216716ed439a589360c096b52d8c7c42"
+  }
+ },
+ "device": "AMD Instinct MI350X",
+ "HIP_VISIBLE_DEVICES": "4",
+ "args": {
+  "reference": "['b73e505=/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/gpu-validation-9cf4ce9/extensions/b73e505-main.so', 'de29ef9=/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/gpu-validation-9cf4ce9/extensions/candidate-de29ef9.so', 'ac8512a=/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/gpu-validation-9cf4ce9/extensions/ac8512a-main.so', 'owning4dd38ce=/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/gpu-validation-9cf4ce9/extensions/owning-4dd38ce.so', 'main9cf4ce9=/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/gpu-validation-9cf4ce9/extensions/main-9cf4ce9-fbbae15b.so']",
+  "expect_sha": "733a2eda77b11abb13ecc073dbfac1b7024ea24d61f33b28b2f9bd4a2c3148c5",
+  "output": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/gpu-validation-9cf4ce9/tail-race-long",
+  "repeats": "500",
+  "diag_repeats": "20",
+  "stress_iters": "20000",
+  "seeds": "200",
+  "phases": "kernel,persistent,padded,diagonal,oclear,stress",
+  "oclear_extra": "True"
+ },
+ "start": "2026-11-12T12:56:19"
+}
+kernel phase done 7.4s
+persistent phase done 19.1s
+padded phase done 68.0s
+diagonal phase done 72.0s
+oclear phase done 93.1s
+stress phase done 161.9s
+{
+ "meta": {
+  "candidate_extension": "/home/jinpli/workspace/home/jinpli/development/zyfa/.claude/worktrees/agent-ac019c7f660da3916/build/9cf4ce9/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+  "candidate_extension_sha256": "733a2eda77b11abb13ecc073dbfac1b7024ea24d61f33b28b2f9bd4a2c3148c5",
+  "references": {
+   "b73e505": {
+    "path": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/gpu-validation-9cf4ce9/extensions/b73e505-main.so",
+    "sha256": "e948f140b7fe34bcdac1256f0a687cfa32e7cca573d6ce7f1e14017cfb343642"
+   },
+   "de29ef9": {
+    "path": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/gpu-validation-9cf4ce9/extensions/candidate-de29ef9.so",
+    "sha256": "8415c313c1389886e5a36acb985049a25b45ca5b6e2eddcadda054f9e66ed70a"
+   },
+   "ac8512a": {
+    "path": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/gpu-validation-9cf4ce9/extensions/ac8512a-main.so",
+    "sha256": "8a0d5fb8994ebf2228b2e92e1e90ad8574cde41713fcc9814525128602d3cc6f"
+   },
+   "owning4dd38ce": {
+    "path": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/gpu-validation-9cf4ce9/extensions/owning-4dd38ce.so",
+    "sha256": "dbb3ebfa0fe06a5dcda2ec453bf18d9bbd71336a45a00c0edfd5ace3d02298fb"
+   },
+   "main9cf4ce9": {
+    "path": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/gpu-validation-9cf4ce9/extensions/main-9cf4ce9-fbbae15b.so",
+    "sha256": "fbbae15bbbbc87485130f4d3c3732206216716ed439a589360c096b52d8c7c42"
+   }
+  },
+  "device": "AMD Instinct MI350X",
+  "HIP_VISIBLE_DEVICES": "4",
+  "args": {
+   "reference": "['b73e505=/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/gpu-validation-9cf4ce9/extensions/b73e505-main.so', 'de29ef9=/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/gpu-validation-9cf4ce9/extensions/candidate-de29ef9.so', 'ac8512a=/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/gpu-validation-9cf4ce9/extensions/ac8512a-main.so', 'owning4dd38ce=/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/gpu-validation-9cf4ce9/extensions/owning-4dd38ce.so', 'main9cf4ce9=/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/gpu-validation-9cf4ce9/extensions/main-9cf4ce9-fbbae15b.so']",
+   "expect_sha": "733a2eda77b11abb13ecc073dbfac1b7024ea24d61f33b28b2f9bd4a2c3148c5",
+   "output": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/gpu-validation-9cf4ce9/tail-race-long",
+   "repeats": "500",
+   "diag_repeats": "20",
+   "stress_iters": "20000",
+   "seeds": "200",
+   "phases": "kernel,persistent,padded,diagonal,oclear,stress",
+   "oclear_extra": "True"
+  },
+  "start": "2026-11-12T12:56:19",
+  "negative_control": "single-bit flips in output and LSE detected",
+  "end": "2026-11-12T12:59:01",
+  "elapsed_s": 161.85495376586914
+ },
+ "cases": 1134,
+ "failures": 0,
+ "by_phase": {
+  "diagonal": {
+   "cases": 594,
+   "pass": 594
+  },
+  "kernel": {
+   "cases": 100,
+   "pass": 100
+  },
+  "oclear-seeds": {
+   "cases": 28,
+   "pass": 28
+  },
+  "padded": {
+   "cases": 336,
+   "pass": 336
+  },
+  "persistent": {
+   "cases": 48,
+   "pass": 48
+  },
+  "stress-fixed": {
+   "cases": 14,
+   "pass": 14
+  },
+  "stress-seeds": {
+   "cases": 14,
+   "pass": 14
+  }
+ },
+ "all_equal_checks_true": true,
+ "equal_checks": [
+  "equal_ac8512a_lse",
+  "equal_ac8512a_nolse",
+  "equal_api_raw_lse",
+  "equal_api_raw_nolse",
+  "equal_b73e505_lse",
+  "equal_b73e505_nolse",
+  "equal_de29ef9_lse",
+  "equal_de29ef9_nolse",
+  "equal_main9cf4ce9_lse",
+  "equal_main9cf4ce9_nolse",
+  "equal_output_lse_vs_nolse",
+  "equal_owning4dd38ce_lse",
+  "equal_owning4dd38ce_nolse"
+ ],
+ "repeat_stable_all": true,
+ "total_candidate_launches": 798316,
+ "max_rel_rms": 0.02673099520108922,
+ "max_abs_err": 0.04236257436282298,
+ "max_lse_abs_err": 0.05005439362632447
+}
+FAILURES 0

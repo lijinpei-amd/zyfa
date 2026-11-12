@@ -1,0 +1,16 @@
+date: 2026-11-12T12:56:21+08:00
+tree: /home/jinpli/workspace/home/jinpli/development/zyfa/.claude/worktrees/agent-ac019c7f660da3916/build/9cf4ce9
+HIP_VISIBLE_DEVICES=6,7
+args: -q -rs tests
+pinned zyfa: /home/jinpli/workspace/home/jinpli/development/zyfa/.claude/worktrees/agent-ac019c7f660da3916/build/9cf4ce9/zyfa/__init__.py _C: /home/jinpli/workspace/home/jinpli/development/zyfa/.claude/worktrees/agent-ac019c7f660da3916/build/9cf4ce9/zyfa/_C.cpython-314-x86_64-linux-gnu.so 733a2eda77b11abb13ecc073dbfac1b7024ea24d61f33b28b2f9bd4a2c3148c5
+..ss.................................................................... [ 22%]
+........................................................................ [ 45%]
+........................................................................ [ 68%]
+........................................................................ [ 91%]
+............................                                             [100%]
+=========================== short test summary info ============================
+SKIPPED [2] tests/test_fp8_build.py:25: requires a build without the native HIP FP8 backend
+314 passed, 2 skipped in 190.27s (0:03:10)
+pytest exit code 0 zyfa still /home/jinpli/workspace/home/jinpli/development/zyfa/.claude/worktrees/agent-ac019c7f660da3916/build/9cf4ce9/zyfa/__init__.py
+wall seconds: 194
+exit: 0

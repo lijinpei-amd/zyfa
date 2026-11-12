@@ -1,0 +1,117 @@
+{
+  "git_head": "3ff02305aa34d8d58808aaa40de9339338e87b4b",
+  "git_status_porcelain": "",
+  "source_sha256": "e39e2b08aa030f821eded7c137118fcc48a0732e25f6201b45e9386d6dd7a094",
+  "source_sha256_at_head_blob": "3cd9ee17689f91588420a15edae7184f0b2ef9e9816b97146c4e8b2641f41dca",
+  "test_codegen_sha256": "009dbd23e06d77107759cbd4a4d3c98e16dac25d997d41f9d41d3c1e801c3fa9",
+  "inspect_manifest": {
+    "native_source_sha256": "e39e2b08aa030f821eded7c137118fcc48a0732e25f6201b45e9386d6dd7a094",
+    "object_sha256": "cddbb825ca17d43b14a71dcfb5890c25f62e65d094dcd0cfdf52e4a913e0e31e",
+    "code_object_sha256": "8f570ad8cce44f97edee4d555af3df2182d77312f3b9c2bee0a75032346ac73f",
+    "object": "/home/jinpli/workspace/home/jinpli/development/zyfa/.claude/worktrees/agent-ac019c7f660da3916/build/9cf4ce9/build/native/fp8_native.o",
+    "assembly_origin": "disassembly of the selected object's embedded code object",
+    "inspection_tool_version": "AMD LLVM version 22.0.0git\n  Optimized build.\n\n\n  Registered Targets:\n    amdgcn - AMD GCN GPUs\n    r600   - AMD GPUs HD2XXX-HD6XXX\n    x86    - 32-bit X86: Pentium-Pro and above\n    x86-64 - 64-bit X86: EM64T and AMD64",
+    "lds_bytes_per_block": {
+      "d128": 163840,
+      "d192": 131072
+    }
+  },
+  "native_fatbin_sha256": "5c98cf29006032c69d97d4557f4a0937c69ea1ff0f85e9742e04f007a8eb7f5e",
+  "extension": "/home/jinpli/workspace/home/jinpli/development/zyfa/.claude/worktrees/agent-ac019c7f660da3916/build/9cf4ce9/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+  "extension_sha256": "733a2eda77b11abb13ecc073dbfac1b7024ea24d61f33b28b2f9bd4a2c3148c5",
+  "extension_native_fatbin_occurrences": 1,
+  "extension_owning_fatbin_occurrences": 0,
+  "extension_native_code_object_occurrences": 1,
+  "reference_dir": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/gpu-validation-de29ef9/candidate/inspect",
+  "reference_code_object_sha256": "ffc5f2a45e3b05a07337558e2b5d3109da36cd93d690df4e45c4676efef8d1f4",
+  "code_object_sha256": "8f570ad8cce44f97edee4d555af3df2182d77312f3b9c2bee0a75032346ac73f",
+  "reference_source_sha256": "dced6ad8124dfd758500f793fa9ef835ac2c7f59e311c6b3e089b0d5c654bdb0",
+  "section_names_equal": true,
+  "differing_sections": [
+    ".dynstr",
+    ".dynsym",
+    ".eh_frame",
+    ".gnu.hash",
+    ".hash",
+    ".rodata",
+    ".strtab",
+    ".symtab",
+    ".text"
+  ],
+  ".text_identical_to_reference": false,
+  ".rodata_identical_to_reference": false,
+  ".note_identical_to_reference": true,
+  "text_sha256": "260904b9ed88df7b8f63c07c7c4c3eee6b7ad3810363158593f29f6b68b92177",
+  "hip_cuid": {
+    "candidate": "__hip_cuid_adf3080a72ec34e9",
+    "reference": "__hip_cuid_ed72deff4948bfa3"
+  },
+  "dimensions": {
+    "128": {
+      "instructions": 5322,
+      "owning_instructions": 5730,
+      "instruction_signatures_identical_to_reference": false,
+      "differs_from_owning": true,
+      "strict_loop_instructions": 1333,
+      "strict_loop_counts_match": true,
+      "strict_loop_sequence_match": true,
+      "s_waitcnt": 117,
+      "owning_s_waitcnt": 130
+    },
+    "192": {
+      "instructions": 3621,
+      "owning_instructions": 3898,
+      "instruction_signatures_identical_to_reference": false,
+      "differs_from_owning": true,
+      "strict_loop_instructions": 825,
+      "strict_loop_counts_match": true,
+      "strict_loop_sequence_match": true,
+      "s_waitcnt": 85,
+      "owning_s_waitcnt": 90
+    }
+  },
+  "resources": {
+    "128": {
+      "group_segment_fixed_size": 163840,
+      "private_segment_fixed_size": 0,
+      "sgpr_count": 77,
+      "sgpr_spill_count": 0,
+      "vgpr_count": 244,
+      "vgpr_spill_count": 0,
+      "kernarg_segment_size": 152,
+      "max_flat_workgroup_size": 512
+    },
+    "192": {
+      "group_segment_fixed_size": 131072,
+      "private_segment_fixed_size": 0,
+      "sgpr_count": 79,
+      "sgpr_spill_count": 0,
+      "vgpr_count": 206,
+      "vgpr_spill_count": 0,
+      "kernarg_segment_size": 152,
+      "max_flat_workgroup_size": 512
+    }
+  },
+  "owning_resources": {
+    "128": {
+      "group_segment_fixed_size": 163840,
+      "private_segment_fixed_size": 64,
+      "sgpr_count": 106,
+      "sgpr_spill_count": 14,
+      "vgpr_count": 256,
+      "vgpr_spill_count": 23,
+      "kernarg_segment_size": 152,
+      "max_flat_workgroup_size": 512
+    },
+    "192": {
+      "group_segment_fixed_size": 131072,
+      "private_segment_fixed_size": 0,
+      "sgpr_count": 106,
+      "sgpr_spill_count": 1,
+      "vgpr_count": 231,
+      "vgpr_spill_count": 0,
+      "kernarg_segment_size": 152,
+      "max_flat_workgroup_size": 512
+    }
+  }
+}

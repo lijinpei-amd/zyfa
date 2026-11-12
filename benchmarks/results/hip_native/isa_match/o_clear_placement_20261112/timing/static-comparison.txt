@@ -1,0 +1,58 @@
+# whole-kernel histogram vs assembly (verify-integrated.py filter)
+tree-292d02a d128: strict loop 1333 counts True sequence True; retained 4974 (asm 5302); positive excess 259, negative -587, L1 846; copies loop/whole 8/348
+   + s_nop:+104 v_or_b32_e32:+24 s_and_b64:+18 s_or_b32:+12 s_addk_i32:+11 s_mov_b32:+10 s_cselect_b64:+10 v_sub_u32_e32:+9 s_not_b32:+9 s_xor_b32:+7 s_cmp_lg_u32:+6 s_cmp_ge_u32:+6 s_branch:+6 v_or3_b32:+5 s_or_b64:+4 s_cmp_lt_u32:+4 s_bfe_u32:+4 s_waitcnt:+3 s_cmp_lt_i32:+2 s_cbranch_vccz:+2 v_cndmask_b32_e32:+1 v_and_or_b32:+1 s_movk_i32:+1
+   - s_add_u32:-165 s_mul_i32:-114 s_and_b32:-68 v_mov_b32_e32:-60 s_lshl_b32:-37 v_bfe_u32:-26 s_cmp_eq_u32:-25 v_lshl_add_u32:-19 v_add_u32_e32:-14 s_sub_u32:-10 v_and_b32_e32:-10 s_cmpk_le_u32:-8 s_lshr_b32:-7 s_addc_u32:-5 s_cbranch_scc0:-3 s_cselect_b32:-3 v_readfirstlane_b32:-3 s_cmp_eq_u64:-2 v_lshl_or_b32:-2 v_mul_lo_u32:-2 v_xor_b32_e32:-2 s_cbranch_scc1:-1 v_cndmask_b32_e64:-1
+tree-292d02a d192: strict loop 825 counts True sequence True; retained 3463 (asm 3737); positive excess 204, negative -478, L1 682; copies loop/whole 4/158
+   + s_nop:+50 v_or_b32_e32:+23 s_and_b64:+18 s_or_b32:+16 s_cmp_lg_u32:+10 s_not_b32:+9 s_mov_b64:+8 s_xor_b32:+7 s_cbranch_scc1:+7 s_branch:+7 s_addk_i32:+7 s_cmp_ge_u32:+6 v_or3_b32:+5 v_and_or_b32:+4 s_cselect_b64:+4 s_cmp_lt_u32:+4 s_bfe_u32:+4 v_sub_u32_e32:+3 v_cndmask_b32_e32:+3 v_lshrrev_b32_e32:+2 v_lshlrev_b32_e32:+2 s_cmp_lt_i32:+2 v_add_lshl_u32:+1 s_movk_i32:+1 s_mov_b32:+1
+   - s_add_u32:-129 s_mul_i32:-99 s_and_b32:-54 s_cmp_eq_u32:-29 v_add_u32_e32:-26 v_bfe_u32:-20 s_lshl_b32:-19 v_lshl_add_u32:-17 s_sub_u32:-16 v_and_b32_e32:-16 v_mov_b32_e32:-12 s_cmpk_le_u32:-8 s_lshr_b32:-7 s_addc_u32:-5 s_cbranch_scc0:-5 s_cselect_b32:-3 v_cndmask_b32_e64:-3 s_cmp_eq_u64:-2 v_mul_lo_u32:-2 v_readfirstlane_b32:-2 v_xor_b32_e32:-2 s_waitcnt:-1 v_lshl_or_b32:-1
+final d128: strict loop 1333 counts True sequence True; retained 5041 (asm 5302); positive excess 266, negative -527, L1 793; copies loop/whole 8/348
+   + s_nop:+104 v_or_b32_e32:+24 s_and_b64:+19 s_or_b32:+12 s_addk_i32:+11 s_mov_b32:+10 s_cselect_b64:+10 v_sub_u32_e32:+9 s_not_b32:+9 s_xor_b32:+7 s_branch:+7 s_cmp_lg_u32:+6 s_cmp_ge_u32:+6 v_or3_b32:+5 v_mov_b32_e32:+4 s_or_b64:+4 s_cmp_lt_u32:+4 s_bfe_u32:+4 s_waitcnt:+3 s_cmp_lt_i32:+2 s_cbranch_vccz:+2 v_cndmask_b32_e32:+1 v_and_or_b32:+1 s_movk_i32:+1 s_cbranch_vccnz:+1
+   - s_add_u32:-165 s_mul_i32:-114 s_and_b32:-68 s_lshl_b32:-37 v_bfe_u32:-26 s_cmp_eq_u32:-25 v_lshl_add_u32:-19 v_add_u32_e32:-14 s_sub_u32:-10 v_and_b32_e32:-10 s_cmpk_le_u32:-8 s_lshr_b32:-7 s_addc_u32:-5 s_cselect_b32:-3 v_readfirstlane_b32:-3 s_cbranch_scc0:-2 s_cbranch_scc1:-2 s_cmp_eq_u64:-2 v_lshl_or_b32:-2 v_mul_lo_u32:-2 v_xor_b32_e32:-2 v_cndmask_b32_e64:-1
+final d192: strict loop 825 counts True sequence True; retained 3530 (asm 3737); positive excess 258, negative -465, L1 723; copies loop/whole 4/158
+   + v_mov_b32_e32:+52 s_nop:+50 v_or_b32_e32:+23 s_and_b64:+19 s_or_b32:+16 s_cmp_lg_u32:+10 s_not_b32:+9 s_mov_b64:+8 s_branch:+8 s_xor_b32:+7 s_addk_i32:+7 s_cmp_ge_u32:+6 s_cbranch_scc1:+6 v_or3_b32:+5 v_and_or_b32:+4 s_cselect_b64:+4 s_cmp_lt_u32:+4 s_bfe_u32:+4 v_sub_u32_e32:+3 v_cndmask_b32_e32:+3 v_lshrrev_b32_e32:+2 v_lshlrev_b32_e32:+2 s_cmp_lt_i32:+2 v_add_lshl_u32:+1 s_movk_i32:+1 s_mov_b32:+1 s_cbranch_vccnz:+1
+   - s_add_u32:-129 s_mul_i32:-99 s_and_b32:-54 s_cmp_eq_u32:-29 v_add_u32_e32:-26 v_bfe_u32:-20 s_lshl_b32:-19 v_lshl_add_u32:-17 s_sub_u32:-16 v_and_b32_e32:-16 s_cmpk_le_u32:-8 s_lshr_b32:-7 s_addc_u32:-5 s_cbranch_scc0:-4 s_cselect_b32:-3 v_cndmask_b32_e64:-3 s_cmp_eq_u64:-2 v_mul_lo_u32:-2 v_readfirstlane_b32:-2 v_xor_b32_e32:-2 s_waitcnt:-1 v_lshl_or_b32:-1
+v d128: strict loop 1333 counts True sequence True; retained 4974 (asm 5302); positive excess 259, negative -587, L1 846; copies loop/whole 8/348
+   + s_nop:+104 v_or_b32_e32:+24 s_and_b64:+18 s_or_b32:+12 s_addk_i32:+11 s_mov_b32:+10 s_cselect_b64:+10 v_sub_u32_e32:+9 s_not_b32:+9 s_xor_b32:+7 s_cmp_lg_u32:+6 s_cmp_ge_u32:+6 s_branch:+6 v_or3_b32:+5 s_or_b64:+4 s_cmp_lt_u32:+4 s_bfe_u32:+4 s_waitcnt:+3 s_cmp_lt_i32:+2 s_cbranch_vccz:+2 v_cndmask_b32_e32:+1 v_and_or_b32:+1 s_movk_i32:+1
+   - s_add_u32:-165 s_mul_i32:-114 s_and_b32:-68 v_mov_b32_e32:-60 s_lshl_b32:-37 v_bfe_u32:-26 s_cmp_eq_u32:-25 v_lshl_add_u32:-19 v_add_u32_e32:-14 s_sub_u32:-10 v_and_b32_e32:-10 s_cmpk_le_u32:-8 s_lshr_b32:-7 s_addc_u32:-5 s_cbranch_scc0:-3 s_cselect_b32:-3 v_readfirstlane_b32:-3 s_cmp_eq_u64:-2 v_lshl_or_b32:-2 v_mul_lo_u32:-2 v_xor_b32_e32:-2 s_cbranch_scc1:-1 v_cndmask_b32_e64:-1
+v d192: strict loop 825 counts True sequence True; retained 3463 (asm 3737); positive excess 204, negative -478, L1 682; copies loop/whole 4/158
+   + s_nop:+50 v_or_b32_e32:+23 s_and_b64:+18 s_or_b32:+16 s_cmp_lg_u32:+10 s_not_b32:+9 s_mov_b64:+8 s_xor_b32:+7 s_cbranch_scc1:+7 s_branch:+7 s_addk_i32:+7 s_cmp_ge_u32:+6 v_or3_b32:+5 v_and_or_b32:+4 s_cselect_b64:+4 s_cmp_lt_u32:+4 s_bfe_u32:+4 v_sub_u32_e32:+3 v_cndmask_b32_e32:+3 v_lshrrev_b32_e32:+2 v_lshlrev_b32_e32:+2 s_cmp_lt_i32:+2 v_add_lshl_u32:+1 s_movk_i32:+1 s_mov_b32:+1
+   - s_add_u32:-129 s_mul_i32:-99 s_and_b32:-54 s_cmp_eq_u32:-29 v_add_u32_e32:-26 v_bfe_u32:-20 s_lshl_b32:-19 v_lshl_add_u32:-17 s_sub_u32:-16 v_and_b32_e32:-16 v_mov_b32_e32:-12 s_cmpk_le_u32:-8 s_lshr_b32:-7 s_addc_u32:-5 s_cbranch_scc0:-5 s_cselect_b32:-3 v_cndmask_b32_e64:-3 s_cmp_eq_u64:-2 v_mul_lo_u32:-2 v_readfirstlane_b32:-2 v_xor_b32_e32:-2 s_waitcnt:-1 v_lshl_or_b32:-1
+
+# whole-kernel order match (difflib matching blocks; approximate LCS)
+tree-292d02a d128: matched in order 2459 of asm 5302 / hip 4974; unmatched asm 2843, hip 2515
+tree-292d02a d192: matched in order 1851 of asm 3737 / hip 3463; unmatched asm 1886, hip 1612
+final d128: matched in order 2519 of asm 5302 / hip 5041; unmatched asm 2783, hip 2522
+final d192: matched in order 1914 of asm 3737 / hip 3530; unmatched asm 1823, hip 1616
+v d128: matched in order 2454 of asm 5302 / hip 4974; unmatched asm 2848, hip 2520
+v d192: matched in order 1847 of asm 3737 / hip 3463; unmatched asm 1890, hip 1616
+
+# zero moves, copies, waits
+tree-292d02a {'128': {'insts': 5322, 's_waitcnt': 117, 'reg_copies': 348, 's_nop': 286, 'v_mov_zero': 69}, '192': {'insts': 3621, 's_waitcnt': 85, 'reg_copies': 158, 's_nop': 190, 'v_mov_zero': 117}}
+final {'128': {'insts': 5389, 's_waitcnt': 117, 'reg_copies': 348, 's_nop': 286, 'v_mov_zero': 133}, '192': {'insts': 3688, 's_waitcnt': 85, 'reg_copies': 158, 's_nop': 190, 'v_mov_zero': 181}}
+v {'128': {'insts': 5322, 's_waitcnt': 117, 'reg_copies': 348, 's_nop': 286, 'v_mov_zero': 69}, '192': {'insts': 3621, 's_waitcnt': 85, 'reg_copies': 158, 's_nop': 190, 'v_mov_zero': 117}}
+
+# V hazard margins (backward: repo checker; forward: fwd_hazard.py)
+d128: 65 targets; nearest overlapping MFMA within 200 wait states: (108, 'WAR', '0x1fac', 'v[82:97], v[28:35], v[236:243], v[82:97]', '0x295c', 'v34, 0')
+d128: 64 zero-move targets; nearest following MFMA on a cleared register within 400 wait states: (185, 'RAW', '0x7d38', 'v[18:33], v[162:169], v[154:161], v[18:33], v173', '0x29d8', 'v33, 0')
+d192: 65 targets; nearest overlapping MFMA within 200 wait states: (75, 'WAR', '0xa4a8', 'v[2:17], v[52:59], v[182:189], v[2:17]', '0xab4c', 'v52, 0')
+d192: 64 zero-move targets; nearest following MFMA on a cleared register within 400 wait states: (115, 'RAW', '0xc8cc', 'v[2:17], v[146:153], v[106:113], v[2:17], v125, ', '0xac40', 'v17, 0')
+
+# V resources
+ .group_segment_fixed_size: 163840
+ .private_segment_fixed_size: 0
+ .sgpr_count: 77
+ .sgpr_spill_count: 0
+ .vgpr_count: 244
+ .vgpr_spill_count: 0
+ .group_segment_fixed_size: 131072
+ .private_segment_fixed_size: 0
+ .sgpr_count: 79
+ .sgpr_spill_count: 0
+ .vgpr_count: 206
+ .vgpr_spill_count: 0
+
+# .text
+04b70d822ca406fc  54832  /home/jinpli/workspace/home/jinpli/development/zyfa/build/att-20261112/tree-292d02a/inspect/native.co
+06c67ac47b2a9e8c  55356  /home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/short-shape-and-gap/trees/final/inspect/native.co
+260904b9ed88df7b  54832  /home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/short-shape-and-gap/trees/v/inspect/native.co
+260904b9ed88df7b  54832  /home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/short-shape-and-gap/trees/vfinal/inspect/native.co
