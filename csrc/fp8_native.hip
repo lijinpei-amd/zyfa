@@ -157,6 +157,12 @@ __device__ __forceinline__ uint32_t sgpr_constant() {
     return r;
 }
 
+// An unspecified tile: poison in IR, no instruction. It defines O on a path that clears O later,
+// so the previous pass's O is not kept live across the pass start.
+__device__ __forceinline__ fx16 unspecified_fx16() {
+    return __builtin_shufflevector(fx16{}, fx16{}, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1);
+}
+
 // A zero tile written as one v_mov_b32 per register, as the assembly clears O at each pass top.
 // A zero splat is a single value that reaches all four O phis at each steady-loop entry, so PHI
 // elimination copies it into three of the four tiles on every entry edge.
@@ -164,9 +170,10 @@ __device__ __forceinline__ uint32_t sgpr_constant() {
 // Hazard: the hazard recognizer does not check inline asm against MFMA hazards, so it inserts no
 // wait states between these moves and an MFMA that reads or writes the same registers. This is
 // safe only because of the current layout: the nearest MFMA touching a cleared O register is
-// 102 (d128) / 67 (d192) wait states away, against a window of about 19.
-// test_hip_inline_asm_o_clear_is_outside_mfma_hazard_window checks this distance; recheck it with
-// benchmarks/check_inline_asm_hazards.py if code moves next to the O clear.
+// 108 (d128) / 75 (d192) wait states before the clear and 185 / 115 after it, against a window
+// of about 19. test_hip_inline_asm_o_clear_is_outside_mfma_hazard_window checks the distance
+// before the clear; recheck both directions if code moves next to the O clear (after the
+// pass-start barrier).
 __device__ __forceinline__ fx16 zero_fx16() {
     fx16 z;
 #pragma unroll
@@ -1780,7 +1787,7 @@ __global__ __launch_bounds__(512, 1) void attend(Args<D> kernel_args) {
         }
     }
     wait_dma();
-    o = o_tile{zero_fx16(), zero_fx16(), zero_fx16(), zero_fx16()};
+    o = o_tile{unspecified_fx16(), unspecified_fx16(), unspecified_fx16(), unspecified_fx16()};
     l = 0.f;
     if (group == 0) {
         if (n > 1) load_v_group0<D>(sm, vr, (base + 1) & 3, 1, v_stride, tid);
@@ -1789,6 +1796,9 @@ __global__ __launch_bounds__(512, 1) void attend(Args<D> kernel_args) {
         wait_dma();
     }
     phase_barrier();
+    // O is cleared once, after the barrier: before it, the moves would delay group 0's tile loads
+    // that the barrier waits for, and lengthen group 1's pass-start phase.
+    o = o_tile{zero_fx16(), zero_fx16(), zero_fx16(), zero_fx16()};
     k = 0;
     if (base == 0) goto stage0;
     if (base == 1) goto stage1;
