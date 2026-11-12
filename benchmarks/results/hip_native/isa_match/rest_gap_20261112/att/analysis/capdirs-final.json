@@ -1,0 +1,18 @@
+{
+ "zyfa_fp8_d128_hip-v27-g1": "/home/jinpli/workspace/home/jinpli/.local/share/capture_att_trace/zyfa_fp8_d128_hip/2026-11-12-08-53-40-zyfa_fp8_d128_hip-v27-restgap-final-len256-gqa4-prof1",
+ "zyfa_fp8_d128_hip-v27-g2": "/home/jinpli/workspace/home/jinpli/.local/share/capture_att_trace/zyfa_fp8_d128_hip/2026-11-12-08-55-08-zyfa_fp8_d128_hip-v27-restgap-final-len256-gqa4-prof2",
+ "zyfa_fp8_d128_hip-v28-g1": "/home/jinpli/workspace/home/jinpli/.local/share/capture_att_trace/zyfa_fp8_d128_hip/2026-11-12-08-54-18-zyfa_fp8_d128_hip-v28-restgap-final-len256-mha-prof1",
+ "zyfa_fp8_d128_hip-v28-g2": "/home/jinpli/workspace/home/jinpli/.local/share/capture_att_trace/zyfa_fp8_d128_hip/2026-11-12-08-55-14-zyfa_fp8_d128_hip-v28-restgap-final-len256-mha-prof2",
+ "zyfa_fp8_d128_hip-v29-g1": "/home/jinpli/workspace/home/jinpli/.local/share/capture_att_trace/zyfa_fp8_d128_hip/2026-11-12-08-54-25-zyfa_fp8_d128_hip-v29-restgap-final-len1024-gqa4-prof1",
+ "zyfa_fp8_d128_hip-v29-g2": "/home/jinpli/workspace/home/jinpli/.local/share/capture_att_trace/zyfa_fp8_d128_hip/2026-11-12-08-55-52-zyfa_fp8_d128_hip-v29-restgap-final-len1024-gqa4-prof2",
+ "zyfa_fp8_d128_hip-v30-g1": "/home/jinpli/workspace/home/jinpli/.local/share/capture_att_trace/zyfa_fp8_d128_hip/2026-11-12-08-54-31-zyfa_fp8_d128_hip-v30-restgap-final-len1024-mha-prof1",
+ "zyfa_fp8_d128_hip-v30-g2": "/home/jinpli/workspace/home/jinpli/.local/share/capture_att_trace/zyfa_fp8_d128_hip/2026-11-12-08-56-11-zyfa_fp8_d128_hip-v30-restgap-final-len1024-mha-prof2-rep3",
+ "zyfa_fp8_d192_hip-v26-g1": "/home/jinpli/workspace/home/jinpli/.local/share/capture_att_trace/zyfa_fp8_d192_hip/2026-11-12-08-54-37-zyfa_fp8_d192_hip-v26-restgap-final-len256-mha-prof1",
+ "zyfa_fp8_d192_hip-v26-g2": "/home/jinpli/workspace/home/jinpli/.local/share/capture_att_trace/zyfa_fp8_d192_hip/2026-11-12-08-56-17-zyfa_fp8_d192_hip-v26-restgap-final-len256-mha-prof2",
+ "zyfa_fp8_d192_hip-v27-g1": "/home/jinpli/workspace/home/jinpli/.local/share/capture_att_trace/zyfa_fp8_d192_hip/2026-11-12-08-54-49-zyfa_fp8_d192_hip-v27-restgap-final-len256-gqa4-prof1-rep2",
+ "zyfa_fp8_d192_hip-v27-g2": "/home/jinpli/workspace/home/jinpli/.local/share/capture_att_trace/zyfa_fp8_d192_hip/2026-11-12-08-57-27-zyfa_fp8_d192_hip-v27-restgap-final-len256-gqa4-prof2",
+ "zyfa_fp8_d192_hip-v28-g1": "/home/jinpli/workspace/home/jinpli/.local/share/capture_att_trace/zyfa_fp8_d192_hip/2026-11-12-08-54-55-zyfa_fp8_d192_hip-v28-restgap-final-len1024-mha-prof1",
+ "zyfa_fp8_d192_hip-v28-g2": "/home/jinpli/workspace/home/jinpli/.local/share/capture_att_trace/zyfa_fp8_d192_hip/2026-11-12-08-57-33-zyfa_fp8_d192_hip-v28-restgap-final-len1024-mha-prof2",
+ "zyfa_fp8_d192_hip-v29-g1": "/home/jinpli/workspace/home/jinpli/.local/share/capture_att_trace/zyfa_fp8_d192_hip/2026-11-12-08-55-01-zyfa_fp8_d192_hip-v29-restgap-final-len1024-gqa4-prof1",
+ "zyfa_fp8_d192_hip-v29-g2": "/home/jinpli/workspace/home/jinpli/.local/share/capture_att_trace/zyfa_fp8_d192_hip/2026-11-12-08-57-52-zyfa_fp8_d192_hip-v29-restgap-final-len1024-gqa4-prof2-rep3"
+}

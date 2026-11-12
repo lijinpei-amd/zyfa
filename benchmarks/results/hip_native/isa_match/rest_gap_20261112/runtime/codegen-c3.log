@@ -1,0 +1,32 @@
+...........................F............................................ [ 82%]
+...............                                                          [100%]
+=================================== FAILURES ===================================
+________________ test_hip_runtime_pv_reuses_one_v_address[192] _________________
+
+disassembled_kernels = ['\n/tmp/pytest-of-jinpli/pytest-124/native_objects0/native.o:\tfile format elf64-amdgpu\n\t.amdgcn_target "amdgpu-amd...  // 000000006B44: BF8C0F70\n\ts_endpgm                                                   // 000000006B48: BF810000\n']
+dim = 192
+
+    @pytest.mark.parametrize("dim", [128, 192])
+    def test_hip_runtime_pv_reuses_one_v_address(disassembled_kernels, dim):
+        from benchmarks.compare_isa import parse_disassembly, select_function
+    
+        code = select_function(parse_disassembly(disassembled_kernels[0]), dim)
+        expected_offsets = [4096 * half + 256 * fragment + 1024 * word
+                            for half in range(2 if dim == 128 else 1)
+                            for fragment in range(4) for word in range(4)]
+        updates = set()
+        for site, (fragment_reads, constructions) in enumerate(runtime_pv_address_sites(code, dim)):
+            offsets = [int(m[1]) if (m := re.search(r"offset:(\d+)", i.operands)) else 0
+                       for i in fragment_reads]
+>           assert offsets == expected_offsets, (site, offsets)
+E           AssertionError: (0, [0, 1024, 2048, 3072, 256, 1280, ...])
+E           assert [0, 1024, 204...56, 1280, ...] == [0, 1024, 204...56, 1280, ...]
+E             
+E             At index 12 diff: 0 != 768
+E             Use -v to get more diff
+
+tests/test_fp8_hip_codegen.py:365: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_fp8_hip_codegen.py::test_hip_runtime_pv_reuses_one_v_address[192]
+1 failed, 86 passed in 188.30s (0:03:08)
+exit 1

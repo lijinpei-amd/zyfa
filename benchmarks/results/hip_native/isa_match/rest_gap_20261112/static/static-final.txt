@@ -1,0 +1,63 @@
+# whole-kernel histogram vs assembly
+c5 d128: strict loop 1333 counts True sequence True; retained 4973 (asm 5302); positive excess 258, negative -587, L1 845; copies loop/whole 8/348
+   + s_nop:+104 v_or_b32_e32:+24 s_and_b64:+18 s_or_b32:+12 s_addk_i32:+11 s_mov_b32:+10 s_cselect_b64:+10 v_sub_u32_e32:+9 s_not_b32:+9 s_xor_b32:+7 s_cmp_lg_u32:+6 s_cmp_ge_u32:+6 s_branch:+6 v_or3_b32:+5 s_or_b64:+4 s_cmp_lt_u32:+4 s_bfe_u32:+4 s_waitcnt:+2 s_cmp_lt_i32:+2 s_cbranch_vccz:+2 v_cndmask_b32_e32:+1 v_and_or_b32:+1 s_movk_i32:+1
+   - s_add_u32:-165 s_mul_i32:-114 s_and_b32:-68 v_mov_b32_e32:-60 s_lshl_b32:-37 v_bfe_u32:-26 s_cmp_eq_u32:-25 v_lshl_add_u32:-19 v_add_u32_e32:-14 s_sub_u32:-10 v_and_b32_e32:-10 s_cmpk_le_u32:-8 s_lshr_b32:-7 s_addc_u32:-5 s_cbranch_scc0:-3 s_cselect_b32:-3 v_readfirstlane_b32:-3 s_cmp_eq_u64:-2 v_lshl_or_b32:-2 v_mul_lo_u32:-2 v_xor_b32_e32:-2 s_cbranch_scc1:-1 v_cndmask_b32_e64:-1
+c5 d192: strict loop 825 counts True sequence True; retained 3449 (asm 3737); positive excess 193, negative -481, L1 674; copies loop/whole 4/156
+   + s_nop:+43 v_or_b32_e32:+23 s_or_b32:+16 s_and_b64:+14 s_cmp_lg_u32:+10 s_not_b32:+9 s_mov_b64:+8 s_xor_b32:+7 s_cbranch_scc1:+7 s_branch:+7 s_addk_i32:+7 s_cmp_ge_u32:+6 v_or3_b32:+5 v_and_or_b32:+4 s_cmp_lt_u32:+4 s_bfe_u32:+4 v_sub_u32_e32:+3 v_cndmask_b32_e32:+3 v_lshrrev_b32_e32:+2 v_lshlrev_b32_e32:+2 s_cselect_b64:+2 s_cmp_lt_i32:+2 s_cbranch_vccz:+2 v_add_lshl_u32:+1 s_movk_i32:+1 s_mov_b32:+1
+   - s_add_u32:-129 s_mul_i32:-99 s_and_b32:-54 s_cmp_eq_u32:-29 v_add_u32_e32:-26 v_bfe_u32:-20 s_lshl_b32:-19 v_lshl_add_u32:-17 s_sub_u32:-16 v_and_b32_e32:-16 v_mov_b32_e32:-12 s_cmpk_le_u32:-8 s_cbranch_scc0:-7 s_lshr_b32:-7 s_addc_u32:-5 s_cselect_b32:-3 v_cndmask_b32_e64:-3 s_cmp_eq_u64:-2 s_waitcnt:-2 v_mul_lo_u32:-2 v_readfirstlane_b32:-2 v_xor_b32_e32:-2 v_lshl_or_b32:-1
+final d128: strict loop 1333 counts True sequence True; retained 4964 (asm 5302); positive excess 248, negative -586, L1 834; copies loop/whole 8/347
+   + s_nop:+99 v_or_b32_e32:+24 s_and_b64:+18 s_mov_b32:+11 s_addk_i32:+11 s_or_b32:+10 s_cselect_b64:+10 v_sub_u32_e32:+9 s_not_b32:+9 s_xor_b32:+7 s_cmp_lg_u32:+6 s_cmp_ge_u32:+6 v_or3_b32:+5 s_branch:+5 s_or_b64:+4 s_cmp_lt_u32:+4 s_bfe_u32:+4 s_cmp_lt_i32:+2 v_cndmask_b32_e32:+1 v_and_or_b32:+1 s_movk_i32:+1 s_cbranch_scc1:+1
+   - s_add_u32:-163 s_mul_i32:-114 s_and_b32:-70 v_mov_b32_e32:-60 s_lshl_b32:-41 v_bfe_u32:-26 s_cmp_eq_u32:-23 v_lshl_add_u32:-19 v_add_u32_e32:-12 s_sub_u32:-10 v_and_b32_e32:-10 s_cmpk_le_u32:-8 s_lshr_b32:-7 s_addc_u32:-5 s_cbranch_scc0:-3 s_cselect_b32:-3 v_readfirstlane_b32:-3 s_cmp_eq_u64:-2 v_lshl_or_b32:-2 v_mul_lo_u32:-2 v_xor_b32_e32:-2 v_cndmask_b32_e64:-1
+final d192: strict loop 825 counts True sequence True; retained 3446 (asm 3737); positive excess 190, negative -481, L1 671; copies loop/whole 4/157
+   + s_nop:+43 v_or_b32_e32:+23 s_or_b32:+16 s_and_b64:+14 s_cmp_lg_u32:+10 s_not_b32:+9 s_cbranch_scc1:+9 s_mov_b64:+8 s_xor_b32:+7 s_branch:+7 s_cmp_ge_u32:+6 v_or3_b32:+5 s_addk_i32:+5 v_and_or_b32:+4 s_cmp_lt_u32:+4 s_bfe_u32:+4 v_sub_u32_e32:+3 v_cndmask_b32_e32:+3 v_lshrrev_b32_e32:+2 s_mov_b32:+2 s_cselect_b64:+2 s_cmp_lt_i32:+2 v_add_lshl_u32:+1 s_movk_i32:+1
+   - s_add_u32:-127 s_mul_i32:-99 s_and_b32:-54 s_cmp_eq_u32:-27 v_add_u32_e32:-26 s_lshl_b32:-23 v_bfe_u32:-20 v_lshl_add_u32:-17 s_sub_u32:-16 v_and_b32_e32:-16 v_mov_b32_e32:-12 s_cmpk_le_u32:-8 s_cbranch_scc0:-7 s_lshr_b32:-7 s_addc_u32:-5 s_cselect_b32:-3 v_cndmask_b32_e64:-3 s_cmp_eq_u64:-2 s_waitcnt:-2 v_mul_lo_u32:-2 v_readfirstlane_b32:-2 v_xor_b32_e32:-2 v_lshl_or_b32:-1
+
+# exact LCS order
+c5 d128: LCS 3309 of asm 5302 / hip 4973; unmatched asm 1993, hip 1664
+c5 d192: LCS 2271 of asm 3737 / hip 3449; unmatched asm 1466, hip 1178
+final d128: LCS 3434 of asm 5302 / hip 4964; unmatched asm 1868, hip 1530
+final d192: LCS 2321 of asm 3737 / hip 3446; unmatched asm 1416, hip 1125
+
+# zero moves, copies, waits, nops
+c5 {'128': {'insts': 5321, 's_waitcnt': 116, 'reg_copies': 348, 's_nop': 286, 'v_mov_zero': 69}, '192': {'insts': 3605, 's_waitcnt': 84, 'reg_copies': 156, 's_nop': 183, 'v_mov_zero': 117}}
+final {'128': {'insts': 5311, 's_waitcnt': 114, 'reg_copies': 347, 's_nop': 281, 'v_mov_zero': 69}, '192': {'insts': 3603, 's_waitcnt': 84, 's_nop': 183, 'reg_copies': 157, 'v_mov_zero': 117}}
+
+# /home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/short-gap/trees/c5: strict loops and copies
+d128: strict loop retained hip 1333 asm 1333; counts_match True sequence_match True; loop copies hip 8 asm 12; whole-kernel copies hip 348 asm 319
+d192: strict loop retained hip 825 asm 825; counts_match True sequence_match True; loop copies hip 4 asm 12; whole-kernel copies hip 156 asm 223
+# /home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/short-gap/trees/c5: O-clear hazard margins (backward: repository checker; forward: fwd_hazard.py)
+d128: 65 targets; nearest overlapping MFMA within 200 wait states: (108, 'WAR', '0x1fac', 'v[82:97], v[28:35], v[236:243], v[82:97]', '0x2958', 'v34, 0')
+d128: 64 zero-move targets; nearest following MFMA on a cleared register within 400 wait states: (185, 'RAW', '0x7d34', 'v[18:33], v[162:169], v[154:161], v[18:33], v173', '0x29d4', 'v33, 0')
+d192: 65 targets; nearest overlapping MFMA within 200 wait states: (75, 'WAR', '0xa4a8', 'v[2:17], v[52:59], v[182:189], v[2:17]', '0xab48', 'v52, 0')
+d192: 64 zero-move targets; nearest following MFMA on a cleared register within 400 wait states: (115, 'RAW', '0xca08', 'v[2:17], v[146:153], v[106:113], v[2:17], v125, ', '0xac3c', 'v17, 0')
+# /home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/short-gap/trees/c5: resources
+ .private_segment_fixed_size: 0
+ .sgpr_count: 77
+ .sgpr_spill_count: 0
+ .vgpr_count: 244
+ .vgpr_spill_count: 0
+ .private_segment_fixed_size: 0
+ .sgpr_count: 79
+ .sgpr_spill_count: 0
+ .vgpr_count: 206
+ .vgpr_spill_count: 0
+
+# /home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/rest-gap/trees/final: strict loops and copies
+d128: strict loop retained hip 1333 asm 1333; counts_match True sequence_match True; loop copies hip 8 asm 12; whole-kernel copies hip 347 asm 319
+d192: strict loop retained hip 825 asm 825; counts_match True sequence_match True; loop copies hip 4 asm 12; whole-kernel copies hip 157 asm 223
+# /home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/rest-gap/trees/final: O-clear hazard margins (backward: repository checker; forward: fwd_hazard.py)
+d128: 65 targets; nearest overlapping MFMA within 200 wait states: (108, 'WAR', '0x1fa4', 'v[82:97], v[28:35], v[236:243], v[82:97]', '0x2ad4', 'v34, 0')
+d128: 64 zero-move targets; nearest following MFMA on a cleared register within 400 wait states: (185, 'RAW', '0x6774', 'v[18:33], v[162:169], v[154:161], v[18:33], v173', '0x2b50', 'v33, 0')
+d192: 65 targets; nearest overlapping MFMA within 200 wait states: (75, 'WAR', '0xa4a0', 'v[2:17], v[52:59], v[182:189], v[2:17]', '0xab40', 'v52, 0')
+d192: 64 zero-move targets; nearest following MFMA on a cleared register within 400 wait states: (115, 'RAW', '0xd904', 'v[2:17], v[146:153], v[106:113], v[2:17], v125, ', '0xac34', 'v17, 0')
+# /home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/rest-gap/trees/final: resources
+ .private_segment_fixed_size: 0
+ .sgpr_count: 77
+ .sgpr_spill_count: 0
+ .vgpr_count: 244
+ .vgpr_spill_count: 0
+ .private_segment_fixed_size: 0
+ .sgpr_count: 79
+ .sgpr_spill_count: 0
+ .vgpr_count: 214
+ .vgpr_spill_count: 0
