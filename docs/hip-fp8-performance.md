@@ -14,11 +14,23 @@ the default. Both native kernels support BHSD/BSHD, MHA and GQA, sequence
 padding, BF16 output, optional FP32 LSE, scalar device descales, CUDA graphs,
 and `torch.compile` through a separate `zyfa::fwd_hip` custom operator.
 
-On the final 24-case comparison, the HIP kernel is 28–29% slower than assembly
-for d128 at 32K tokens and 7.5–8.3% slower for d192. At 1K tokens the gaps are
-3.05–3.28× for d128 and 1.61× for d192. All 212 project tests pass. This is a
-native implementation of the main ZYFA pipeline with measured compiler and
-cross-pass scheduling differences, rather than a claim of equal performance.
+In the current build ([`o_clear_placement_20261112`](../benchmarks/results/hip_native/isa_match/o_clear_placement_20261112/README.md)),
+the HIP kernel's speed against the assembly kernel depends on length:
+
+| Length | d128 | d192 |
+| --- | --- | --- |
+| 16K and 32K | 0.7–0.9% slower | 0.4–0.6% slower |
+| 8192 | 1.0–1.3% slower | 0.7–0.8% slower |
+| 1024 | 5.9–6.2% slower | 4.3–5.0% slower |
+| 256 | 5.0–7.0% slower | 8.5–10.7% slower |
+
+The remaining gap is outside the steady loop: pass start, tails and epilogue.
+The steady loops take the same cycles per iteration as the assembly kernels
+(ATT). All 314 project tests pass, with 2 skipped.
+
+The earlier 24-case comparison further down describes a much older build. It
+was 28–29% slower than assembly for d128 at 32K tokens, and 3.05–3.28× slower
+at 1K tokens.
 
 ## Structure reproduced
 
@@ -110,8 +122,11 @@ Loop-invariant code motion is disabled for the persistent pass loop:
   therefore crosses the pass loop.
 
 The O tile is cleared at each pass start with 64 `vgpr_constant<0>` moves, as
-the assembly kernels do. An `o_tile{}` zero would become an SGPR splat whose
-PHI copies are repeated on every steady-loop entry edge. The compiler adds no
+the assembly kernels do. The clear sits after the pass-start barrier: placed
+before it, the moves delayed group 0's tile loads and lengthened group 1's
+pass-start phase. Until the clear, O is an unspecified tile. An `o_tile{}` zero
+would become an SGPR splat whose PHI copies are repeated on every steady-loop
+entry edge. The compiler adds no
 MFMA hazard padding around inline asm; the nearest MFMA touching a cleared
 register is far outside the hazard window. The low half of each FP8
 probability pack takes an unspecified "old" operand, because the high-half pack
@@ -137,7 +152,7 @@ source uses one static LDS array for the reasons above.
 ## Generated code and remaining differences
 
 Current resources, from the
-[`copies_20261112`](../benchmarks/results/hip_native/isa_match/copies_20261112/README.md)
+[`o_clear_placement_20261112`](../benchmarks/results/hip_native/isa_match/o_clear_placement_20261112/README.md)
 capture:
 
 | Resource | HIP d128 | Assembly d128 | HIP d192 | Assembly d192 |

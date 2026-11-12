@@ -3,7 +3,45 @@
 Both four-stage steady loops retain the assembly backend's exact disassembled
 mnemonic counts and sequence. The whole-kernel counts and sequence still differ.
 
-## Current capture: register copies
+## Current capture: O-clear placement
+
+[`o_clear_placement_20261112`](../benchmarks/results/hip_native/isa_match/o_clear_placement_20261112/README.md)
+moves the O clear introduced by the register-copy fixes below to after the
+pass-start barrier (`9cf4ce9`). The moves had sat in front of group 0's
+pass-start tile loads and in group 1's pass-start phase. That slowed short
+shapes by up to 1.8%.
+
+The fix:
+- **Placement:** O is cleared once, after the barrier, for both groups.
+- **Before the clear:** O is an unspecified tile, so the previous pass's O
+  isn't kept live.
+
+The result:
+- **Instruction match:** the mnemonic histogram is unchanged (positive excess
+  259/204, L1 846/682). Strict loops stay exact, with no spills.
+- **Hazard margins:** 108/75 wait states before the clear and 185/115 after,
+  against a window of about 19.
+- **Short-shape timing vs `b73e505`:** −1.2% to −1.4% at L256 for d128 GQA4 and
+  d192, −0.4% to −0.8% at L1024.
+- **Correctness:** outputs are bitwise-identical to the preceding captures.
+
+A two-site variant was 0.2–0.7% faster on d128, but added 64 static moves.
+That worsened d192's count match (positive excess 204 → 258), so it wasn't
+used.
+
+HIP time / assembly time, same process (README protocol, five clean runs):
+
+| | d128 MHA | d128 GQA4 | d192 MHA | d192 GQA4 |
+| --- | ---: | ---: | ---: | ---: |
+| L256 | 1.070 | 1.050 | 1.107 | 1.085 |
+| L1024 | 1.059 | 1.062 | 1.050 | 1.043 |
+| L8192 | 1.010 | 1.013 | 1.007 | 1.008 |
+| L16K / L32K (292d02a code) | 1.008 / 1.007 | 1.009 / 1.007 | 1.004 / 1.005 | 1.006 / 1.006 |
+
+The remaining gap is at short lengths, outside the steady loop: pass start,
+tails and epilogue.
+
+## Register copies
 
 [`copies_20261112`](../benchmarks/results/hip_native/isa_match/copies_20261112/README.md)
 adds source commits `0ddab6a`–`292d02a` to the single-LDS capture below. The
