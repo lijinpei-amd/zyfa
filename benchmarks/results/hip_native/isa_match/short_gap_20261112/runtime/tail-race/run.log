@@ -1,0 +1,115 @@
+{
+ "candidate_extension": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/short-gap/trees/c5/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+ "candidate_extension_sha256": "08fc7f45ad55d0aabebb18e6c6952c34c07f614cf8d3d1a98c77f78d4d2b3f1b",
+ "references": {
+  "head": {
+   "path": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/short-gap/trees/head/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "sha256": "5ed38862b845eabc846c50b4e3e91d334e81a2f3a3828c2e1a01d6bd3843b231"
+  },
+  "main9cf4ce9": {
+   "path": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/gpu-validation-9cf4ce9/extensions/main-9cf4ce9-fbbae15b.so",
+   "sha256": "fbbae15bbbbc87485130f4d3c3732206216716ed439a589360c096b52d8c7c42"
+  }
+ },
+ "device": "AMD Instinct MI350X",
+ "HIP_VISIBLE_DEVICES": "0",
+ "args": {
+  "reference": "['head=/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/short-gap/trees/head/zyfa/_C.cpython-314-x86_64-linux-gnu.so', 'main9cf4ce9=/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/gpu-validation-9cf4ce9/extensions/main-9cf4ce9-fbbae15b.so']",
+  "expect_sha": "08fc7f45ad55d0aabebb18e6c6952c34c07f614cf8d3d1a98c77f78d4d2b3f1b",
+  "output": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/short-gap/correctness/c5-tail-race/result",
+  "repeats": "500",
+  "diag_repeats": "20",
+  "stress_iters": "20000",
+  "seeds": "200",
+  "phases": "kernel,persistent,padded,diagonal,oclear,stress",
+  "oclear_extra": "True"
+ },
+ "start": "2026-11-12T14:54:05"
+}
+kernel phase done 7.3s
+persistent phase done 19.0s
+padded phase done 55.0s
+diagonal phase done 58.6s
+oclear phase done 76.7s
+stress phase done 144.2s
+{
+ "meta": {
+  "candidate_extension": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/short-gap/trees/c5/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+  "candidate_extension_sha256": "08fc7f45ad55d0aabebb18e6c6952c34c07f614cf8d3d1a98c77f78d4d2b3f1b",
+  "references": {
+   "head": {
+    "path": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/short-gap/trees/head/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+    "sha256": "5ed38862b845eabc846c50b4e3e91d334e81a2f3a3828c2e1a01d6bd3843b231"
+   },
+   "main9cf4ce9": {
+    "path": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/gpu-validation-9cf4ce9/extensions/main-9cf4ce9-fbbae15b.so",
+    "sha256": "fbbae15bbbbc87485130f4d3c3732206216716ed439a589360c096b52d8c7c42"
+   }
+  },
+  "device": "AMD Instinct MI350X",
+  "HIP_VISIBLE_DEVICES": "0",
+  "args": {
+   "reference": "['head=/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/short-gap/trees/head/zyfa/_C.cpython-314-x86_64-linux-gnu.so', 'main9cf4ce9=/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/gpu-validation-9cf4ce9/extensions/main-9cf4ce9-fbbae15b.so']",
+   "expect_sha": "08fc7f45ad55d0aabebb18e6c6952c34c07f614cf8d3d1a98c77f78d4d2b3f1b",
+   "output": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/short-gap/correctness/c5-tail-race/result",
+   "repeats": "500",
+   "diag_repeats": "20",
+   "stress_iters": "20000",
+   "seeds": "200",
+   "phases": "kernel,persistent,padded,diagonal,oclear,stress",
+   "oclear_extra": "True"
+  },
+  "start": "2026-11-12T14:54:05",
+  "negative_control": "single-bit flips in output and LSE detected",
+  "end": "2026-11-12T14:56:29",
+  "elapsed_s": 144.20040893554688
+ },
+ "cases": 1134,
+ "failures": 0,
+ "by_phase": {
+  "diagonal": {
+   "cases": 594,
+   "pass": 594
+  },
+  "kernel": {
+   "cases": 100,
+   "pass": 100
+  },
+  "oclear-seeds": {
+   "cases": 28,
+   "pass": 28
+  },
+  "padded": {
+   "cases": 336,
+   "pass": 336
+  },
+  "persistent": {
+   "cases": 48,
+   "pass": 48
+  },
+  "stress-fixed": {
+   "cases": 14,
+   "pass": 14
+  },
+  "stress-seeds": {
+   "cases": 14,
+   "pass": 14
+  }
+ },
+ "all_equal_checks_true": true,
+ "equal_checks": [
+  "equal_api_raw_lse",
+  "equal_api_raw_nolse",
+  "equal_head_lse",
+  "equal_head_nolse",
+  "equal_main9cf4ce9_lse",
+  "equal_main9cf4ce9_nolse",
+  "equal_output_lse_vs_nolse"
+ ],
+ "repeat_stable_all": true,
+ "total_candidate_launches": 798316,
+ "max_rel_rms": 0.02673099520108922,
+ "max_abs_err": 0.04236257436282298,
+ "max_lse_abs_err": 0.05005439362632447
+}
+FAILURES 0

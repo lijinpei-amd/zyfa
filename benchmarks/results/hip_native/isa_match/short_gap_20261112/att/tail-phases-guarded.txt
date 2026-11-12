@@ -1,0 +1,51 @@
+== asm128 zyfa_fp8_d128_asm-v4-g1,zyfa_fp8_d128_asm-v4-g2
+group 0 MM18  n= 256 mean    1942 median    1932
+group 0 SM    n= 256 mean    1174 median    1120
+group 1 MM18  n= 256 mean    1817 median    1804
+group 1 SM    n= 256 mean     871 median     864
+== hip128 zyfa_fp8_d128_hip-v9-g1,zyfa_fp8_d128_hip-v9-g2
+group 0 MM18  n= 256 mean    2483 median    2384
+group 0 SM    n= 256 mean    1235 median    1336
+group 1 MM18  n= 256 mean    2198 median    2196
+group 1 SM    n= 256 mean     797 median     828
+== hip128 zyfa_fp8_d128_hip-v17-g1,zyfa_fp8_d128_hip-v17-g2 --dis /home/jinpli/workspace/h
+group 0 MM18  n= 256 mean    2434 median    2412
+group 0 SM    n= 256 mean    1429 median    1426
+group 1 MM18  n= 256 mean    2182 median    2176
+group 1 SM    n= 256 mean     913 median     946
+== asm192 zyfa_fp8_d192_asm-v2-g1,zyfa_fp8_d192_asm-v2-g2
+group 0 MM11  n= 128 mean    1331 median    1350
+group 0 MM5   n= 256 mean     361 median     318
+group 0 SM    n= 384 mean     906 median     896
+group 1 MM11  n= 256 mean    1288 median    1304
+group 1 MM5   n= 128 mean     383 median     388
+group 1 SM    n= 384 mean     468 median     452
+== hip192 zyfa_fp8_d192_hip-v6-g1,zyfa_fp8_d192_hip-v6-g2
+group 0 MM11  n= 128 mean    1957 median    2010
+group 0 MM5   n= 256 mean     375 median     372
+group 0 SM    n= 384 mean     901 median     796
+group 1 MM11  n= 256 mean    1784 median    1698
+group 1 MM5   n= 128 mean     354 median     354
+group 1 SM    n= 384 mean     531 median     508
+== hip192 zyfa_fp8_d192_hip-v14-g1,zyfa_fp8_d192_hip-v14-g2 --dis /home/jinpli/workspace/h
+group 0 MM11  n= 128 mean    1639 median    1638
+group 0 MM5   n= 256 mean     382 median     376
+group 0 SM    n= 384 mean     885 median     772
+group 1 MM11  n= 256 mean    1617 median    1624
+group 1 MM5   n= 128 mean     346 median     346
+group 1 SM    n= 384 mean     542 median     504
+== hip192 zyfa_fp8_d192_hip-v22-g1,zyfa_fp8_d192_hip-v22-g2 --dis /hom
+group 0 MM11  n= 128 mean    1560 median    1564
+group 1 MM11  n= 256 mean    1489 median    1496
+== asm192 zyfa_fp8_d192_asm-v4-g1,zyfa_fp8_d192_asm-v4-g2
+group 0 MM11  n= 224 mean    1353 median    1352
+group 1 MM11  n= 256 mean    1288 median    1288
+== hip192 zyfa_fp8_d192_hip-v8-g1,zyfa_fp8_d192_hip-v8-g2
+group 0 MM11  n= 256 mean    1884 median    1856
+group 1 MM11  n= 256 mean    1697 median    1668
+== hip192 zyfa_fp8_d192_hip-v16-g1,zyfa_fp8_d192_hip-v16-g2 --dis /hom
+group 0 MM11  n= 192 mean    1670 median    1682
+group 1 MM11  n= 256 mean    1613 median    1626
+== hip192 zyfa_fp8_d192_hip-v24-g1,zyfa_fp8_d192_hip-v24-g2 --dis /hom
+group 0 MM11  n= 192 mean    1574 median    1580
+group 1 MM11  n= 256 mean    1492 median    1496

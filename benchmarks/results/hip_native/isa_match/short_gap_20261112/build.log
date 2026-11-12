@@ -1,0 +1,283 @@
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/bindings.cpp -> /home/jinpli/workspace/home/jinpli/development/zyfa/csrc/bindings.cpp [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/common/base_types.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/common/base_types.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/common/util.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/common/util.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/common/base_ops.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/common/base_ops.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/common/macros.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/common/macros.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/common/common.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/common/common.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/types/register/rv_layout.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/types/register/rv_layout.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/types/register/rt_shape.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/types/register/rt_shape.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/types/register/rt_layout.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/types/register/rt_layout.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/types/register/rt_base.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/types/register/rt_base.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/types/register/rv.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/types/register/rv.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/types/register/rt.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/types/register/rt.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/types/register/art_base.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/types/register/art_base.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/types/register/art.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/types/register/art.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/types/register/register.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/types/register/register.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/types/shared/sv.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/types/shared/sv.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/types/shared/st_shape.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/types/shared/st_shape.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/types/shared/st.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/types/shared/st.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/types/shared/shared.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/types/shared/shared.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/types/global/util.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/types/global/util.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/types/global/gl.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/types/global/gl.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/types/global/global.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/types/global/global.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/types/types.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/types/types.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/register/tile/conversions.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/register/tile/conversions.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/register/tile/maps.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/register/tile/maps.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/register/tile/reductions.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/register/tile/reductions.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/register/tile/mma.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/register/tile/mma.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/register/tile/assembly/conversions.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/register/tile/assembly/conversions.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/register/tile/assembly/maps.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/register/tile/assembly/maps.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/register/tile/assembly/mma.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/register/tile/assembly/mma.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/register/tile/assembly/tile.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/register/tile/assembly/tile.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/register/tile/tile.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/register/tile/tile.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/register/vec/conversions.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/register/vec/conversions.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/register/vec/maps.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/register/vec/maps.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/register/vec/reductions.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/register/vec/reductions.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/register/vec/assembly/maps.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/register/vec/assembly/maps.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/register/vec/assembly/vec.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/register/vec/assembly/vec.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/register/vec/vec.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/register/vec/vec.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/register/register.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/register/register.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/memory/util/util.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/memory/util/util.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/memory/tile/shared_to_register.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/memory/tile/shared_to_register.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/memory/tile/global_to_register.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/memory/tile/global_to_register.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/memory/tile/global_to_shared.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/memory/tile/global_to_shared.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/memory/tile/assembly/global_to_register.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/memory/tile/assembly/global_to_register.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/memory/tile/assembly/shared_to_register.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/memory/tile/assembly/shared_to_register.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/memory/tile/assembly/tile.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/memory/tile/assembly/tile.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/memory/tile/tile.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/memory/tile/tile.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/memory/vec/shared_to_register.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/memory/vec/shared_to_register.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/memory/vec/global_to_register.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/memory/vec/global_to_register.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/memory/vec/global_to_shared.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/memory/vec/global_to_shared.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/memory/vec/assembly/shared_to_register.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/memory/vec/assembly/shared_to_register.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/memory/vec/assembly/vec.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/memory/vec/assembly/vec.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/memory/vec/vec.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/warp/memory/vec/vec.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/group/memory/tile/global_to_shared.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/third_party/hipkittens/include/cdna4/ops/group/memory/tile/global_to_shared.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/tiles.cuh -> /home/jinpli/workspace/home/jinpli/development/zyfa/csrc/tiles.cuh [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/xcd_map.h -> /home/jinpli/workspace/home/jinpli/development/zyfa/csrc/xcd_map.h [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/bf16_d128.hip -> /home/jinpli/workspace/home/jinpli/development/zyfa/csrc/bf16_d128.hip [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/llvm.h -> /home/jinpli/workspace/home/jinpli/development/zyfa/csrc/llvm.h [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/rt.h -> /home/jinpli/workspace/home/jinpli/development/zyfa/csrc/rt.h [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/rt_bf16_d192.h -> /home/jinpli/workspace/home/jinpli/development/zyfa/csrc/rt_bf16_d192.h [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/bf16_d192.hip -> /home/jinpli/workspace/home/jinpli/development/zyfa/csrc/bf16_d192_hip.hip [skipped, already hipified]
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/rt_fp8_d128.h -> /home/jinpli/workspace/home/jinpli/development/zyfa/csrc/rt_fp8_d128.h [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_d128.hip -> /home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_d128_hip.hip [skipped, already hipified]
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/rt_fp8_d192.h -> /home/jinpli/workspace/home/jinpli/development/zyfa/csrc/rt_fp8_d192.h [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_d192.hip -> /home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_d192_hip.hip [skipped, already hipified]
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/descale.h -> /home/jinpli/workspace/home/jinpli/development/zyfa/csrc/descale.h [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.h -> /home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.h [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/build/include/generated/fmha_fp8_d128_pp_co.h -> /home/jinpli/workspace/home/jinpli/development/zyfa/build/include/generated/fmha_fp8_d128_pp_co.h [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_d128_asm.hip -> /home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_d128_asm.hip [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/build/include/generated/fmha_fp8_d192_pp_co.h -> /home/jinpli/workspace/home/jinpli/development/zyfa/build/include/generated/fmha_fp8_d192_pp_co.h [skipped, no changes]
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_d192_asm.hip -> /home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_d192_asm.hip [skipped, no changes]
+[92mSuccessfully preprocessed all matching files.[0m
+Total number of unsupported CUDA function calls: 0
+
+
+Total number of replaced kernel launches: 10
+running build_ext
+[build] /home/jinpli/workspace/home/jinpli/development/zyfa/build/include/generated/fmha_fp8_d128_pp.s (126 hazard paddings) -> /home/jinpli/workspace/home/jinpli/development/zyfa/build/include/generated/fmha_fp8_d128_pp.co (38360 B) -> /home/jinpli/workspace/home/jinpli/development/zyfa/build/include/generated/fmha_fp8_d128_pp_co.h
+[build] /home/jinpli/workspace/home/jinpli/development/zyfa/build/include/generated/fmha_fp8_d192_pp.s (102 hazard paddings) -> /home/jinpli/workspace/home/jinpli/development/zyfa/build/include/generated/fmha_fp8_d192_pp.co (24816 B) -> /home/jinpli/workspace/home/jinpli/development/zyfa/build/include/generated/fmha_fp8_d192_pp_co.h
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.hip:422:46: warning: builtin '__builtin_amdgcn_sicmp' is deprecated; use __builtin_amdgcn_ballot_w64 instead [-Wdeprecated-builtins]
+  422 |                     const uint64_t visible = __builtin_amdgcn_sicmp(8 * j + i, threshold, 38);
+      |                                              ^
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.hip:422:46: warning: builtin '__builtin_amdgcn_sicmp' is deprecated; use __builtin_amdgcn_ballot_w64 instead [-Wdeprecated-builtins]
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.hip:1775:9: note: in instantiation of function template specialization 'fmha_fp8_native::mask<128, 0>' requested here
+ 1775 |         mask<D, 0>(s.a, q_start, 0, kc.ninf);
+      |         ^
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.hip:2107:24: note: in instantiation of function template specialization 'fmha_fp8_native::attend<128>' requested here
+ 2107 |     hipLaunchKernelGGL(attend<128>, dim3(args.grid), dim3(512), 0, stream, args);
+      |                        ^
+/home/jinpli/workspace/home/jinpli/.local/opt/rocm-7.2.3/include/hip/amd_detail/amd_hip_runtime.h:232:73: note: expanded from macro 'hipLaunchKernelGGL'
+  232 | #define hipLaunchKernelGGL(kernelName, ...) hipLaunchKernelGGLInternal((kernelName), __VA_ARGS__)
+      |                                                                         ^
+/home/jinpli/workspace/home/jinpli/.local/opt/rocm-7.2.3/include/hip/amd_detail/amd_hip_runtime.h:229:5: note: expanded from macro 'hipLaunchKernelGGLInternal'
+  229 |     kernelName<<<(numBlocks), (numThreads), (memPerBlock), (streamId)>>>(__VA_ARGS__);             \
+      |     ^
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.hip:422:46: warning: builtin '__builtin_amdgcn_sicmp' is deprecated; use __builtin_amdgcn_ballot_w64 instead [-Wdeprecated-builtins]
+  422 |                     const uint64_t visible = __builtin_amdgcn_sicmp(8 * j + i, threshold, 38);
+      |                                              ^
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.hip:1778:9: note: in instantiation of function template specialization 'fmha_fp8_native::mask<128, 1>' requested here
+ 1778 |         mask<D, 1>(s.b, q_start, 0, kc.ninf);
+      |         ^
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.hip:2107:24: note: in instantiation of function template specialization 'fmha_fp8_native::attend<128>' requested here
+ 2107 |     hipLaunchKernelGGL(attend<128>, dim3(args.grid), dim3(512), 0, stream, args);
+      |                        ^
+/home/jinpli/workspace/home/jinpli/.local/opt/rocm-7.2.3/include/hip/amd_detail/amd_hip_runtime.h:232:73: note: expanded from macro 'hipLaunchKernelGGL'
+  232 | #define hipLaunchKernelGGL(kernelName, ...) hipLaunchKernelGGLInternal((kernelName), __VA_ARGS__)
+      |                                                                         ^
+/home/jinpli/workspace/home/jinpli/.local/opt/rocm-7.2.3/include/hip/amd_detail/amd_hip_runtime.h:229:5: note: expanded from macro 'hipLaunchKernelGGLInternal'
+  229 |     kernelName<<<(numBlocks), (numThreads), (memPerBlock), (streamId)>>>(__VA_ARGS__);             \
+      |     ^
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.hip:422:46: warning: builtin '__builtin_amdgcn_sicmp' is deprecated; use __builtin_amdgcn_ballot_w64 instead [-Wdeprecated-builtins]
+  422 |                     const uint64_t visible = __builtin_amdgcn_sicmp(8 * j + i, threshold, 38);
+      |                                              ^
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.hip:1782:13: note: in instantiation of function template specialization 'fmha_fp8_native::mask<128, 2>' requested here
+ 1782 |             mask<D, 2>(s.c, q_start, 0, kc.ninf);
+      |             ^
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.hip:2107:24: note: in instantiation of function template specialization 'fmha_fp8_native::attend<128>' requested here
+ 2107 |     hipLaunchKernelGGL(attend<128>, dim3(args.grid), dim3(512), 0, stream, args);
+      |                        ^
+/home/jinpli/workspace/home/jinpli/.local/opt/rocm-7.2.3/include/hip/amd_detail/amd_hip_runtime.h:232:73: note: expanded from macro 'hipLaunchKernelGGL'
+  232 | #define hipLaunchKernelGGL(kernelName, ...) hipLaunchKernelGGLInternal((kernelName), __VA_ARGS__)
+      |                                                                         ^
+/home/jinpli/workspace/home/jinpli/.local/opt/rocm-7.2.3/include/hip/amd_detail/amd_hip_runtime.h:229:5: note: expanded from macro 'hipLaunchKernelGGLInternal'
+  229 |     kernelName<<<(numBlocks), (numThreads), (memPerBlock), (streamId)>>>(__VA_ARGS__);             \
+      |     ^
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.hip:422:46: warning: builtin '__builtin_amdgcn_sicmp' is deprecated; use __builtin_amdgcn_ballot_w64 instead [-Wdeprecated-builtins]
+  422 |                     const uint64_t visible = __builtin_amdgcn_sicmp(8 * j + i, threshold, 38);
+      |                                              ^
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.hip:1785:13: note: in instantiation of function template specialization 'fmha_fp8_native::mask<128, 3>' requested here
+ 1785 |             mask<D, 3>(s.d, q_start, 0, kc.ninf);
+      |             ^
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.hip:2107:24: note: in instantiation of function template specialization 'fmha_fp8_native::attend<128>' requested here
+ 2107 |     hipLaunchKernelGGL(attend<128>, dim3(args.grid), dim3(512), 0, stream, args);
+      |                        ^
+/home/jinpli/workspace/home/jinpli/.local/opt/rocm-7.2.3/include/hip/amd_detail/amd_hip_runtime.h:232:73: note: expanded from macro 'hipLaunchKernelGGL'
+  232 | #define hipLaunchKernelGGL(kernelName, ...) hipLaunchKernelGGLInternal((kernelName), __VA_ARGS__)
+      |                                                                         ^
+/home/jinpli/workspace/home/jinpli/.local/opt/rocm-7.2.3/include/hip/amd_detail/amd_hip_runtime.h:229:5: note: expanded from macro 'hipLaunchKernelGGLInternal'
+  229 |     kernelName<<<(numBlocks), (numThreads), (memPerBlock), (streamId)>>>(__VA_ARGS__);             \
+      |     ^
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.hip:422:46: warning: builtin '__builtin_amdgcn_sicmp' is deprecated; use __builtin_amdgcn_ballot_w64 instead [-Wdeprecated-builtins]
+  422 |                     const uint64_t visible = __builtin_amdgcn_sicmp(8 * j + i, threshold, 38);
+      |                                              ^
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.hip:1775:9: note: in instantiation of function template specialization 'fmha_fp8_native::mask<192, 0>' requested here
+ 1775 |         mask<D, 0>(s.a, q_start, 0, kc.ninf);
+      |         ^
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.hip:2113:24: note: in instantiation of function template specialization 'fmha_fp8_native::attend<192>' requested here
+ 2113 |     hipLaunchKernelGGL(attend<192>, dim3(args.grid), dim3(512), 0, stream, args);
+      |                        ^
+/home/jinpli/workspace/home/jinpli/.local/opt/rocm-7.2.3/include/hip/amd_detail/amd_hip_runtime.h:232:73: note: expanded from macro 'hipLaunchKernelGGL'
+  232 | #define hipLaunchKernelGGL(kernelName, ...) hipLaunchKernelGGLInternal((kernelName), __VA_ARGS__)
+      |                                                                         ^
+/home/jinpli/workspace/home/jinpli/.local/opt/rocm-7.2.3/include/hip/amd_detail/amd_hip_runtime.h:229:5: note: expanded from macro 'hipLaunchKernelGGLInternal'
+  229 |     kernelName<<<(numBlocks), (numThreads), (memPerBlock), (streamId)>>>(__VA_ARGS__);             \
+      |     ^
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.hip:422:46: warning: builtin '__builtin_amdgcn_sicmp' is deprecated; use __builtin_amdgcn_ballot_w64 instead [-Wdeprecated-builtins]
+  422 |                     const uint64_t visible = __builtin_amdgcn_sicmp(8 * j + i, threshold, 38);
+      |                                              ^
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.hip:1778:9: note: in instantiation of function template specialization 'fmha_fp8_native::mask<192, 1>' requested here
+ 1778 |         mask<D, 1>(s.b, q_start, 0, kc.ninf);
+      |         ^
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.hip:2113:24: note: in instantiation of function template specialization 'fmha_fp8_native::attend<192>' requested here
+ 2113 |     hipLaunchKernelGGL(attend<192>, dim3(args.grid), dim3(512), 0, stream, args);
+      |                        ^
+/home/jinpli/workspace/home/jinpli/.local/opt/rocm-7.2.3/include/hip/amd_detail/amd_hip_runtime.h:232:73: note: expanded from macro 'hipLaunchKernelGGL'
+  232 | #define hipLaunchKernelGGL(kernelName, ...) hipLaunchKernelGGLInternal((kernelName), __VA_ARGS__)
+      |                                                                         ^
+/home/jinpli/workspace/home/jinpli/.local/opt/rocm-7.2.3/include/hip/amd_detail/amd_hip_runtime.h:229:5: note: expanded from macro 'hipLaunchKernelGGLInternal'
+  229 |     kernelName<<<(numBlocks), (numThreads), (memPerBlock), (streamId)>>>(__VA_ARGS__);             \
+      |     ^
+7 warnings generated when compiling for amdgpu9.50-amd-amdhsa.
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.hip:422:46: warning: builtin '__builtin_ia32_movdqa64load128_mask' is deprecated; use __builtin_amdgcn_ballot_w64 instead [-Wdeprecated-builtins]
+  422 |                     const uint64_t visible = __builtin_amdgcn_sicmp(8 * j + i, threshold, 38);
+      |                                              ^
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.hip:422:46: warning: builtin '__builtin_ia32_movdqa64load128_mask' is deprecated; use __builtin_amdgcn_ballot_w64 instead [-Wdeprecated-builtins]
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.hip:1775:9: note: in instantiation of function template specialization 'fmha_fp8_native::mask<128, 0>' requested here
+ 1775 |         mask<D, 0>(s.a, q_start, 0, kc.ninf);
+      |         ^
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.hip:2107:24: note: in instantiation of function template specialization 'fmha_fp8_native::attend<128>' requested here
+ 2107 |     hipLaunchKernelGGL(attend<128>, dim3(args.grid), dim3(512), 0, stream, args);
+      |                        ^
+/home/jinpli/workspace/home/jinpli/.local/opt/rocm-7.2.3/include/hip/amd_detail/amd_hip_runtime.h:232:73: note: expanded from macro 'hipLaunchKernelGGL'
+  232 | #define hipLaunchKernelGGL(kernelName, ...) hipLaunchKernelGGLInternal((kernelName), __VA_ARGS__)
+      |                                                                         ^
+/home/jinpli/workspace/home/jinpli/.local/opt/rocm-7.2.3/include/hip/amd_detail/amd_hip_runtime.h:229:5: note: expanded from macro 'hipLaunchKernelGGLInternal'
+  229 |     kernelName<<<(numBlocks), (numThreads), (memPerBlock), (streamId)>>>(__VA_ARGS__);             \
+      |     ^
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.hip:422:46: warning: builtin '__builtin_ia32_movdqa64load128_mask' is deprecated; use __builtin_amdgcn_ballot_w64 instead [-Wdeprecated-builtins]
+  422 |                     const uint64_t visible = __builtin_amdgcn_sicmp(8 * j + i, threshold, 38);
+      |                                              ^
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.hip:1778:9: note: in instantiation of function template specialization 'fmha_fp8_native::mask<128, 1>' requested here
+ 1778 |         mask<D, 1>(s.b, q_start, 0, kc.ninf);
+      |         ^
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.hip:2107:24: note: in instantiation of function template specialization 'fmha_fp8_native::attend<128>' requested here
+ 2107 |     hipLaunchKernelGGL(attend<128>, dim3(args.grid), dim3(512), 0, stream, args);
+      |                        ^
+/home/jinpli/workspace/home/jinpli/.local/opt/rocm-7.2.3/include/hip/amd_detail/amd_hip_runtime.h:232:73: note: expanded from macro 'hipLaunchKernelGGL'
+  232 | #define hipLaunchKernelGGL(kernelName, ...) hipLaunchKernelGGLInternal((kernelName), __VA_ARGS__)
+      |                                                                         ^
+/home/jinpli/workspace/home/jinpli/.local/opt/rocm-7.2.3/include/hip/amd_detail/amd_hip_runtime.h:229:5: note: expanded from macro 'hipLaunchKernelGGLInternal'
+  229 |     kernelName<<<(numBlocks), (numThreads), (memPerBlock), (streamId)>>>(__VA_ARGS__);             \
+      |     ^
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.hip:422:46: warning: builtin '__builtin_ia32_movdqa64load128_mask' is deprecated; use __builtin_amdgcn_ballot_w64 instead [-Wdeprecated-builtins]
+  422 |                     const uint64_t visible = __builtin_amdgcn_sicmp(8 * j + i, threshold, 38);
+      |                                              ^
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.hip:1782:13: note: in instantiation of function template specialization 'fmha_fp8_native::mask<128, 2>' requested here
+ 1782 |             mask<D, 2>(s.c, q_start, 0, kc.ninf);
+      |             ^
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.hip:2107:24: note: in instantiation of function template specialization 'fmha_fp8_native::attend<128>' requested here
+ 2107 |     hipLaunchKernelGGL(attend<128>, dim3(args.grid), dim3(512), 0, stream, args);
+      |                        ^
+/home/jinpli/workspace/home/jinpli/.local/opt/rocm-7.2.3/include/hip/amd_detail/amd_hip_runtime.h:232:73: note: expanded from macro 'hipLaunchKernelGGL'
+  232 | #define hipLaunchKernelGGL(kernelName, ...) hipLaunchKernelGGLInternal((kernelName), __VA_ARGS__)
+      |                                                                         ^
+/home/jinpli/workspace/home/jinpli/.local/opt/rocm-7.2.3/include/hip/amd_detail/amd_hip_runtime.h:229:5: note: expanded from macro 'hipLaunchKernelGGLInternal'
+  229 |     kernelName<<<(numBlocks), (numThreads), (memPerBlock), (streamId)>>>(__VA_ARGS__);             \
+      |     ^
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.hip:422:46: warning: builtin '__builtin_ia32_movdqa64load128_mask' is deprecated; use __builtin_amdgcn_ballot_w64 instead [-Wdeprecated-builtins]
+  422 |                     const uint64_t visible = __builtin_amdgcn_sicmp(8 * j + i, threshold, 38);
+      |                                              ^
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.hip:1785:13: note: in instantiation of function template specialization 'fmha_fp8_native::mask<128, 3>' requested here
+ 1785 |             mask<D, 3>(s.d, q_start, 0, kc.ninf);
+      |             ^
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.hip:2107:24: note: in instantiation of function template specialization 'fmha_fp8_native::attend<128>' requested here
+ 2107 |     hipLaunchKernelGGL(attend<128>, dim3(args.grid), dim3(512), 0, stream, args);
+      |                        ^
+/home/jinpli/workspace/home/jinpli/.local/opt/rocm-7.2.3/include/hip/amd_detail/amd_hip_runtime.h:232:73: note: expanded from macro 'hipLaunchKernelGGL'
+  232 | #define hipLaunchKernelGGL(kernelName, ...) hipLaunchKernelGGLInternal((kernelName), __VA_ARGS__)
+      |                                                                         ^
+/home/jinpli/workspace/home/jinpli/.local/opt/rocm-7.2.3/include/hip/amd_detail/amd_hip_runtime.h:229:5: note: expanded from macro 'hipLaunchKernelGGLInternal'
+  229 |     kernelName<<<(numBlocks), (numThreads), (memPerBlock), (streamId)>>>(__VA_ARGS__);             \
+      |     ^
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.hip:422:46: warning: builtin '__builtin_ia32_movdqa64load128_mask' is deprecated; use __builtin_amdgcn_ballot_w64 instead [-Wdeprecated-builtins]
+  422 |                     const uint64_t visible = __builtin_amdgcn_sicmp(8 * j + i, threshold, 38);
+      |                                              ^
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.hip:1775:9: note: in instantiation of function template specialization 'fmha_fp8_native::mask<192, 0>' requested here
+ 1775 |         mask<D, 0>(s.a, q_start, 0, kc.ninf);
+      |         ^
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.hip:2113:24: note: in instantiation of function template specialization 'fmha_fp8_native::attend<192>' requested here
+ 2113 |     hipLaunchKernelGGL(attend<192>, dim3(args.grid), dim3(512), 0, stream, args);
+      |                        ^
+/home/jinpli/workspace/home/jinpli/.local/opt/rocm-7.2.3/include/hip/amd_detail/amd_hip_runtime.h:232:73: note: expanded from macro 'hipLaunchKernelGGL'
+  232 | #define hipLaunchKernelGGL(kernelName, ...) hipLaunchKernelGGLInternal((kernelName), __VA_ARGS__)
+      |                                                                         ^
+/home/jinpli/workspace/home/jinpli/.local/opt/rocm-7.2.3/include/hip/amd_detail/amd_hip_runtime.h:229:5: note: expanded from macro 'hipLaunchKernelGGLInternal'
+  229 |     kernelName<<<(numBlocks), (numThreads), (memPerBlock), (streamId)>>>(__VA_ARGS__);             \
+      |     ^
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.hip:422:46: warning: builtin '__builtin_ia32_movdqa64load128_mask' is deprecated; use __builtin_amdgcn_ballot_w64 instead [-Wdeprecated-builtins]
+  422 |                     const uint64_t visible = __builtin_amdgcn_sicmp(8 * j + i, threshold, 38);
+      |                                              ^
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.hip:1778:9: note: in instantiation of function template specialization 'fmha_fp8_native::mask<192, 1>' requested here
+ 1778 |         mask<D, 1>(s.b, q_start, 0, kc.ninf);
+      |         ^
+/home/jinpli/workspace/home/jinpli/development/zyfa/csrc/fp8_native.hip:2113:24: note: in instantiation of function template specialization 'fmha_fp8_native::attend<192>' requested here
+ 2113 |     hipLaunchKernelGGL(attend<192>, dim3(args.grid), dim3(512), 0, stream, args);
+      |                        ^
+/home/jinpli/workspace/home/jinpli/.local/opt/rocm-7.2.3/include/hip/amd_detail/amd_hip_runtime.h:232:73: note: expanded from macro 'hipLaunchKernelGGL'
+  232 | #define hipLaunchKernelGGL(kernelName, ...) hipLaunchKernelGGLInternal((kernelName), __VA_ARGS__)
+      |                                                                         ^
+/home/jinpli/workspace/home/jinpli/.local/opt/rocm-7.2.3/include/hip/amd_detail/amd_hip_runtime.h:229:5: note: expanded from macro 'hipLaunchKernelGGLInternal'
+  229 |     kernelName<<<(numBlocks), (numThreads), (memPerBlock), (streamId)>>>(__VA_ARGS__);             \
+      |     ^
+'-bitop3-insts' is not a recognized feature for this target (ignoring feature)
+'-dl-insts' is not a recognized feature for this target (ignoring feature)
+'-vop3-literal' is not a recognized feature for this target (ignoring feature)
+'-bitop3-insts' is not a recognized feature for this target (ignoring feature)
+'-dl-insts' is not a recognized feature for this target (ignoring feature)
+'-vop3-literal' is not a recognized feature for this target (ignoring feature)
+'-bitop3-insts' is not a recognized feature for this target (ignoring feature)
+'-dl-insts' is not a recognized feature for this target (ignoring feature)
+'-vop3-literal' is not a recognized feature for this target (ignoring feature)
+'-bitop3-insts' is not a recognized feature for this target (ignoring feature)
+'-dl-insts' is not a recognized feature for this target (ignoring feature)
+'-vop3-literal' is not a recognized feature for this target (ignoring feature)
+'-bitop3-insts' is not a recognized feature for this target (ignoring feature)
+'-dl-insts' is not a recognized feature for this target (ignoring feature)
+'-vop3-literal' is not a recognized feature for this target (ignoring feature)
+7 warnings generated when compiling for host.
+building 'zyfa._C' extension
+ninja: no work to do.
+x86_64-linux-gnu-g++ -fno-strict-overflow -Wsign-compare -DNDEBUG -g -O2 -Wall -shared -Wl,-O1 -Wl,-Bsymbolic-functions -Wl,-Bsymbolic-functions -Wl,--package-metadata=%7B%22type%22:%22deb%22%2C%22os%22:%22ubuntu%22%2C%22name%22:%22python3.14%22%2C%22version%22:%223.14.4-1ubuntu0.2%22%2C%22architecture%22:%22amd64%22%7D -Wl,-z,relro -g -fwrapv -O2 /home/jinpli/workspace/home/jinpli/development/zyfa/build/temp.linux-x86_64-cpython-314/csrc/bf16_d128.o /home/jinpli/workspace/home/jinpli/development/zyfa/build/temp.linux-x86_64-cpython-314/csrc/bf16_d192_hip.o /home/jinpli/workspace/home/jinpli/development/zyfa/build/temp.linux-x86_64-cpython-314/csrc/bindings.o /home/jinpli/workspace/home/jinpli/development/zyfa/build/temp.linux-x86_64-cpython-314/csrc/fp8_d128_asm.o /home/jinpli/workspace/home/jinpli/development/zyfa/build/temp.linux-x86_64-cpython-314/csrc/fp8_d128_hip.o /home/jinpli/workspace/home/jinpli/development/zyfa/build/temp.linux-x86_64-cpython-314/csrc/fp8_d192_asm.o /home/jinpli/workspace/home/jinpli/development/zyfa/build/temp.linux-x86_64-cpython-314/csrc/fp8_d192_hip.o /home/jinpli/workspace/home/jinpli/development/zyfa/build/native/fp8_native.o -L/home/jinpli/workspace/home/jinpli/venv/01/lib/python3.14/site-packages/torch/lib -L/home/jinpli/workspace/home/jinpli/.local/opt/rocm-7.2.3/lib -L/home/jinpli/workspace/home/jinpli/.local/opt/rocm-7.2.3/hip/lib -L/usr/lib/x86_64-linux-gnu -lc10 -ltorch -ltorch_cpu -ltorch_python -lamdhip64 -lc10_hip -ltorch_hip -o build/lib.linux-x86_64-cpython-314/zyfa/_C.cpython-314-x86_64-linux-gnu.so
+copying build/lib.linux-x86_64-cpython-314/zyfa/_C.cpython-314-x86_64-linux-gnu.so -> zyfa
+Saved native code object, metadata, and loop bodies to benchmarks/results/hip_native/isa_match/short_gap_20261112/owning
