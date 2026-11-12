@@ -99,6 +99,21 @@ export AMDGPU_ASIC_ID_TABLE_PATHS=/home/jinpli/workspace/home/jinpli/venv/01/lib
 the recorded machine), or run the commands in a subprocess that has that group,
 with the environment above set inside it.
 
+## Build options
+
+`ZYFA_FP8_STRICT_ISA` controls how the kernels' wave-mask selects
+(`select_wave_mask`) are written:
+
+| Value | Selects written as | Effect |
+| --- | --- | --- |
+| `1` (default) | one inline-asm `v_cndmask_b32_e64` each | The strict steady loops match the assembly's instruction sequence exactly. Every result recorded here uses this setting. |
+| `0` | `__builtin_amdgcn_inverse_ballot_w64` and a select | 0.2–1.1% faster in the measured shapes. The strict loops no longer match exactly, the whole-kernel mnemonic distance grows (positive excess 248/190 → 347/249, L1 834/671 → 1189/867), and SGPRs rise to 93/94. Outputs are bitwise-identical. |
+
+Set it in the environment when building, for example
+`ZYFA_FP8_STRICT_ISA=0 python setup.py build_ext --inplace`. `setup.py` passes
+it to the native compile as `-DZYFA_FP8_STRICT_ISA`. The codegen tests compile
+with the default.
+
 ## Build, check and test
 
 ```sh

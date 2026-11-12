@@ -96,10 +96,27 @@ struct Params {
     uint32_t rescale;
 };
 
+// ZYFA_FP8_STRICT_ISA chooses how wave-mask selects are written.
+//   1 (default): one inline-asm v_cndmask_b32_e64 per select. Each compare stays immediately
+//     before its select, as in the assembly kernels, so the strict steady loops match the
+//     assembly's instruction sequence exactly.
+//   0: __builtin_amdgcn_inverse_ballot_w64 plus a select. LLVM then groups a block's compares
+//     ahead of its selects, writing each mask to its own SGPR pair. That drops the VCC hazard
+//     s_nops and was 0.2-1.1% faster in the measured shapes. The cost: the strict loops no longer
+//     match the assembly (the rescale selects change encoding), the whole-kernel mnemonic
+//     distance grows, and SGPR use rises (77/79 -> 93/94).
+#ifndef ZYFA_FP8_STRICT_ISA
+#define ZYFA_FP8_STRICT_ISA 1
+#endif
+
 __device__ __forceinline__ float select_wave_mask(uint64_t mask, float old_m, float new_m) {
+#if ZYFA_FP8_STRICT_ISA
     float result;
     asm("v_cndmask_b32_e64 %0, %1, %2, %3" : "=v"(result) : "v"(old_m), "v"(new_m), "s"(mask));
     return result;
+#else
+    return __builtin_amdgcn_inverse_ballot_w64(mask) ? new_m : old_m;
+#endif
 }
 
 __device__ __forceinline__ uint32_t scalar_sub(uint32_t a, uint32_t b) {

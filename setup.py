@@ -29,6 +29,11 @@ hip_flags = ["-O3", "-std=c++20", "-ffast-math", "-fgpu-flush-denormals-to-zero"
              "-Wno-nan-infinity-disabled", "-DKITTENS_CDNA4", "-U__HIP_NO_HALF_CONVERSIONS__",
              "-U__HIP_NO_HALF_OPERATORS__"]
 native_define = ["-DZYFA_ENABLE_NATIVE_FP8=1"] if NATIVE_LLVM_ROOT else []
+# ZYFA_FP8_STRICT_ISA=0 trades the exact assembly instruction sequence for slightly faster native
+# wave-mask selects; see csrc/fp8_native.hip. Unset keeps the source default (strict).
+STRICT_ISA = os.environ.get("ZYFA_FP8_STRICT_ISA")
+if STRICT_ISA not in (None, "0", "1"):
+    sys.exit("ZYFA_FP8_STRICT_ISA must be 0 or 1")
 
 
 class BuildExt(BuildExtension):
@@ -40,7 +45,8 @@ class BuildExt(BuildExtension):
             NATIVE_OBJECT.parent.mkdir(parents=True, exist_ok=True)
             rocm = Path(os.environ.get("ROCM_PATH", "/opt/rocm"))
             compiler = Path(NATIVE_LLVM_ROOT) / "build/bin/clang++"
-            native_flags = [*hip_flags, "-fhonor-infinities", "-fno-slp-vectorize", "-fPIC",
+            native_flags = [*hip_flags, *([f"-DZYFA_FP8_STRICT_ISA={STRICT_ISA}"] if STRICT_ISA else []),
+                            "-fhonor-infinities", "-fno-slp-vectorize", "-fPIC",
                             "-fno-gpu-rdc", "--offload-arch=gfx950",
                             "-x", "hip", "--rocm-path=" + str(rocm),
                             "-Xclang", "-target-feature", "-Xclang", "-dl-insts",
