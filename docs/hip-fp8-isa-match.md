@@ -3,7 +3,43 @@
 Both four-stage steady loops retain the assembly backend's exact disassembled
 mnemonic counts and sequence. The whole-kernel counts and sequence still differ.
 
-## Current capture: O-clear placement
+## Current capture: short-length waits and masked-MM order
+
+[`short_gap_20261112`](../benchmarks/results/hip_native/isa_match/short_gap_20261112/README.md)
+closes most of the short-length gap to the assembly kernels. Per-pass ATT
+region analysis found where HIP waited or serialized and the assembly did not:
+
+- **`f66b5fa`:** group 0 waited `vmcnt(0)` for its pass-start V1/K2/K3 loads
+  before the barrier. The assembly lets them cross the barrier, and the first
+  MM waits for them. The HIP wait cost 600–1140 cycles per pass in group 0, and
+  group 1 sat at its barrier for the same time. This was 44–90% of the L256
+  gap.
+- **`c3b73c3`:** the masked MM waited at its end for loads it had just issued.
+  It now waits at its start, for the previous phase's loads, as the assembly
+  does.
+- **`4a2e4fb`:** the d192 masked MM issues its PV MFMAs before the mask and
+  statistics. That removes LLVM's MFMA-result padding before the mask. The
+  same change slowed d128, so d128 keeps the old order.
+
+HIP time / assembly time, before → after:
+
+| | d128 MHA | d128 GQA4 | d192 MHA | d192 GQA4 |
+| --- | ---: | ---: | ---: | ---: |
+| L256 | 1.071 → 1.017 | 1.050 → 1.005 | 1.108 → 1.008 | 1.086 → 1.023 |
+| L1024 | 1.058 → 1.018 | 1.064 → 1.023 | 1.051 → 1.008 | 1.048 → 1.010 |
+| L8192 | 1.010 → 1.003 | 1.009 → 1.009 | 1.007 → 1.004 | 1.009 → 1.003 |
+
+The mnemonic histogram moves closer to the assembly: positive excess 259/204 →
+258/193, and L1 846/682 → 845/674. The change in d192 is −4 `s_and_b64`,
+−2 `s_cselect_b64`, −7 `s_nop` and −1 `s_waitcnt`. Strict loops stay exact, and
+loop copies stay at 8/4. Outputs are bitwise-identical over 798,316 launches.
+
+The old documentation said HIP lacked the assembly's cross-pass prefetch. That
+is out of date: the next pass's tiles and Q are already loaded during the last
+tile, the ring rotates across passes, and the epilogue overlaps the next pass
+start.
+
+## O-clear placement
 
 [`o_clear_placement_20261112`](../benchmarks/results/hip_native/isa_match/o_clear_placement_20261112/README.md)
 moves the O clear introduced by the register-copy fixes below to after the

@@ -14,19 +14,26 @@ the default. Both native kernels support BHSD/BSHD, MHA and GQA, sequence
 padding, BF16 output, optional FP32 LSE, scalar device descales, CUDA graphs,
 and `torch.compile` through a separate `zyfa::fwd_hip` custom operator.
 
-In the current build ([`o_clear_placement_20261112`](../benchmarks/results/hip_native/isa_match/o_clear_placement_20261112/README.md)),
-the HIP kernel's speed against the assembly kernel depends on length:
+In the current build ([`short_gap_20261112`](../benchmarks/results/hip_native/isa_match/short_gap_20261112/README.md)),
+the HIP kernel is within about 2.3% of the assembly kernel at every measured
+length. Times below are HIP / assembly, same process:
 
-| Length | d128 | d192 |
-| --- | --- | --- |
-| 16K and 32K | 0.7–0.9% slower | 0.4–0.6% slower |
-| 8192 | 1.0–1.3% slower | 0.7–0.8% slower |
-| 1024 | 5.9–6.2% slower | 4.3–5.0% slower |
-| 256 | 5.0–7.0% slower | 8.5–10.7% slower |
+| Length | d128 MHA | d128 GQA4 | d192 MHA | d192 GQA4 |
+| --- | ---: | ---: | ---: | ---: |
+| 256 | 1.017 | 1.005 | 1.008 | 1.023 |
+| 1024 | 1.018 | 1.023 | 1.008 | 1.010 |
+| 8192 | 1.003 | 1.009 | 1.004 | 1.003 |
+| 16K / 32K | 1.008 / 1.007 | 1.009 / 1.007 | 1.004 / 1.005 | 1.006 / 1.006 |
 
-The remaining gap is outside the steady loop: pass start, tails and epilogue.
 The steady loops take the same cycles per iteration as the assembly kernels
-(ATT). All 314 project tests pass, with 2 skipped.
+(ATT). The rest of the short-length gap is in three places:
+- the d128 masked tail, which still runs QK, mask, statistics and PV in a fixed
+  order;
+- the O clear;
+- one extra serialized wait in the prologue.
+
+All 314 project tests pass, with 2 skipped. The 16K/32K row was measured on the
+previous code; the later changes affect only the pass start and masked tail.
 
 The earlier 24-case comparison further down describes a much older build. It
 was 28–29% slower than assembly for d128 at 32K tokens, and 3.05–3.28× slower
@@ -122,9 +129,8 @@ Loop-invariant code motion is disabled for the persistent pass loop:
   therefore crosses the pass loop.
 
 The O tile is cleared at each pass start with 64 `vgpr_constant<0>` moves, as
-the assembly kernels do. The clear sits after the pass-start barrier: placed
-before it, the moves delayed group 0's tile loads and lengthened group 1's
-pass-start phase. Until the clear, O is an unspecified tile. An `o_tile{}` zero
+the assembly kernels do. The clear sits after the pass-start barrier. The
+assembly's position, before the barrier, timed slower. Until the clear, O is an unspecified tile. An `o_tile{}` zero
 would become an SGPR splat whose PHI copies are repeated on every steady-loop
 entry edge. The compiler adds no
 MFMA hazard padding around inline asm; the nearest MFMA touching a cleared
@@ -173,13 +179,15 @@ Neither kernel spills or uses scratch. The earlier capture described below had
 steady-loop iteration. Those spills came from LLVM hoisting per-pass values to
 the kernel entry, and from a duplicated score tile in the masked tail.
 
-The HIP implementation restarts its ring and startup loads on each mirrored
-pass. It does not reproduce the assembly's next-pass prefetch, cross-pass ring
-rotation, or overlap of the previous epilogue with the next startup. LLVM also
-chooses different fragment read-ahead, instruction interleaving, and register
-allocation. These are material performance differences; the implementation
-reproduces the main tiling and four-slot SM/MM pipeline but does not match every
-assembly scheduling detail. Row/tile spans at or above 4 GiB are explicitly
+Like the assembly kernels, the HIP kernels:
+- load the next pass's first K/V tiles and Q during the last tile;
+- rotate the four-slot ring across passes;
+- overlap the previous epilogue's stores with the next pass's first QK.
+
+Group 0's pass-start tile loads stay in flight across the pass-start barrier,
+and the first MM waits for them. The masked MM waits at its start for the
+previous phase's loads. Outside the steady loops, LLVM still chooses different
+instruction interleaving and register allocation; the steady loops match. Row/tile spans at or above 4 GiB are explicitly
 rejected by the native backend; the assembly default retains its legacy
 fallback for those shapes.
 
