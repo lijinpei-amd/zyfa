@@ -103,18 +103,54 @@ with the environment above set inside it.
 
 ## Build options
 
-`ZYFA_FP8_STRICT_ISA` controls how the kernels' wave-mask selects
-(`select_wave_mask`) are written:
+`ZYFA_FP8_STRICT_ISA` chooses between matching the assembly exactly and two
+small speedups. It controls how the wave-mask selects (`select_wave_mask`) are
+written and how many kernels each head dimension gets:
 
-| Value | Selects written as | Effect |
+| Value | Selects written as | Kernels per head dimension |
 | --- | --- | --- |
-| `1` (default) | one inline-asm `v_cndmask_b32_e64` each | The strict steady loops match the assembly's instruction sequence exactly. Every result recorded here uses this setting. |
-| `0` | `__builtin_amdgcn_inverse_ballot_w64` and a select | 0.2–1.1% faster in the measured shapes. The strict loops no longer match exactly, the whole-kernel mnemonic distance grows (positive excess 248/190 → 347/249, L1 834/671 → 1189/867), and SGPRs rise to 93/94. Outputs are bitwise-identical. |
+| `1` (default) | one inline-asm `v_cndmask_b32_e64` each | one, `attend<D>` |
+| `0` | `__builtin_amdgcn_inverse_ballot_w64` and a select | two: `attend<D, true>` and `attend<D, false>` |
+
+**Strict (`1`).** The strict steady loops match the assembly's instruction
+sequence exactly. Every result recorded here uses this setting.
+
+**Non-strict (`0`).** Outputs are bitwise-identical to the strict build.
+- **Selects.** 0.2–1.1% faster in the measured shapes. The strict loops no
+  longer match exactly, the whole-kernel mnemonic distance grows (positive
+  excess 248/190 → 347/249, L1 834/671 → 1189/867), and SGPRs rise to 93/94.
+- **Descale specialization.** The launcher runs `attend<D, true>` when q, k
+  and v descales are all passed as tensors, as the benchmarks do, and the
+  general `attend<D, false>` for any other combination. Python float descales
+  are applied on the host, so they count as missing. The choice depends only
+  on which pointers are set, so CUDA graph replays stay valid.
+  - `attend<D, true>` loads the three descales with no null checks and no
+    `s_mov_b32 1.0`. That is 14 fewer instructions (5 compares, 6 branches,
+    3 moves), and the three `s_load_dword`s issue back to back. Positive excess
+    is 342/243 and L1 1193/869: the assembly keeps its null checks, so removing
+    them lowers the excess but adds to L1. Registers are unchanged and nothing
+    spills.
+  - `attend<D, false>` has the same instructions as the unspecialized
+    non-strict kernel.
+  - Timing (README protocol, guarded, 5 clean runs): within ±0.25% of the
+    unspecialized non-strict build in every case, with mixed signs, so no
+    measurable gain. In the same runs the specialized build was 0.6–1.3%
+    faster than the strict build at L256 and L1024 and 0.1–0.2% faster at
+    L8192; the selects account for that.
+  - Costs: the code object holds four kernels instead of two (`.text` 54 → 109
+    KB), and the native compile takes about 46% longer (70 → 102 s on the
+    recorded machine).
 
 Set it in the environment when building, for example
 `ZYFA_FP8_STRICT_ISA=0 python setup.py build_ext --inplace`. `setup.py` passes
 it to the native compile as `-DZYFA_FP8_STRICT_ISA`. The codegen tests compile
 with the default.
+
+**Tools on a non-strict build.** `compare_isa.select_function` returns the
+general kernel by default (`attend<D>` or `attend<D, false>`), and the
+all-descales kernel with `all_descales=True`. `compare_isa.py --all-descales`
+compares that kernel. `inspect_hip.py` saves its steady loops under
+`hip_d{128,192}_all_descales/`, next to the general kernel's `hip_d{128,192}/`.
 
 ## Build, check and test
 
@@ -132,7 +168,8 @@ python -m pytest -q tests
   `build/`, and it asserts the source hash. Use it on the recorded commit only.
 - To check a fresh build by hand, compare the kernel `.text` section:
   `llvm-objcopy -O binary --only-section=.text native.co`.
-- The recorded `.text` SHA-256 for the current kernels begins `179a935c`.
+- The recorded `.text` SHA-256 for the current kernels begins `179a935c`. A
+  `ZYFA_FP8_STRICT_ISA=0` build's begins `7418c231`.
 
 **Test suite.** The full suite gave 314 passed and 2 skipped with two GPUs
 visible. With one GPU visible, the two-GPU test is skipped as well.
