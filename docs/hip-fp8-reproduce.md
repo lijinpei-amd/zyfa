@@ -18,7 +18,7 @@ The native kernels need a patched LLVM. Stock ROCm or upstream LLVM rejects the
 | Branch | `2026-11-10-fp8-schedule-match` |
 | Commit | `72e518a3f02acb5c50f2dc64d7ad844c4694908b` |
 | Base | upstream `llvm/llvm-project` `main` at `3ad61ff817ac` (2026-11-10) |
-| Local commits | 26 AMDGPU commits: 13 code changes, 13 test-only precommits |
+| Local commits | 26 AMDGPU commits: 12 code changes, 14 test-only (13 precommits, 1 check refresh) |
 
 The code changes, oldest first:
 
@@ -38,6 +38,8 @@ The code changes, oldest first:
 | `72e518a3f02a` | Use SCC branches for uniform truncates to i1 | — |
 
 - `setup.py` also passes `-disable-machine-licm`. That is a stock LLVM option.
+- [hip-fp8-workarounds.md](hip-fp8-workarounds.md) tracks every patch, flag and
+  inline-asm workaround, and its removal status.
 - None of the side branches from this work are needed: MachineLICM loop
   metadata, `-amdgpu-early-machinelicm-before-fold`, and copy-origin
   instrumentation.
