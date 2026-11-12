@@ -14,26 +14,23 @@ the default. Both native kernels support BHSD/BSHD, MHA and GQA, sequence
 padding, BF16 output, optional FP32 LSE, scalar device descales, CUDA graphs,
 and `torch.compile` through a separate `zyfa::fwd_hip` custom operator.
 
-In the current build ([`short_gap_20261112`](../benchmarks/results/hip_native/isa_match/short_gap_20261112/README.md)),
-the HIP kernel is within about 2.3% of the assembly kernel at every measured
-length. Times below are HIP / assembly, same process:
+In the current build ([`rest_gap_20261112`](../benchmarks/results/hip_native/isa_match/rest_gap_20261112/README.md)),
+the HIP kernels match or beat the assembly kernels at every measured length.
+Times are HIP / assembly, same process:
 
 | Length | d128 MHA | d128 GQA4 | d192 MHA | d192 GQA4 |
 | --- | ---: | ---: | ---: | ---: |
-| 256 | 1.017 | 1.005 | 1.008 | 1.023 |
-| 1024 | 1.018 | 1.023 | 1.008 | 1.010 |
-| 8192 | 1.003 | 1.009 | 1.004 | 1.003 |
+| 256 | 0.992 | 0.983 | 0.978 | 0.986 |
+| 1024 | 1.000 | 0.998 | 0.987 | 0.999 |
+| 8192 | 1.003 | 1.003 | 1.000 | 1.001 |
 | 16K / 32K | 1.008 / 1.007 | 1.009 / 1.007 | 1.004 / 1.005 | 1.006 / 1.006 |
 
 The steady loops take the same cycles per iteration as the assembly kernels
-(ATT). The rest of the short-length gap is in three places:
-- the d128 masked tail, which still runs QK, mask, statistics and PV in a fixed
-  order;
-- the O clear;
-- one extra serialized wait in the prologue.
-
-All 314 project tests pass, with 2 skipped. The 16K/32K row was measured on the
-previous code; the later changes affect only the pass start and masked tail.
+(ATT). The masked MMs interleave the mask and statistics under their MFMAs as
+the assembly does. The prologue issues all three descale loads before one wait.
+What remains is small: the O clear after the pass-start barrier, and epilogue
+store issue. The 16K/32K row was measured before the short-length changes,
+which affect only the pass start, the masked tail and the prologue.
 
 The earlier 24-case comparison further down describes a much older build. It
 was 28–29% slower than assembly for d128 at 32K tokens, and 3.05–3.28× slower

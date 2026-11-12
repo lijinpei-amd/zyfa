@@ -3,7 +3,35 @@
 Both four-stage steady loops retain the assembly backend's exact disassembled
 mnemonic counts and sequence. The whole-kernel counts and sequence still differ.
 
-## Current capture: short-length waits and masked-MM order
+## Current capture: masked-MM interleave and prologue loads
+
+[`rest_gap_20261112`](../benchmarks/results/hip_native/isa_match/rest_gap_20261112/README.md)
+removes the rest of the short-length gap.
+
+- **Masked MMs** (`c946161`, `7ef2635`, `ee96028`): both now follow the
+  generator's masked variant, as the steady MM does:
+  - mask and row max run under the QK MFMAs;
+  - statistics run under the first PV MFMAs.
+
+  About 270 VALU instructions no longer run with no MFMA in flight.
+- **Prologue** (`238a793`): all three descale loads issue before one wait.
+  Before, a folded `qd * kd` serialized them.
+
+HIP time / assembly time is now 0.978–1.000 at L256/L1024 and 1.000–1.003 at
+L8192, down from 1.003–1.023. Outputs stay bitwise-identical, and strict loops
+stay exact.
+
+The match against the assembly improves on all three measures:
+
+| | d128 | d192 |
+| --- | --- | --- |
+| Positive excess | 258 → 248 | 193 → 190 |
+| L1 | 845 → 834 | 674 → 671 |
+| Exact LCS order | 3309 → 3434 | 2271 → 2321 |
+
+`s_waitcnt` now equals the assembly's count in d128, and d192 uses 214 VGPRs.
+
+## Short-length waits and masked-MM order
 
 [`short_gap_20261112`](../benchmarks/results/hip_native/isa_match/short_gap_20261112/README.md)
 closes most of the short-length gap to the assembly kernels. Per-pass ATT
