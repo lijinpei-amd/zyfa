@@ -174,7 +174,11 @@ positive excess went 248/190 → 1157/624, d128 spilled, and kernels ran
     V-descale load. Removing it gave −0.6 to −1.2% at L256.
   - **Why not volatile:** a volatile version turned the descale loads into
     vector loads.
-  - **Status (2026-11-12):** keep.
+  - **Status (2026-11-12):** strict build keeps it. The non-strict build
+    (`ZYFA_FP8_STRICT_ISA=0`) no longer uses inline asm here:
+    - its `attend<D, true>` kernel, used when all descales are passed, loads
+      them unconditionally and needs no default;
+    - its fallback `attend<D, false>` uses a plain `1.0f` and accepts the fold.
     - Compile-time descale specialization was measured
       (`build/investigations-20261112/descale-specialize/`). An all-present
       kernel without null checks or `sgpr_one`, in the non-strict build, gave

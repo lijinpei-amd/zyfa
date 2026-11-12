@@ -112,6 +112,8 @@ struct Params {
 //       combination. The launchers choose by which descale pointers are set (see launch).
 //       Timing stayed within 0.25% of the unspecialized build, and the code object holds four
 //       kernels instead of two.
+//     - The missing-descale default (sgpr_one) is a plain 1.0f, not inline asm. Only the
+//       fallback kernel uses it.
 #ifndef ZYFA_FP8_STRICT_ISA
 #define ZYFA_FP8_STRICT_ISA 1
 #endif
@@ -181,12 +183,21 @@ __device__ __forceinline__ uint32_t sgpr_constant() {
     return r;
 }
 
-// 1.0 in an SGPR, as the assembly's s_mov_b32 1.0, with the value hidden from LLVM. Not volatile:
-// the asm has no memory effects, so the global loads after it can still be scalar loads.
+// The default for a missing descale.
+// Strict build: 1.0 in an SGPR, as the assembly's s_mov_b32 1.0, with the value hidden from LLVM.
+// Not volatile: the asm has no memory effects, so the global loads after it can still be scalar
+// loads.
+// Non-strict build: a plain 1.0. Only the fallback kernel attend<D, false> reads it. That kernel
+// runs only when a descale is missing, so the InstCombine fold described at its use is accepted
+// there.
 __device__ __forceinline__ float sgpr_one() {
+#if ZYFA_FP8_STRICT_ISA
     float r;
     asm("s_mov_b32 %0, 1.0" : "=s"(r));
     return r;
+#else
+    return 1.0f;
+#endif
 }
 
 // An unspecified tile: poison in IR, no instruction. It defines O on a path that clears O later,

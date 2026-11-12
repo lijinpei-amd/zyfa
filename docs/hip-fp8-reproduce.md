@@ -130,8 +130,10 @@ sequence exactly. Every result recorded here uses this setting.
     is 342/243 and L1 1193/869: the assembly keeps its null checks, so removing
     them lowers the excess but adds to L1. Registers are unchanged and nothing
     spills.
-  - `attend<D, false>` has the same instructions as the unspecialized
-    non-strict kernel.
+  - `attend<D, false>` uses a plain `1.0f` for a missing descale, so it has no
+    inline asm there. InstCombine then folds the descale multiply into a
+    branch again, which costs `s_waitcnt` +2 and `s_mov_b32` −1 in the
+    prologue. This kernel runs only when a descale is missing.
   - Timing (README protocol, guarded, 5 clean runs): within ±0.25% of the
     unspecialized non-strict build in every case, with mixed signs, so no
     measurable gain. In the same runs the specialized build was 0.6–1.3%
