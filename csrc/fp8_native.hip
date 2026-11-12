@@ -1801,8 +1801,9 @@ __global__ __launch_bounds__(512, 1) void attend(Args<D> kernel_args) {
         if (n > 3) load_k_group0<D>(sm, kr, (base + 3) & 3, 3, k_stride, tid);
     }
     phase_barrier();
-    // O is cleared once, after the barrier: before it, the moves would delay group 0's tile loads
-    // that the barrier waits for, and lengthen group 1's pass-start phase.
+    // O is cleared once, after the barrier. The assembly clears it before group 0's loads, but there
+    // the moves lengthen group 1's pass-start phase, which the ping-pong makes critical: that order
+    // timed 1-5% slower at length 256 even with the loads left in flight.
     o = o_tile{zero_fx16(), zero_fx16(), zero_fx16(), zero_fx16()};
     k = 0;
     if (base == 0) goto stage0;
