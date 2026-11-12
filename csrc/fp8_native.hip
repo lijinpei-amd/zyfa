@@ -1465,10 +1465,14 @@ do { \
     FP8_SCHEDULE_POINT(__float_as_int((OUT).bias_lo), __float_as_int((OUT).bias_hi)); \
 } while (false)
 
+// As the assembly's masked MM, this waits at its start for the previous phase's tile loads and leaves
+// its own K(k+4)/V(k+2) loads in flight across the closing barrier; every following tail phase
+// (masked MM, PV-only, load-only, last tile) waits before it reads or issues.
 #define FP8_MASKED_MM() do { \
     const uint32_t cur = (base + sk) & 3u; \
     const uint32_t next = (cur + 1u) & 3u; \
     [[clang::nomerge]] __builtin_amdgcn_s_setprio(1); \
+    wait_dma(); \
     const auto prefetch = [&]() { \
         if (sk + 4u < n) load_k<D>(sm, kr, cur, sk + 4u, k_stride, tid); \
         if (sk + 2u < n) load_v<D>(sm, vr, (cur + 2u) & 3u, sk + 2u, v_stride, tid); \
@@ -1522,7 +1526,6 @@ do { \
         l *= np.corr; \
     } \
     params = np; \
-    wait_dma(); \
     phase_barrier(); \
 } while (false)
 
