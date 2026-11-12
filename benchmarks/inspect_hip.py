@@ -10,6 +10,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import subprocess
 
 if __package__:
@@ -54,11 +55,17 @@ def main():
                    args.output / "disassembly.s")
     functions = parse_disassembly(assembly)
     lines = assembly.splitlines()
+    # hip_d{dim} holds the general kernel. A ZYFA_FP8_STRICT_ISA=0 build also has the all-descales
+    # kernel, saved under hip_d{dim}_all_descales.
+    variants = [(False, "")]
+    if any(re.search(r"attendILi\d+ELb1E", name) for name in functions):
+        variants.append((True, "_all_descales"))
     for dim, count in ((128, 72), (192, 44)):
-        directory = args.output / f"hip_d{dim}"
-        directory.mkdir(exist_ok=True)
-        body = steady_loop(select_function(functions, dim), count)
-        (directory / "steady-loop.s").write_text("".join(lines[i.line - 1] + "\n" for i in body))
+        for all_descales, suffix in variants:
+            directory = args.output / f"hip_d{dim}{suffix}"
+            directory.mkdir(exist_ok=True)
+            body = steady_loop(select_function(functions, dim, all_descales=all_descales), count)
+            (directory / "steady-loop.s").write_text("".join(lines[i.line - 1] + "\n" for i in body))
     manifest = {"native_source_sha256": hashlib.sha256(source.read_bytes()).hexdigest(),
                 "object_sha256": hashlib.sha256(obj.read_bytes()).hexdigest(),
                 "code_object_sha256": hashlib.sha256(code_object.read_bytes()).hexdigest(),

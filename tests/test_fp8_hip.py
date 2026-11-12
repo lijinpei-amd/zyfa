@@ -1,3 +1,4 @@
+import itertools
 import math
 
 import pytest
@@ -141,3 +142,20 @@ def test_python_hip_unit_descales_and_fake_operator(dim):
     torch.library.opcheck(torch.ops.zyfa.fwd_hip.default,
                           (*tensors, 1 / math.sqrt(dim), 1.0, True, False, one, one, one),
                           test_utils="test_faketensor")
+
+
+@pytest.mark.parametrize("dim", [128, 192])
+def test_python_hip_missing_descales_match_unit_descales(dim):
+    # A missing descale reads as 1.0. In a ZYFA_FP8_STRICT_ISA=0 build, a call missing any descale runs the general
+    # kernel and a call with all three runs the all-descales kernel, so this also compares the two kernels.
+    tensors, descales = make_inputs(dim, 4, 1, 512)
+    one = torch.ones((), device="cuda", dtype=torch.float32)
+    names = ("q_descale", "k_descale", "v_descale")
+    kwargs = dict(causal=True, layout="bhsd", backend="hip", return_lse=True)
+    for present in itertools.product((False, True), repeat=3):
+        given = {name: descale for name, descale, p in zip(names, descales, present) if p}
+        filled = {name: descale if p else one for name, descale, p in zip(names, descales, present)}
+        output, lse = zyfa.flash_attn_func(*tensors, **given, **kwargs)
+        expected, expected_lse = zyfa.flash_attn_func(*tensors, **filled, **kwargs)
+        assert torch.equal(output.view(torch.int16), expected.view(torch.int16)), present
+        assert torch.equal(lse.view(torch.int32), expected_lse.view(torch.int32)), present

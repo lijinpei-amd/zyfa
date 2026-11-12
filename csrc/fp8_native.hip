@@ -96,15 +96,21 @@ struct Params {
     uint32_t rescale;
 };
 
-// ZYFA_FP8_STRICT_ISA chooses how wave-mask selects are written.
-//   1 (default): one inline-asm v_cndmask_b32_e64 per select. Each compare stays immediately
-//     before its select, as in the assembly kernels, so the strict steady loops match the
-//     assembly's instruction sequence exactly.
-//   0: __builtin_amdgcn_inverse_ballot_w64 plus a select. LLVM then groups a block's compares
-//     ahead of its selects, writing each mask to its own SGPR pair. That drops the VCC hazard
-//     s_nops and was 0.2-1.1% faster in the measured shapes. The cost: the strict loops no longer
-//     match the assembly (the rescale selects change encoding), the whole-kernel mnemonic
-//     distance grows, and SGPR use rises (77/79 -> 93/94).
+// ZYFA_FP8_STRICT_ISA chooses between matching the assembly and two small speedups.
+//   1 (default): one inline-asm v_cndmask_b32_e64 per wave-mask select, and one kernel per head
+//     dimension, attend<D>. Each compare stays immediately before its select, as in the assembly
+//     kernels, so the strict steady loops match the assembly's instruction sequence exactly.
+//   0: two changes.
+//     - Wave-mask selects are __builtin_amdgcn_inverse_ballot_w64 plus a select. LLVM then groups
+//       a block's compares ahead of its selects, writing each mask to its own SGPR pair. That
+//       drops the VCC hazard s_nops and was 0.2-1.1% faster in the measured shapes. The cost: the
+//       strict loops no longer match the assembly (the rescale selects change encoding), the
+//       whole-kernel mnemonic distance grows, and SGPR use rises (77/79 -> 93/94).
+//     - Each head dimension gets a second kernel, attend<D, true>, for launches that pass all
+//       three descales. It loads them with no null checks and no s_mov_b32 1.0: 14 fewer
+//       instructions than the general kernel, attend<D, false>, which runs every other
+//       combination. The launchers choose by which descale pointers are set (see launch). The
+//       code object holds four kernels instead of two.
 #ifndef ZYFA_FP8_STRICT_ISA
 #define ZYFA_FP8_STRICT_ISA 1
 #endif
@@ -1730,9 +1736,20 @@ do { \
     phase_barrier(); \
 } while (false)
 
+// The strict build keeps the single attend<D>, so its symbols and code match the recorded build.
+// See ZYFA_FP8_STRICT_ISA for the non-strict attend<D, AllDescales>.
+#if ZYFA_FP8_STRICT_ISA
 template <int D>
+#else
+template <int D, bool AllDescales>
+#endif
 __global__ __launch_bounds__(512, 1) void attend(Args<D> kernel_args) {
 #pragma clang fp reassociate(off)
+#if ZYFA_FP8_STRICT_ISA
+    constexpr bool all_descales = false;
+#else
+    constexpr bool all_descales = AllDescales;
+#endif
     const auto ap = (kernarg_bytes)__builtin_amdgcn_kernarg_segment_ptr();
     const u16 a = *(kernarg_u16)(ap);
     const u16 b = *(kernarg_u16)(ap + 64);
@@ -1760,10 +1777,11 @@ __global__ __launch_bounds__(512, 1) void attend(Args<D> kernel_args) {
     // A missing descale is 1.0 from a one-instruction asm, the assembly's s_mov_b32 1.0. With a
     // known 1.0, InstCombine folds qd * kd into the K-descale branch, which then waits for the Q and
     // K descale loads before the V descale load issues; the assembly issues all three before one
-    // wait with the job table load.
-    const float qd = args.q_descale ? *((const_global_float)args.q_descale) : sgpr_one();
-    const float kd = args.k_descale ? *((const_global_float)args.k_descale) : sgpr_one();
-    const float vd = args.v_descale ? *((const_global_float)args.v_descale) : sgpr_one();
+    // wait with the job table load. When all three descales are known present, the loads are
+    // unconditional and there is no 1.0 to fold.
+    const float qd = (all_descales || args.q_descale) ? *((const_global_float)args.q_descale) : sgpr_one();
+    const float kd = (all_descales || args.k_descale) ? *((const_global_float)args.k_descale) : sgpr_one();
+    const float vd = (all_descales || args.v_descale) ? *((const_global_float)args.v_descale) : sgpr_one();
     const float qk_descale = qd * kd;
     const float scale = args.sl2 * qk_descale;
     float p_scale = scale;
@@ -2304,15 +2322,30 @@ kernel_end:
 #undef FP8_ANCHOR2
 #undef FP8_ANCHOR1
 
+// The non-strict build picks the kernel by which descale pointers are set, not by the values they
+// point to. A CUDA graph replay reads new values through the same pointers, so the captured kernel
+// stays the right one.
+template <int D>
+static void launch(const Args<D> &args, hipStream_t stream) {
+#if ZYFA_FP8_STRICT_ISA
+    hipLaunchKernelGGL(attend<D>, dim3(args.grid), dim3(512), 0, stream, args);
+#else
+    if (args.q_descale && args.k_descale && args.v_descale)
+        hipLaunchKernelGGL(HIP_KERNEL_NAME(attend<D, true>), dim3(args.grid), dim3(512), 0, stream, args);
+    else
+        hipLaunchKernelGGL(HIP_KERNEL_NAME(attend<D, false>), dim3(args.grid), dim3(512), 0, stream, args);
+#endif
+}
+
 hipError_t launch_d128(const Args128 &args, hipStream_t stream) {
     if (args.kv_ss >= (1u << 24)) return hipErrorInvalidValue;
-    hipLaunchKernelGGL(attend<128>, dim3(args.grid), dim3(512), 0, stream, args);
+    launch<128>(args, stream);
     return hipGetLastError();
 }
 
 hipError_t launch_d192(const Args192 &args, hipStream_t stream) {
     if (args.k_ss >= (1u << 24) || args.v_ss >= (1u << 24)) return hipErrorInvalidValue;
-    hipLaunchKernelGGL(attend<192>, dim3(args.grid), dim3(512), 0, stream, args);
+    launch<192>(args, stream);
     return hipGetLastError();
 }
 

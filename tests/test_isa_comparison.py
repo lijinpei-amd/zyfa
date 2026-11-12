@@ -1,6 +1,8 @@
 from collections import Counter
 
-from benchmarks.compare_isa import compare, excluded_reason, parse_disassembly, steady_loop
+import pytest
+
+from benchmarks.compare_isa import compare, excluded_reason, parse_disassembly, select_function, steady_loop
 
 
 SAMPLE = """
@@ -82,3 +84,15 @@ def test_loop_includes_all_backedge_paths_and_excludes_interleaved_preheader():
     code = [Instruction(op, "", address, n + 1, target) for n, (address, op, target) in enumerate(layout)]
     body = steady_loop(code, 2)
     assert [i.address for i in body] == [4, 8, 32, 36, 40, 44]
+
+
+def test_select_function_picks_the_general_or_all_descales_kernel():
+    suffix = "EvNSt11conditionalIXeqT_Li128EENS_7Args128ENS_7Args192EE4typeE"
+    strict = {f"_ZN15fmha_fp8_native6attendILi{d}EE{suffix}": [d] for d in (128, 192)}
+    loose = {f"_ZN15fmha_fp8_native6attendILi{d}ELb{b}EE{suffix}": [d, b] for d in (128, 192) for b in (0, 1)}
+    assert select_function(strict, 192) == [192]
+    with pytest.raises(ValueError, match="only ZYFA_FP8_STRICT_ISA=0 builds"):
+        select_function(strict, 192, all_descales=True)
+    assert select_function(loose, 128) == [128, 0]
+    assert select_function(loose, 128, all_descales=True) == [128, 1]
+    assert select_function({"fmha_fp8_d128_pp": ["asm"]}, 128) == ["asm"]

@@ -144,13 +144,24 @@ def compare(reference, llvm):
                          for name, code in (("reference", reference), ("llvm", llvm))}}
 
 
-def select_function(functions, dim, symbol=None):
+def select_function(functions, dim, symbol=None, all_descales=False):
+    """Returns the native kernel for head dimension dim, or the only function in an assembly listing.
+
+    A strict build has one kernel per dimension, attend<D>. A ZYFA_FP8_STRICT_ISA=0 build has two:
+    attend<D, false>, the general kernel, and attend<D, true>, used when all three descales are
+    passed. all_descales=False picks attend<D> or attend<D, false>; True picks attend<D, true>.
+    """
     if symbol:
         return functions[symbol]
-    candidates = [name for name in functions if f"attendILi{dim}" in name]
-    if len(candidates) == 1:
-        return functions[candidates[0]]
-    if len(functions) == 1:
+    kernels = {name: match[1] for name in functions
+               if (match := re.search(rf"attendILi{dim}E(?:Lb([01])E)?E", name))}
+    if kernels:
+        candidates = [name for name, flag in kernels.items() if (flag == "1") == all_descales]
+        if len(candidates) == 1:
+            return functions[candidates[0]]
+        if all_descales and not candidates:
+            raise ValueError(f"no all-descales kernel for d{dim}; only ZYFA_FP8_STRICT_ISA=0 builds have one")
+    elif len(functions) == 1 and not all_descales:
         return next(iter(functions.values()))
     raise ValueError(f"select a function explicitly: {list(functions)}")
 
@@ -163,11 +174,13 @@ def main():
     parser.add_argument("--scope", choices=["loop", "kernel"], default="loop")
     parser.add_argument("--llvm-symbol")
     parser.add_argument("--assembly-symbol")
+    parser.add_argument("--all-descales", action="store_true",
+                        help="compare attend<D, true>, the all-descales kernel of a ZYFA_FP8_STRICT_ISA=0 build")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--allow-mismatch", action="store_true")
     args = parser.parse_args()
-    code = [select_function(parse_disassembly(path.read_text()), args.dim, symbol)
-            for path, symbol in ((args.assembly, args.assembly_symbol), (args.llvm, args.llvm_symbol))]
+    code = [select_function(parse_disassembly(args.assembly.read_text()), args.dim, args.assembly_symbol),
+            select_function(parse_disassembly(args.llvm.read_text()), args.dim, args.llvm_symbol, args.all_descales)]
     if args.scope == "loop":
         code = [steady_loop(body, 72 if args.dim == 128 else 44) for body in code]
     result = compare(*code)
