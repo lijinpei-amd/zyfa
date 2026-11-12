@@ -98,7 +98,13 @@ recorded; the reasons below are inferred from each option's effect.
     values, literals and V-ring bases to kernel entry, which raised SGPR/VGPR
     pressure and caused spills.
   - **Cost:** requires the loop-constant asm (below).
-  - **Status:** under investigation (`build/investigations-20261112/licm-on/`).
+  - **Status (2026-11-12, `build/investigations-20261112/licm-on/`):** with the
+    production compiler, re-enabling MachineLICM costs about 0.3%.
+    - The run before SIFoldOperands hoists 470–580 immediate moves before they
+      can fold, which costs about +20 SGPRs.
+    - Only `llvm-lds-licm`'s `-amdgpu-early-machinelicm-before-fold=false`, which
+      skips that run, makes it neutral.
+    - Keep the flag unless that option is adopted.
 - [ ] **`-Xclang -target-feature` `-vop3-literal`, `-dl-insts`, `-bitop3-insts`.**
   - **Reason (inferred):** keep LLVM to the encodings and instructions the
     assembly kernels use.
@@ -142,7 +148,16 @@ positive excess went 248/190 → 1157/624, d128 spilled, and kernels ran
     and with MachineLICM off LLVM recreates them at every use. Without the asm,
     each stage gains moves plus an `s_nop`: the strict loops grow to
     1353/841, and d192 is about 2% slower.
-  - **Status:** under investigation, together with `-disable-machine-licm`.
+  - **Status (2026-11-12):** only removable with MachineLICM back on.
+    - Plain 0x7f, −127.0 and 0.125 are fine once the post-fold MachineLICM run
+      hoists them.
+    - −inf must stay asm: plain −inf causes 16 d128 VGPR spills.
+    - −8.0 should stay asm: a plain −8.0 lands in an SGPR and adds a `v_mov`
+      per d128 stage.
+    - Variant L3i8 (asm only for −8.0 and −inf, plus
+      `-amdgpu-early-machinelicm-before-fold=false`) is statically slightly
+      better than HEAD and speed-neutral. It needs that LLVM option.
+    - With the production compiler, keep all five.
 - [ ] **`vgpr_constant<0>` in `zero_fx16` — 64 × `v_mov_b32 v, 0`** (O clear,
   one site after the pass-start barrier).
   - **Reason:** an `o_tile{}` zero becomes an SGPR splat that feeds four O
@@ -159,8 +174,12 @@ positive excess went 248/190 → 1157/624, d128 spilled, and kernels ran
     V-descale load. Removing it gave −0.6 to −1.2% at L256.
   - **Why not volatile:** a volatile version turned the descale loads into
     vector loads.
-  - **Status:** compile-time descale specialization for the non-strict build
-    is under investigation (`build/investigations-20261112/descale-specialize/`).
+  - **Status (2026-11-12):** keep.
+    - Compile-time descale specialization was measured
+      (`build/investigations-20261112/descale-specialize/`). An all-present
+      kernel without null checks or `sgpr_one`, in the non-strict build, gave
+      no measurable gain (±0.25%).
+    - It doubled the kernel code size and took 46% longer to compile.
 - [ ] **`scalar_increment` — `s_add_u32 s, s, 1`** (volatile, 17 sites: stage
   guards and advances).
   - **Reason:** keeps the reference's separate advance and guard recompute.
@@ -193,8 +212,13 @@ instruction asm and aren't tracked here.
 ## Related source-level steering (no asm, no patch)
 
 - [ ] **`#pragma clang loop licm(disable)`** on the persistent pass loop
-  (written as `for (;;)`): turns off IR LICM for that loop. Under
-  investigation with `-disable-machine-licm`.
+  (written as `for (;;)`): turns off IR LICM for that loop.
+  - **Status (2026-11-12):** keep. With IR LICM on, 587 more values (pointers,
+    epilogue and LDS addresses, head bases) are hoisted to kernel entry, and
+    d128 spills 26–69 VGPRs.
+  - Scoping LICM to the steady loop isn't possible. That loop has several entry
+    points, so LLVM doesn't treat it as a natural loop; the pass loop's
+    preheader is the only place values can be hoisted to.
 - [ ] **`__builtin_expect_with_probability(delta >= 0, 1, 0.85)`** inside the
   masked MMs.
   - **Reason:** block placement keeps the −inf fill out of line.
