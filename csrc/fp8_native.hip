@@ -157,6 +157,14 @@ __device__ __forceinline__ uint32_t sgpr_constant() {
     return r;
 }
 
+// 1.0 in an SGPR, as the assembly's s_mov_b32 1.0, with the value hidden from LLVM. Not volatile:
+// the asm has no memory effects, so the global loads after it can still be scalar loads.
+__device__ __forceinline__ float sgpr_one() {
+    float r;
+    asm("s_mov_b32 %0, 1.0" : "=s"(r));
+    return r;
+}
+
 // An unspecified tile: poison in IR, no instruction. It defines O on a path that clears O later,
 // so the previous pass's O is not kept live across the pass start.
 __device__ __forceinline__ fx16 unspecified_fx16() {
@@ -1704,9 +1712,13 @@ __global__ __launch_bounds__(512, 1) void attend(Args<D> kernel_args) {
     const int group = wave >> 2;
     const int qwarp = args.pair ? (wave & 3) : wave;
     const int paired_head = args.pair ? group : 0;
-    const float qd = args.q_descale ? *((const_global_float)args.q_descale) : 1.f;
-    const float kd = args.k_descale ? *((const_global_float)args.k_descale) : 1.f;
-    const float vd = args.v_descale ? *((const_global_float)args.v_descale) : 1.f;
+    // A missing descale is 1.0 from a one-instruction asm, the assembly's s_mov_b32 1.0. With a
+    // known 1.0, InstCombine folds qd * kd into the K-descale branch, which then waits for the Q and
+    // K descale loads before the V descale load issues; the assembly issues all three before one
+    // wait with the job table load.
+    const float qd = args.q_descale ? *((const_global_float)args.q_descale) : sgpr_one();
+    const float kd = args.k_descale ? *((const_global_float)args.k_descale) : sgpr_one();
+    const float vd = args.v_descale ? *((const_global_float)args.v_descale) : sgpr_one();
     const float qk_descale = qd * kd;
     const float scale = args.sl2 * qk_descale;
     float p_scale = scale;
