@@ -411,19 +411,18 @@ __device__ __forceinline__ float lane_max(fx16 s) {
     return m;
 }
 
-// Weighted gives the elementwise path a 0.85 branch weight (see below). By default only d128 has it:
-// the d192 pass-start masked QK keeps its -inf fill in line, which timed 0.8% faster at length 256;
-// the d192 masked MM passes true.
-template <int D, int Block, bool Weighted = D == 128>
+// Weighted gives the elementwise path a 0.85 branch weight; the masked MMs pass true. The pass-start
+// masked QK keeps the default weight and its -inf fill in line: with 0.85 the fill moved out of
+// line, and d192 timed 0.8% slower at length 256.
+template <int D, int Block, bool Weighted = false>
 __device__ __forceinline__ void mask(fx16 &s, int q_start, int tile, float ninf) {
     const int delta = scalar_mask_sub<Block * 32>(scalar_sub((uint32_t)q_start, (uint32_t)tile * keys<D>));
     if (delta >= 32)
         return;
     // The elementwise path comes first, so it is the fall-through of the delta < 0 branch, as in
-    // the assembly. The 0.85 weight lets block placement fall from it into the merge and move the
-    // -inf fill out of line; at the default 62.5/37.5 the fill competes for the merge and placement
-    // puts other tail stages after the elementwise path (for d128, the pvo stage; for the d192
-    // masked MM, between its QK and PV MFMAs).
+    // the assembly. In the masked MMs, the 0.85 weight lets block placement fall from it into the
+    // merge and move the -inf fill out of line; at the default 62.5/37.5 the fill competes for the
+    // merge and placement moves the MM's MFMAs after the mask beyond other tail stages.
     if (Weighted ? __builtin_expect_with_probability(delta >= 0, 1, 0.85) : delta >= 0) {
         const int threshold = delta + (laneid() & 31) - (laneid() >> 5) * 4;
 #pragma unroll
@@ -1527,7 +1526,7 @@ do { \
     s.b = mma(r0, q.b, s.b); \
     r4 = read_v_fragment<0, 1, true>(tail_vbase); \
     FP8_SCHEDULE_POINT(s.b, r4); \
-    mask<D, 0>(s.a, q_start, sk + 1u, kc.ninf); \
+    mask<D, 0, true>(s.a, q_start, sk + 1u, kc.ninf); \
     [[clang::nomerge]] phase_use(s.a); \
     SCHED_FENCE(); \
     FP8_MAX16(ma, s.a); \
@@ -1535,13 +1534,13 @@ do { \
     s.c = mma(r1, q.b, s.c); \
     r0 = read_v_fragment<0, 2, true>(tail_vbase); \
     FP8_SCHEDULE_POINT(s.c, r0); \
-    mask<D, 1>(s.b, q_start, sk + 1u, kc.ninf); \
+    mask<D, 1, true>(s.b, q_start, sk + 1u, kc.ninf); \
     [[clang::nomerge]] phase_use(s.b); \
     SCHED_FENCE(); \
     FP8_MAX16(mb, s.b); \
     s.d = mma(r2, q.b, s.d); \
     FP8_SCHEDULE_POINT(s.d); \
-    mask<D, 2>(s.c, q_start, sk + 1u, kc.ninf); \
+    mask<D, 2, true>(s.c, q_start, sk + 1u, kc.ninf); \
     [[clang::nomerge]] phase_use(s.c); \
     SCHED_FENCE(); \
     FP8_MAX16(mc, s.c); \
@@ -1550,7 +1549,7 @@ do { \
     r1 = read_v_fragment<0, 3, true>(tail_vbase); \
     r2 = read_v_fragment<1, 0, true>(tail_vbase); \
     FP8_SCHEDULE_POINT(o.a, r1, r2); \
-    mask<D, 3>(s.d, q_start, sk + 1u, kc.ninf); \
+    mask<D, 3, true>(s.d, q_start, sk + 1u, kc.ninf); \
     [[clang::nomerge]] phase_use(s.d); \
     SCHED_FENCE(); \
     FP8_MAX16(md, s.d); \
