@@ -1468,6 +1468,10 @@ do { \
 // As the assembly's masked MM, this waits at its start for the previous phase's tile loads and leaves
 // its own K(k+4)/V(k+2) loads in flight across the closing barrier; every following tail phase
 // (masked MM, PV-only, load-only, last tile) waits before it reads or issues.
+// d192 issues its four PV MFMAs right after the QK MFMAs: they need only the previous tile's
+// probabilities, and the mask and statistics VALU then follows them instead of separating the two
+// MFMA groups (with LLVM's MFMA-result wait states before the first mask). d128 keeps PV after the
+// statistics, which timed better there and matches the assembly order more closely.
 #define FP8_MASKED_MM() do { \
     const uint32_t cur = (base + sk) & 3u; \
     const uint32_t next = (cur + 1u) & 3u; \
@@ -1498,6 +1502,7 @@ do { \
         [[clang::nomerge]] phase_use(s.d); \
     } \
     SCHED_FENCE(); \
+    if constexpr (D == 192) pv<D>(tail_vbase, data.p, params, o, kc.scale_one, prefetch); \
     mask<D, 0>(s.a, q_start, sk + 1u, kc.ninf); \
     [[clang::nomerge]] phase_use(s.a); \
     SCHED_FENCE(); \
@@ -1514,7 +1519,7 @@ do { \
     } \
     Params np; \
     FP8_COMPUTE_STATS(np, false); \
-    pv<D>(tail_vbase, data.p, params, o, kc.scale_one, [&]() { if constexpr (D == 192) prefetch(); }); \
+    if constexpr (D == 128) pv<D>(tail_vbase, data.p, params, o, kc.scale_one, []() {}); \
     prepare_scores<D>(s, np, p_scale); \
     if constexpr (D == 192) { FP8_SCHEDULE_POINT(s.a, s.b); } \
     if (np.rescale) { \
