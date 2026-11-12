@@ -255,8 +255,16 @@ samples. They are tuning records; the table above is the final comparison.
 
 ## Reproduction
 
-The commands below run the current source. The timings above describe the
-earlier capture; current timings are in [LLVM FP8 ISA matching](hip-fp8-isa-match.md).
+[Reproducing the native HIP FP8 results](hip-fp8-reproduce.md) covers the
+current build:
+- the LLVM branch (`lijinpei-amd/llvm-project`
+  `2026-11-10-fp8-schedule-match`, commit `72e518a3f02a`);
+- the environment;
+- the build, check and test commands;
+- the benchmark protocols behind the current tables.
+
+The commands below produced the earlier 24-case comparison; the timings above
+describe that capture.
 
 Build against the installed ROCm PyTorch, with `LLVM_ROOT` pointing to the
 compatible compiler described in [LLVM FP8 ISA matching](hip-fp8-isa-match.md):

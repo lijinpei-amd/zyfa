@@ -3,6 +3,9 @@
 Both four-stage steady loops retain the assembly backend's exact disassembled
 mnemonic counts and sequence. The whole-kernel counts and sequence still differ.
 
+The compiler, environment and benchmark commands for the current kernels are
+in [Reproducing the native HIP FP8 results](hip-fp8-reproduce.md).
+
 ## Current capture: masked-MM interleave and prologue loads
 
 [`rest_gap_20261112`](../benchmarks/results/hip_native/isa_match/rest_gap_20261112/README.md)
