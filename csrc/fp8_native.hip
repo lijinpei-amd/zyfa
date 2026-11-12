@@ -1789,11 +1789,13 @@ __global__ __launch_bounds__(512, 1) void attend(Args<D> kernel_args) {
     wait_dma();
     o = o_tile{unspecified_fx16(), unspecified_fx16(), unspecified_fx16(), unspecified_fx16()};
     l = 0.f;
+    // As in the assembly, group 0's V1/K2/K3 loads stay in flight across the barrier: the first
+    // MM after it waits for them (steady vmcnt(4/3), tail vmcnt(0)) before its closing barrier, and
+    // no wave reads those slots earlier.
     if (group == 0) {
         if (n > 1) load_v_group0<D>(sm, vr, (base + 1) & 3, 1, v_stride, tid);
         if (n > 2) load_k_group0<D>(sm, kr, (base + 2) & 3, 2, k_stride, tid);
         if (n > 3) load_k_group0<D>(sm, kr, (base + 3) & 3, 3, k_stride, tid);
-        wait_dma();
     }
     phase_barrier();
     // O is cleared once, after the barrier: before it, the moves would delay group 0's tile loads
