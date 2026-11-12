@@ -1465,14 +1465,157 @@ do { \
     FP8_SCHEDULE_POINT(__float_as_int((OUT).bias_lo), __float_as_int((OUT).bias_hi)); \
 } while (false)
 
+// d128 masked MM, interleaved as csrc/asm/d128.py::seg_mm builds its "mmm" variant: the steady MM's
+// MFMA order, fragment refills and LDS waits, with runtime K/V slots, K(k+4) issued after the third
+// QK MFMA and V(k+2) after the fourth, the l update after the K loads, the mask and row max of S
+// block j after the MFMA that follows block j's final QK MFMA, and the statistics under the first two
+// PV MFMAs. The VALU then runs while the MFMAs execute, instead of between the QK and PV groups.
+#define FP8_MASKED_MM_D128() do { \
+    const uint32_t cur = (base + sk) & 3u; \
+    const uint32_t next = (cur + 1u) & 3u; \
+    const auto &p = data.p; \
+    [[clang::nomerge]] __builtin_amdgcn_s_setprio(1); \
+    wait_dma(); \
+    const f4 rs_lo_vector = row_sum_vector(p.a, sel); \
+    FP8_SCHEDULE_POINT(rs_lo_vector); \
+    const f4 rs_hi_vector = row_sum_vector(p.b, sel); \
+    FP8_SCHEDULE_POINT(rs_hi_vector); \
+    Params np{}; \
+    i8 r0 = data.head.a, r1 = data.head.b, r2, r3, r4; \
+    r2 = read_k<D, 2, 0, -1>(sm, next); \
+    r3 = read_k<D, 3, 0, -1>(sm, next); \
+    FP8_SCHEDULE_POINT(r2, r3); \
+    FP8_LDS_WAIT(4); \
+    s.a = mma(r0, q.a, fx16{}); \
+    r4 = read_k<D, 0, 1, -1>(sm, next); \
+    FP8_SCHEDULE_POINT(s.a, r4); \
+    s.b = mma(r1, q.a, fx16{}); \
+    r0 = read_k<D, 1, 1, -1>(sm, next); \
+    FP8_SCHEDULE_POINT(s.b, r0); \
+    FP8_LDS_WAIT(4); \
+    s.c = mma(r2, q.a, fx16{}); \
+    r1 = read_k<D, 2, 1, -1>(sm, next); \
+    FP8_SCHEDULE_POINT(s.c, r1); \
+    if (sk + 4u < n) load_k<D>(sm, kr, cur, sk + 4u, k_stride, tid); \
+    SCHED_FENCE(); \
+    l = add_scaled_sum(l, rs_lo_vector[0], params.sum_scale_lo); \
+    FP8_SCHEDULE_POINT(__float_as_int(l)); \
+    l = add_scaled_sum(l, rs_hi_vector[0], params.sum_scale_hi); \
+    FP8_ANCHOR1(rs_lo_vector); FP8_ANCHOR1(rs_hi_vector); \
+    FP8_SCHEDULE_POINT(__float_as_int(l)); \
+    s.d = mma(r3, q.a, fx16{}); \
+    r2 = read_k<D, 3, 1, -1>(sm, next); \
+    FP8_SCHEDULE_POINT(s.d, r2); \
+    if (sk + 2u < n) load_v<D>(sm, vr, (cur + 2u) & 3u, sk + 2u, v_stride, tid); \
+    SCHED_FENCE(); \
+    FP8_LDS_WAIT(4); \
+    s.a = mma(r4, q.b, s.a); \
+    r3 = read_v_fragment<0, 0, true>(tail_vbase); \
+    FP8_SCHEDULE_POINT(s.a, r3); \
+    s.b = mma(r0, q.b, s.b); \
+    r4 = read_v_fragment<0, 1, true>(tail_vbase); \
+    FP8_SCHEDULE_POINT(s.b, r4); \
+    mask<D, 0>(s.a, q_start, sk + 1u, kc.ninf); \
+    [[clang::nomerge]] phase_use(s.a); \
+    SCHED_FENCE(); \
+    FP8_MAX16(ma, s.a); \
+    FP8_LDS_WAIT(8); \
+    s.c = mma(r1, q.b, s.c); \
+    r0 = read_v_fragment<0, 2, true>(tail_vbase); \
+    FP8_SCHEDULE_POINT(s.c, r0); \
+    mask<D, 1>(s.b, q_start, sk + 1u, kc.ninf); \
+    [[clang::nomerge]] phase_use(s.b); \
+    SCHED_FENCE(); \
+    FP8_MAX16(mb, s.b); \
+    s.d = mma(r2, q.b, s.d); \
+    FP8_SCHEDULE_POINT(s.d); \
+    mask<D, 2>(s.c, q_start, sk + 1u, kc.ninf); \
+    [[clang::nomerge]] phase_use(s.c); \
+    SCHED_FENCE(); \
+    FP8_MAX16(mc, s.c); \
+    FP8_LDS_WAIT(4); \
+    o.a = mma_scaled(r3, p.a, o.a, kc.scale_one, params.sb_lo); \
+    r1 = read_v_fragment<0, 3, true>(tail_vbase); \
+    r2 = read_v_fragment<1, 0, true>(tail_vbase); \
+    FP8_SCHEDULE_POINT(o.a, r1, r2); \
+    mask<D, 3>(s.d, q_start, sk + 1u, kc.ninf); \
+    [[clang::nomerge]] phase_use(s.d); \
+    SCHED_FENCE(); \
+    FP8_MAX16(md, s.d); \
+    const float lo_raw = fmaxf(ma, mb); \
+    const float hi_pair_max = fmaxf(mc, md); \
+    FP8_SCHEDULE_POINT(__float_as_int(lo_raw), __float_as_int(hi_pair_max)); \
+    const auto lo_swap = __builtin_amdgcn_permlane32_swap(__float_as_int(lo_raw), __float_as_int(lo_raw), false, false); \
+    const auto hi_swap = __builtin_amdgcn_permlane32_swap(__float_as_int(hi_pair_max), __float_as_int(hi_pair_max), false, false); \
+    FP8_SCHEDULE_POINT(lo_swap, hi_swap); \
+    const float lo = fmaxf(__int_as_float(lo_swap[0]), __int_as_float(lo_swap[1])); \
+    const float hi = fmaxf(__int_as_float(hi_swap[0]), __int_as_float(hi_swap[1])); \
+    FP8_SCHEDULE_POINT(__float_as_int(lo), __float_as_int(hi)); \
+    const float m = fmaxf(params.m, fmaxf(lo, hi) * scale); \
+    np.rescale = __builtin_amdgcn_ballot_w64(m - params.m > kc.vote) != 0; \
+    const uint64_t rescale_mask = np.rescale ? -1ULL : 0ULL; \
+    FP8_ANCHOR1(rescale_mask); \
+    FP8_SCHEDULE_POINT(__float_as_int(m), np.rescale); \
+    o.b = mma_scaled(r4, p.a, o.b, kc.scale_one, params.sb_lo); \
+    FP8_SCHEDULE_POINT(o.b); \
+    np.m = select_wave_mask(rescale_mask, params.m, m); \
+    const float off_lo = block_offset(lo, scale, np.m, kc.neg_127); \
+    np.sb_lo = 127 + (int)off_lo; \
+    np.sum_scale_lo = __int_as_float(np.sb_lo << 23); \
+    FP8_SCHEDULE_POINT(__float_as_int(np.m), np.sb_lo, __float_as_int(np.sum_scale_lo)); \
+    const float off_hi = block_offset(hi, scale, np.m, kc.neg_127); \
+    np.sb_hi = 127 + (int)off_hi; \
+    np.sum_scale_hi = __int_as_float(np.sb_hi << 23); \
+    FP8_SCHEDULE_POINT(np.sb_hi, __float_as_int(np.sum_scale_hi)); \
+    const float bias = fma_negative_eight(np.m, b8k, kc.neg_eight); \
+    np.bias_lo = fma_negative_eight(off_lo, bias, kc.neg_eight); \
+    np.bias_hi = fma_negative_eight(off_hi, bias, kc.neg_eight); \
+    FP8_SCHEDULE_POINT(__float_as_int(np.bias_lo), __float_as_int(np.bias_hi)); \
+    FP8_LDS_WAIT(4); \
+    o.c = mma_scaled(r0, p.a, o.c, kc.scale_one, params.sb_lo); \
+    r3 = read_v_fragment<1, 1, true>(tail_vbase); \
+    r4 = read_v_fragment<1, 2, true>(tail_vbase); \
+    FP8_SCHEDULE_POINT(o.c, r3, r4); \
+    o.d = mma_scaled(r1, p.a, o.d, kc.scale_one, params.sb_lo); \
+    FP8_SCHEDULE_POINT(o.d); \
+    FP8_LDS_WAIT(4); \
+    o.a = mma_scaled(r2, p.b, o.a, kc.scale_one, params.sb_hi); \
+    r0 = read_v_fragment<1, 3, true>(tail_vbase); \
+    FP8_SCHEDULE_POINT(o.a, r0); \
+    o.b = mma_scaled(r3, p.b, o.b, kc.scale_one, params.sb_hi); \
+    FP8_SCHEDULE_POINT(o.b); \
+    FP8_LDS_WAIT(0); \
+    o.c = mma_scaled(r4, p.b, o.c, kc.scale_one, params.sb_hi); \
+    FP8_SCHEDULE_POINT(o.c); \
+    o.d = mma_scaled(r0, p.b, o.d, kc.scale_one, params.sb_hi); \
+    FP8_SCHEDULE_POINT(o.d); \
+    if (__builtin_expect(__builtin_amdgcn_readfirstlane(np.rescale), 1)) { \
+        np.corr = exp2_hw(params.m - np.m); \
+        o.a *= np.corr; \
+        o.b *= np.corr; \
+        o.c *= np.corr; \
+        o.d *= np.corr; \
+        l *= np.corr; \
+    } \
+    params = np; \
+    phase_barrier(); \
+} while (false)
+
 // As the assembly's masked MM, this waits at its start for the previous phase's tile loads and leaves
 // its own K(k+4)/V(k+2) loads in flight across the closing barrier; every following tail phase
 // (masked MM, PV-only, load-only, last tile) waits before it reads or issues.
 // d192 issues its four PV MFMAs right after the QK MFMAs: they need only the previous tile's
 // probabilities, and the mask and statistics VALU then follows them instead of separating the two
-// MFMA groups (with LLVM's MFMA-result wait states before the first mask). d128 keeps PV after the
-// statistics, which timed better there and matches the assembly order more closely.
+// MFMA groups (with LLVM's MFMA-result wait states before the first mask). d128 uses the interleaved
+// FP8_MASKED_MM_D128 above.
 #define FP8_MASKED_MM() do { \
+    if constexpr (D == 128) { \
+        FP8_MASKED_MM_D128(); \
+    } else { \
+        FP8_MASKED_MM_D192(); \
+    } \
+} while (false)
+#define FP8_MASKED_MM_D192() do { \
     const uint32_t cur = (base + sk) & 3u; \
     const uint32_t next = (cur + 1u) & 3u; \
     [[clang::nomerge]] __builtin_amdgcn_s_setprio(1); \
@@ -2090,6 +2233,8 @@ kernel_end:
 
 #undef FP8_COMPUTE_STATS
 #undef FP8_MASKED_MM
+#undef FP8_MASKED_MM_D128
+#undef FP8_MASKED_MM_D192
 #undef FP8_OUTPUT
 #undef FP8_OUTPUT_POINT
 #undef FP8_STEP
