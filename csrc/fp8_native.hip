@@ -1,6 +1,7 @@
 #include "fp8_native.h"
 #include "rt.h"
 #include <type_traits>
+#include <utility>
 
 namespace fmha_fp8_native {
 
@@ -165,6 +166,39 @@ __device__ __forceinline__ uint32_t scalar_min(uint32_t a, uint32_t b) {
     asm volatile("s_min_u32 %0, %1, %2" : "=s"(r) : "s"(a), "s"(b) : "scc");
     return r;
 }
+
+__device__ __forceinline__ uint32_t scalar_mul(uint32_t a, uint32_t b) {
+    uint32_t r;
+    asm volatile("s_mul_i32 %0, %1, %2" : "=s"(r) : "s"(a), "s"(b));
+    return r;
+}
+
+// a * B in one instruction (none for B = 0), as LLVM would select it, but volatile: it stays where
+// the source puts it and MachineLICM does not hoist it.
+template <uint32_t B>
+__device__ __forceinline__ uint32_t scalar_mul_imm(uint32_t a) {
+    uint32_t r;
+    if constexpr (B == 0)
+        return 0;
+    else if constexpr ((B & (B - 1)) == 0)
+        asm volatile("s_lshl_b32 %0, %1, %2" : "=s"(r) : "s"(a), "n"(__builtin_ctz(B)) : "scc");
+    else
+        asm volatile("s_mul_i32 %0, %1, %2" : "=s"(r) : "s"(a), "n"(B));
+    return r;
+}
+
+// Non-strict only. An LDS DMA reads M0 one wait state after the SALU write before it; when nothing
+// sits between them, the hazard recognizer inserts s_nop 0. ZYFA_FP8_DMA_FILL picks the regions
+// whose source puts scalar work there instead: 1 steady loop, 2 group 0's whole-tile rounds, 4 the
+// two-chunk tile loads of the masked MM and tails. 2 and 4 use s_mul_i32 / s_lshl_b32 inline asm,
+// which the hazard recognizer counts only when LLVM expands it into an instruction (as it does
+// s_min_u32 and s_add_u32); otherwise the s_nop stays. The default, 0, keeps the code unchanged.
+#ifndef ZYFA_FP8_DMA_FILL
+#define ZYFA_FP8_DMA_FILL 0
+#endif
+#if ZYFA_FP8_STRICT_ISA && ZYFA_FP8_DMA_FILL
+#error "ZYFA_FP8_DMA_FILL needs ZYFA_FP8_STRICT_ISA=0"
+#endif
 
 // A register holding a constant. The one-instruction asm hides the value from LLVM, so instruction
 // selection cannot rematerialize the constant at each use inside a loop; like the assembly's setup
@@ -338,6 +372,69 @@ __device__ __forceinline__ void load_v_group0(Lds<D> sm, g2s_i32x4 rsrc, int slo
         load_v_chunk<D, 512, -1, true>(sm, rsrc, slot, tile, stride, tid);
         load_v_chunk<D, 768, -1, true>(sm, rsrc, slot, tile, stride, tid);
     }
+}
+
+// The ZYFA_FP8_DMA_FILL forms: Fill runs between the M0 write and the DMA and returns the soffset.
+template <bool V, int D, int Chunk, int Slot = -1, bool Group0Round = false, typename Fill>
+__device__ __forceinline__ void load_chunk_fill(Lds<D> sm, g2s_i32x4 rsrc, int slot, Fill fill) {
+    const uint32_t voff = Group0Round || Chunk == 0 ? (V ? sm.vvoff0 : sm.kvoff0) : (V ? sm.vvoff1 : sm.kvoff1);
+    const uint32_t dma = V ? sm.vdma : sm.kdma;
+    const uint32_t slot_base = Slot >= 0 ? dma : dma + (V ? Lds<D>::value_offset(slot) : Lds<D>::key_offset(slot));
+    constexpr uint32_t offset = (Slot >= 0 ? (V ? Lds<D>::value_offset(Slot) : Lds<D>::key_offset(Slot)) : 0) + Chunk * 16;
+    const g2s_as3 lds = dma_address<offset>(slot_base);
+    const uint32_t soffset = fill();
+    llvm_amdgcn_raw_buffer_load_lds(rsrc, lds, 16, voff, soffset, 0, 0);
+}
+
+// A two-chunk tile load (load_k, load_v): the soffset is computed under the first chunk's DMA and
+// Next() runs under the second's. Tile * step is the tile's byte offset.
+template <bool V, int D, typename Next>
+__device__ __forceinline__ uint32_t load_tile_fill(Lds<D> sm, g2s_i32x4 rsrc, int slot, uint32_t tile, uint32_t step,
+                                                   Next next) {
+    uint32_t soffset = 0;
+    load_chunk_fill<V, D, 0>(sm, rsrc, slot, [&] { return soffset = scalar_mul(tile, step); });
+    if constexpr (V && D == 192) {
+        next();
+    } else {
+        load_chunk_fill<V, D, 512>(sm, rsrc, slot, [&] { next(); return soffset; });
+    }
+    return soffset;
+}
+
+// Round R's key offset of a whole-tile load by group 0's 256 lanes (load_k_group0, load_v_group0).
+template <bool V, int D, int R>
+constexpr uint32_t group0_round_key() {
+    constexpr int chunk = 256 * R;
+    if constexpr (!V)
+        return chunk / (D == 128 ? 8 : 16);
+    else if constexpr (D == 128)
+        return ((chunk >> 7) & 3) * 32 + ((chunk >> 9) & 1) * 4;
+    else
+        return ((chunk >> 8) & 1) * 4;
+}
+
+// A group 0 whole tile: each round's soffset (Tile * keys + round key) * stride is computed under
+// that round's DMA, or under the one before when the first round's is 0; Last() runs under the last
+// free DMA.
+template <bool V, int D, int Tile, typename Last>
+__device__ __forceinline__ void load_group0_fill(Lds<D> sm, g2s_i32x4 rsrc, int slot, int stride, Last last) {
+    constexpr int rounds = V && D == 192 ? 2 : 4;
+    constexpr bool ahead = Tile == 0;
+    uint32_t soffset[rounds + 1] = {};
+    [&]<int... R>(std::integer_sequence<int, R...>) {
+        ([&] {
+            load_chunk_fill<V, D, 256 * R, -1, true>(sm, rsrc, slot, [&] {
+                constexpr int next = ahead ? R + 1 : R;
+                if constexpr (next < rounds)
+                    soffset[next] = scalar_mul_imm<Tile * keys<D> + group0_round_key<V, D, next>()>(stride);
+                else
+                    last();
+                return soffset[R];
+            });
+        }(), ...);
+    }(std::make_integer_sequence<int, rounds>{});
+    if constexpr (!ahead)
+        last();
 }
 
 template <int D, int Block, int DH, int Slot>
@@ -682,6 +779,44 @@ __device__ __forceinline__ SMData<D> sm_step(Lds<D> sm, uint32_t base, uint32_t 
     SCHED_FENCE(); \
 } while (false)
 
+// The steady MM's K(k+4) and V(k+2) chunk loads. With ZYFA_FP8_DMA_FILL & 1, each chunk's soffset
+// clamp or the step after it runs between the chunk's M0 write and its DMA.
+#if ZYFA_FP8_DMA_FILL & 1
+#define FP8_STEADY_LOAD_K0() \
+    uint32_t k_offset; \
+    load_chunk_fill<false, D, 0, Cur>(sm, kr, Cur, [&] { return k_offset = scalar_min(k_future, k_max); })
+#define FP8_STEADY_LOAD_K1() \
+    load_chunk_fill<false, D, 512, Cur>(sm, kr, Cur, [&] { k_future = scalar_add(k_future, k_step); return k_offset; })
+#define FP8_STEADY_LOAD_V0() \
+    uint32_t v_offset; \
+    load_chunk_fill<true, D, 0, (Cur + 2) & 3>(sm, vr, (Cur + 2) & 3, \
+                                             [&] { return v_offset = scalar_min(v_future, v_max); })
+#define FP8_STEADY_LOAD_V1() \
+    load_chunk_fill<true, D, 512, (Cur + 2) & 3>(sm, vr, (Cur + 2) & 3, \
+                                               [&] { v_future = scalar_add(v_future, v_step); return v_offset; })
+#define FP8_STEADY_LOAD_V0_LAST() \
+    FP8_STEADY_LOAD_V0(); \
+    v_future = scalar_add(v_future, v_step)
+#else
+#define FP8_STEADY_LOAD_K0() \
+    const uint32_t k_offset = scalar_min(k_future, k_max); \
+    FP8_SCHEDULE_POINT(k_offset); \
+    load_k_chunk<D, 0, Cur>(sm, kr, Cur, k_offset, k_stride, tid)
+#define FP8_STEADY_LOAD_K1() load_k_chunk<D, 512, Cur>(sm, kr, Cur, k_offset, k_stride, tid)
+#define FP8_STEADY_LOAD_V0() \
+    const uint32_t v_offset = scalar_min(v_future, v_max); \
+    FP8_SCHEDULE_POINT(v_offset); \
+    load_v_chunk<D, 0, (Cur + 2) & 3>(sm, vr, (Cur + 2) & 3, v_offset, v_stride, tid)
+#define FP8_STEADY_LOAD_V1() \
+    load_v_chunk<D, 512, (Cur + 2) & 3>(sm, vr, (Cur + 2) & 3, v_offset, v_stride, tid); \
+    k_future = scalar_add(k_future, k_step); \
+    v_future = scalar_add(v_future, v_step)
+#define FP8_STEADY_LOAD_V0_LAST() \
+    FP8_STEADY_LOAD_V0(); \
+    k_future = scalar_add(k_future, k_step); \
+    v_future = scalar_add(v_future, v_step)
+#endif
+
 // Steady MM follows csrc/asm/d128.py and d192.py::seg_mm, including each fragment refill,
 // DMA issue slot, and the max chains placed one MFMA after the corresponding final QK.
 // Named fragments describe the five/six-slot source ring; LLVM chooses physical registers.
@@ -714,9 +849,7 @@ do { \
         s.c = mma(r2, q.a, fx16{}); \
         r1 = read_k<D, 2, 1, Next>(sm, Next); \
         FP8_SCHEDULE_POINT(s.c, r1); \
-        const uint32_t k_offset = scalar_min(k_future, k_max); \
-        FP8_SCHEDULE_POINT(k_offset); \
-        load_k_chunk<D, 0, Cur>(sm, kr, Cur, k_offset, k_stride, tid); \
+        FP8_STEADY_LOAD_K0(); \
         SCHED_FENCE(); \
         l = add_scaled_sum_float(l, rs_lo, params.sum_scale_lo); \
         FP8_SCHEDULE_POINT(__float_as_int(l)); \
@@ -726,22 +859,18 @@ do { \
         s.d = mma(r3, q.a, fx16{}); \
         r2 = read_k<D, 3, 1, Next>(sm, Next); \
         FP8_SCHEDULE_POINT(s.d, r2); \
-        load_k_chunk<D, 512, Cur>(sm, kr, Cur, k_offset, k_stride, tid); \
+        FP8_STEADY_LOAD_K1(); \
         SCHED_FENCE(); \
         FP8_LDS_WAIT(4); \
         s.a = mma(r4, q.b, s.a); \
         r3 = read_v<D, 0, 0, Cur, true>(sm, Cur); \
         FP8_SCHEDULE_POINT(s.a, r3); \
-        const uint32_t v_offset = scalar_min(v_future, v_max); \
-        FP8_SCHEDULE_POINT(v_offset); \
-        load_v_chunk<D, 0, (Cur + 2) & 3>(sm, vr, (Cur + 2) & 3, v_offset, v_stride, tid); \
+        FP8_STEADY_LOAD_V0(); \
         SCHED_FENCE(); \
         s.b = mma(r0, q.b, s.b); \
         r4 = read_v<D, 0, 1, Cur, true>(sm, Cur); \
         FP8_SCHEDULE_POINT(s.b, r4); \
-        load_v_chunk<D, 512, (Cur + 2) & 3>(sm, vr, (Cur + 2) & 3, v_offset, v_stride, tid); \
-        k_future = scalar_add(k_future, k_step); \
-        v_future = scalar_add(v_future, v_step); \
+        FP8_STEADY_LOAD_V1(); \
         SCHED_FENCE(); \
         FP8_MAX16(ma, s.a); \
         FP8_SCHEDULE_POINT(__float_as_int(ma)); \
@@ -821,9 +950,7 @@ do { \
         s.b = mma(r1, q.a, fx16{}); \
         r0 = read_v<D, 0, 0, Cur, true>(sm, Cur); \
         FP8_SCHEDULE_POINT(s.b, r0); \
-        const uint32_t k_offset = scalar_min(k_future, k_max); \
-        FP8_SCHEDULE_POINT(k_offset); \
-        load_k_chunk<D, 0, Cur>(sm, kr, Cur, k_offset, k_stride, tid); \
+        FP8_STEADY_LOAD_K0(); \
         SCHED_FENCE(); \
         const float old_l = l; \
         l = __builtin_fmaf(rs_lo, __int_as_float(params.sb_lo << 23), old_l); \
@@ -833,15 +960,11 @@ do { \
         s.a = mma(r2, q.b, s.a); \
         r1 = read_v<D, 0, 1, Cur, true>(sm, Cur); \
         FP8_SCHEDULE_POINT(s.a, r1); \
-        load_k_chunk<D, 512, Cur>(sm, kr, Cur, k_offset, k_stride, tid); \
+        FP8_STEADY_LOAD_K1(); \
         SCHED_FENCE(); \
         s.b = mma(r3, q.b, s.b); \
         FP8_SCHEDULE_POINT(s.b); \
-        const uint32_t v_offset = scalar_min(v_future, v_max); \
-        FP8_SCHEDULE_POINT(v_offset); \
-        load_v_chunk<D, 0, (Cur + 2) & 3>(sm, vr, (Cur + 2) & 3, v_offset, v_stride, tid); \
-        k_future = scalar_add(k_future, k_step); \
-        v_future = scalar_add(v_future, v_step); \
+        FP8_STEADY_LOAD_V0_LAST(); \
         SCHED_FENCE(); \
         FP8_LDS_WAIT(8); \
         s.a = mma(r4, q.c, s.a); \
@@ -1511,6 +1634,16 @@ do { \
     FP8_SCHEDULE_POINT(__float_as_int((OUT).bias_lo), __float_as_int((OUT).bias_hi)); \
 } while (false)
 
+// The two-chunk K(k+4) and V(k+2) tile loads of the masked MM and the tails. With
+// ZYFA_FP8_DMA_FILL & 4, each tile's soffset is computed under its first chunk's DMA.
+#if ZYFA_FP8_DMA_FILL & 4
+#define FP8_TILE_LOAD_K(SLOT, TILE) load_tile_fill<false, D>(sm, kr, SLOT, TILE, k_step, [] {})
+#define FP8_TILE_LOAD_V(SLOT, TILE) load_tile_fill<true, D>(sm, vr, SLOT, TILE, v_step, [] {})
+#else
+#define FP8_TILE_LOAD_K(SLOT, TILE) load_k<D>(sm, kr, SLOT, TILE, k_stride, tid)
+#define FP8_TILE_LOAD_V(SLOT, TILE) load_v<D>(sm, vr, SLOT, TILE, v_stride, tid)
+#endif
+
 // d128 masked MM, interleaved as csrc/asm/d128.py::seg_mm builds its "mmm" variant: the steady MM's
 // MFMA order, fragment refills and LDS waits, with runtime K/V slots, K(k+4) issued after the third
 // QK MFMA and V(k+2) after the fourth, the l update after the K loads, the mask and row max of S
@@ -1542,7 +1675,7 @@ do { \
     s.c = mma(r2, q.a, fx16{}); \
     r1 = read_k<D, 2, 1, -1>(sm, next); \
     FP8_SCHEDULE_POINT(s.c, r1); \
-    if (sk + 4u < n) load_k<D>(sm, kr, cur, sk + 4u, k_stride, tid); \
+    if (sk + 4u < n) FP8_TILE_LOAD_K(cur, sk + 4u); \
     SCHED_FENCE(); \
     l = add_scaled_sum(l, rs_lo_vector[0], params.sum_scale_lo); \
     FP8_SCHEDULE_POINT(__float_as_int(l)); \
@@ -1552,7 +1685,7 @@ do { \
     s.d = mma(r3, q.a, fx16{}); \
     r2 = read_k<D, 3, 1, -1>(sm, next); \
     FP8_SCHEDULE_POINT(s.d, r2); \
-    if (sk + 2u < n) load_v<D>(sm, vr, (cur + 2u) & 3u, sk + 2u, v_stride, tid); \
+    if (sk + 2u < n) FP8_TILE_LOAD_V((cur + 2u) & 3u, sk + 2u); \
     SCHED_FENCE(); \
     FP8_LDS_WAIT(4); \
     s.a = mma(r4, q.b, s.a); \
@@ -1682,7 +1815,7 @@ do { \
     s.b = mma(r1, q.a, fx16{}); \
     r0 = read_v_fragment<0, 0, true>(tail_vbase); \
     FP8_SCHEDULE_POINT(s.b, r0); \
-    if (sk + 4u < n) load_k<D>(sm, kr, cur, sk + 4u, k_stride, tid); \
+    if (sk + 4u < n) FP8_TILE_LOAD_K(cur, sk + 4u); \
     SCHED_FENCE(); \
     l = __builtin_fmaf(rs_lo_vector[0], __int_as_float(params.sb_lo << 23), l); \
     FP8_SCHEDULE_POINT(__float_as_int(l)); \
@@ -1691,7 +1824,7 @@ do { \
     s.a = mma(r2, q.b, s.a); \
     r1 = read_v_fragment<0, 1, true>(tail_vbase); \
     FP8_SCHEDULE_POINT(s.a, r1); \
-    if (sk + 2u < n) load_v<D>(sm, vr, (cur + 2u) & 3u, sk + 2u, v_stride, tid); \
+    if (sk + 2u < n) FP8_TILE_LOAD_V((cur + 2u) & 3u, sk + 2u); \
     SCHED_FENCE(); \
     s.b = mma(r3, q.b, s.b); \
     FP8_SCHEDULE_POINT(s.b); \
@@ -1947,9 +2080,15 @@ __global__ __launch_bounds__(512, 1) void attend(Args<D> kernel_args) {
         if (n > 1) load_k<D>(sm, kr, (ring_base + 1) & 3, 1, k_stride, tid);
     };
     const auto load_first_tiles_group0 = [&](uint32_t ring_base) {
+#if ZYFA_FP8_DMA_FILL & 2
+        load_group0_fill<false, D, 0>(sm, kr, ring_base, k_stride, [] {});
+        load_group0_fill<true, D, 0>(sm, vr, ring_base, v_stride, [] {});
+        if (n > 1) load_group0_fill<false, D, 1>(sm, kr, (ring_base + 1) & 3, k_stride, [] {});
+#else
         load_k_group0<D>(sm, kr, ring_base, 0, k_stride, tid);
         load_v_group0<D>(sm, vr, ring_base, 0, v_stride, tid);
         if (n > 1) load_k_group0<D>(sm, kr, (ring_base + 1) & 3, 1, k_stride, tid);
+#endif
     };
     if (job >= args.n_jobs) goto kernel_end;
     load_job();
@@ -2031,9 +2170,15 @@ __global__ __launch_bounds__(512, 1) void attend(Args<D> kernel_args) {
     // MM after it waits for them (steady vmcnt(4/3), tail vmcnt(0)) before its closing barrier, and
     // no wave reads those slots earlier.
     if (group == 0) {
+#if ZYFA_FP8_DMA_FILL & 2
+        if (n > 1) load_group0_fill<true, D, 1>(sm, vr, (base + 1) & 3, v_stride, [] {});
+        if (n > 2) load_group0_fill<false, D, 2>(sm, kr, (base + 2) & 3, k_stride, [] {});
+        if (n > 3) load_group0_fill<false, D, 3>(sm, kr, (base + 3) & 3, k_stride, [] {});
+#else
         if (n > 1) load_v_group0<D>(sm, vr, (base + 1) & 3, 1, v_stride, tid);
         if (n > 2) load_k_group0<D>(sm, kr, (base + 2) & 3, 2, k_stride, tid);
         if (n > 3) load_k_group0<D>(sm, kr, (base + 3) & 3, 3, k_stride, tid);
+#endif
     }
     phase_barrier();
     // O is cleared once, after the barrier. The assembly clears it before group 0's loads, but there
@@ -2085,8 +2230,8 @@ tail:
             if (k == fm) goto pvo0;
             phase_barrier();
             wait_dma();
-            if (k + 4 < n) load_k<D>(sm, kr, (base + k) & 3, k + 4, k_stride, tid);
-            if (k + 2 < n) load_v<D>(sm, vr, (base + k + 2) & 3, k + 2, v_stride, tid);
+            if (k + 4 < n) FP8_TILE_LOAD_K((base + k) & 3, k + 4);
+            if (k + 2 < n) FP8_TILE_LOAD_V((base + k + 2) & 3, k + 2);
             phase_barrier();
             k = scalar_increment(k);
             goto tail1;
@@ -2102,8 +2247,8 @@ tail:
             l = add_tail_sum<D>(l, row_sum(p.a, sel), D == 128 ? params.sum_scale_lo : __int_as_float(params.sb_lo << 23));
             if constexpr (D == 128) l = add_tail_sum<D>(l, row_sum(p.b, sel), params.sum_scale_hi);
             pv<D>(tail_vbase, p, params, o, kc.scale_one, [&]() {
-                if (k + 4 < n) load_k<D>(sm, kr, (base + k) & 3, k + 4, k_stride, tid);
-                if (k + 2 < n) load_v<D>(sm, vr, (base + k + 2) & 3, k + 2, v_stride, tid);
+                if (k + 4 < n) FP8_TILE_LOAD_K((base + k) & 3, k + 4);
+                if (k + 2 < n) FP8_TILE_LOAD_V((base + k + 2) & 3, k + 2);
             });
             phase_barrier();
             k = scalar_increment(k);
@@ -2192,8 +2337,8 @@ finished_dead_last0:
             if (k == fm) goto pvo1;
             phase_barrier();
             wait_dma();
-            if (k + 4 < n) load_k<D>(sm, kr, (base + k) & 3, k + 4, k_stride, tid);
-            if (k + 2 < n) load_v<D>(sm, vr, (base + k + 2) & 3, k + 2, v_stride, tid);
+            if (k + 4 < n) FP8_TILE_LOAD_K((base + k) & 3, k + 4);
+            if (k + 2 < n) FP8_TILE_LOAD_V((base + k + 2) & 3, k + 2);
             phase_barrier();
             k = scalar_increment(k);
             goto tail0;
@@ -2209,8 +2354,8 @@ finished_dead_last0:
             l = add_tail_sum<D>(l, row_sum(p.a, sel), D == 128 ? params.sum_scale_lo : __int_as_float(params.sb_lo << 23));
             if constexpr (D == 128) l = add_tail_sum<D>(l, row_sum(p.b, sel), params.sum_scale_hi);
             pv<D>(tail_vbase, p, params, o, kc.scale_one, [&]() {
-                if (k + 4 < n) load_k<D>(sm, kr, (base + k) & 3, k + 4, k_stride, tid);
-                if (k + 2 < n) load_v<D>(sm, vr, (base + k + 2) & 3, k + 2, v_stride, tid);
+                if (k + 4 < n) FP8_TILE_LOAD_K((base + k) & 3, k + 4);
+                if (k + 2 < n) FP8_TILE_LOAD_V((base + k + 2) & 3, k + 2);
             });
             phase_barrier();
             k = scalar_increment(k);
@@ -2326,6 +2471,13 @@ kernel_end:
 #undef FP8_OUTPUT_POINT
 #undef FP8_STEP
 #undef FP8_STEADY_MM
+#undef FP8_STEADY_LOAD_K0
+#undef FP8_STEADY_LOAD_K1
+#undef FP8_STEADY_LOAD_V0
+#undef FP8_STEADY_LOAD_V1
+#undef FP8_STEADY_LOAD_V0_LAST
+#undef FP8_TILE_LOAD_K
+#undef FP8_TILE_LOAD_V
 #undef FP8_LDS_WAIT
 #undef FP8_SCHEDULE_POINT
 #undef FP8_PICK_ANCHOR

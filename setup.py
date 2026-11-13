@@ -34,6 +34,10 @@ native_define = ["-DZYFA_ENABLE_NATIVE_FP8=1"] if NATIVE_LLVM_ROOT else []
 STRICT_ISA = os.environ.get("ZYFA_FP8_STRICT_ISA")
 if STRICT_ISA not in (None, "0", "1"):
     sys.exit("ZYFA_FP8_STRICT_ISA must be 0 or 1")
+# Non-strict only: which M0 -> LDS DMA hazard slots the source fills (see csrc/fp8_native.hip).
+DMA_FILL = os.environ.get("ZYFA_FP8_DMA_FILL")
+if DMA_FILL is not None and DMA_FILL not in [str(n) for n in range(8)]:
+    sys.exit("ZYFA_FP8_DMA_FILL must be 0 to 7")
 
 
 class BuildExt(BuildExtension):
@@ -46,6 +50,7 @@ class BuildExt(BuildExtension):
             rocm = Path(os.environ.get("ROCM_PATH", "/opt/rocm"))
             compiler = Path(NATIVE_LLVM_ROOT) / "build/bin/clang++"
             native_flags = [*hip_flags, *([f"-DZYFA_FP8_STRICT_ISA={STRICT_ISA}"] if STRICT_ISA else []),
+                            *([f"-DZYFA_FP8_DMA_FILL={DMA_FILL}"] if DMA_FILL else []),
                             "-fhonor-infinities", "-fno-slp-vectorize", "-fPIC",
                             "-fno-gpu-rdc", "--offload-arch=gfx950",
                             "-x", "hip", "--rocm-path=" + str(rocm),
