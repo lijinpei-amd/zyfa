@@ -12,9 +12,14 @@ How to build and measure is in [hip-fp8-reproduce.md](hip-fp8-reproduce.md).
 
 ## LLVM patches
 
-Repository `lijinpei-amd/llvm-project`, branch `2026-11-10-fp8-schedule-match`
-(`72e518a3f02a`): 26 commits on upstream `main` `3ad61ff817ac`, of which 12
-change code and 14 only add or refresh tests.
+Repository `lijinpei-amd/llvm-project`, branch `2026-11-13-mlicm-rp-av-sreg`
+(`6eff2d896a12`): 39 commits on upstream `main` `3ad61ff817ac`.
+- The first 26 (`72e518a3f02a`, branch `2026-11-10-fp8-schedule-match`) are
+  all the strict build needs: 12 change code and 14 only add or refresh
+  tests.
+- The other 13 are for the non-strict build: 8 change code (3 of them NFC)
+  and 5 are test precommits. They are listed under
+  [Non-strict build only](#non-strict-build-only).
 
 ### Correctness and hazard modeling (default codegen)
 
@@ -88,12 +93,37 @@ error.
     reference's causal-mask compare.
   - **Status:** count match only.
 
+### Non-strict build only
+
+These are on top of `72e518a3f02a`. The strict build's code is the same with
+or without them (`.text` `179a935c`).
+
+- [ ] **`14d21d46628b` — `-machinelicm-real-pressure`.** With `7b103ab26cb6`,
+  `e14f8d836257` and `ef204770dd44`, plus NFC follow-ups `2c650de2b8c3`,
+  `4d7d693278d2`, `cc3c59c140d0`.
+  - **Problem:** MachineLICM's pressure model undercounts the pressure already
+    live in a loop, so it hoists into registers the loop needs. That is why
+    the strict build turns it off.
+  - **Change:** an option to decide each hoist on the loop's live register
+    pressure against the scheduler's occupancy limits (`7b103ab26cb6`).
+    `e14f8d836257` counts AV register classes in the VGPR pressure set, and
+    `ef204770dd44` stops the SGPR limit from subtracting reserved registers
+    twice.
+  - **Status:** used by the non-strict build. Upstream candidate.
+- [ ] **`6eff2d896a12` — Expand single-op `s_mul_i32` and `s_lshl_b32` inline
+  asm.**
+  - **Change:** extends `5ee669114fb9`'s expansion to the `scalar_mul` /
+    `scalar_mul_imm` helpers, so the hazard recognizer sees that they fill
+    the M0 → LDS DMA slot.
+  - **Status:** exists only because of those inline-asm helpers.
+
 ### Stock options and target features in `setup.py`
 
 These aren't patches, but they steer stock LLVM. The original rationale isn't
 recorded; the reasons below are inferred from each option's effect.
 
-- [ ] **`-disable-machine-licm`.**
+- [ ] **`-disable-machine-licm`** (strict build only; the non-strict build
+  passes `-machinelicm-real-pressure` instead).
   - **Reason:** turns off both early MachineLICM runs. They hoisted per-pass
     values, literals and V-ring bases to kernel entry, which raised SGPR/VGPR
     pressure and caused spills.
@@ -208,6 +238,20 @@ positive excess went 248/190 → 1157/624, d128 spilled, and kernels ran
     bounds.
   - **Status:** count match only. Removing all scalar helpers changed time by
     at most about 0.8%.
+
+- [ ] **`scalar_mul` — `s_mul_i32`** (volatile, 1 site) and
+  **`scalar_mul_imm<B>` — `s_mul_i32` or `s_lshl_b32`** (volatile, `"n"`
+  immediate, 1 site). Non-strict build only, with `ZYFA_FP8_DMA_FILL` bits 2
+  and 4.
+  - **Reason:** they compute tile soffsets inside the M0 → LDS DMA hazard
+    slot, which LLVM would otherwise pad with `s_nop 0`. Volatile asm keeps
+    each one between its M0 write and its DMA; plain C++ multiplies get
+    bunched by the scheduler or hoisted by MachineLICM.
+  - **Effect:** with bit 1 (which reuses `scalar_min` and `scalar_add`), the
+    M0 `s_nop`s go from 57/52 to 21/14 per kernel. Combined with
+    real-pressure MachineLICM, 0.07% faster than the non-strict build
+    without either, and 0.66% faster than the strict build.
+  - **Status:** needs `6eff2d896a12`.
 
 The `__asm("llvm.…")` declarations (`fake.use`, `s.barrier`, `s.setprio`,
 `s.nop`, `rcp.f32`, `log.f32`) only alias LLVM intrinsics. They aren't

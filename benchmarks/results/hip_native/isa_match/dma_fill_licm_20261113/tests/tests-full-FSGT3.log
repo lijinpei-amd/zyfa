@@ -1,0 +1,16 @@
+date: 2026-11-14T00:07:24+08:00
+tree: /home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/FSGT3
+HIP_VISIBLE_DEVICES=6,7
+args: -q -rs tests
+pinned zyfa: /home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/FSGT3/zyfa/__init__.py _C: /home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/FSGT3/zyfa/_C.cpython-314-x86_64-linux-gnu.so 6ee69241f1ecb4ae6a3d4c0bf45d462d5b28240c1ee2f04969418a1b8963726a
+..ss.................................................................... [ 22%]
+........................................................................ [ 45%]
+........................................................................ [ 67%]
+........................................................................ [ 90%]
+...............................                                          [100%]
+=========================== short test summary info ============================
+SKIPPED [2] tests/test_fp8_build.py:25: requires a build without the native HIP FP8 backend
+317 passed, 2 skipped in 12.79s
+pytest exit code 0 zyfa still /home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/FSGT3/zyfa/__init__.py
+wall seconds: 17
+exit: 0

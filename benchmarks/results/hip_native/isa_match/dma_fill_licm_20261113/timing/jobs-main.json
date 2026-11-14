@@ -1,0 +1,602 @@
+[
+ {
+  "name": "main control vs nscopy r1",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/control-vs-nscopy-r1",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/head-ns/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/extensions/head-ns-copy/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/control-vs-nscopy-r1"
+  ]
+ },
+ {
+  "name": "main V0 vs s r1",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/V0-vs-s-r1",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/V0/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/mlicm-followup/trees/head/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/V0-vs-s-r1"
+  ]
+ },
+ {
+  "name": "main V0 vs ns r1",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/V0-vs-ns-r1",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/V0/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/head-ns/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/V0-vs-ns-r1"
+  ]
+ },
+ {
+  "name": "main FS vs s r1",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FS-vs-s-r1",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/FS/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/mlicm-followup/trees/head/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FS-vs-s-r1"
+  ]
+ },
+ {
+  "name": "main FS vs ns r1",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FS-vs-ns-r1",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/FS/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/head-ns/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FS-vs-ns-r1"
+  ]
+ },
+ {
+  "name": "main FSG vs s r1",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FSG-vs-s-r1",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/FSG/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/mlicm-followup/trees/head/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FSG-vs-s-r1"
+  ]
+ },
+ {
+  "name": "main FSG vs ns r1",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FSG-vs-ns-r1",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/FSG/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/head-ns/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FSG-vs-ns-r1"
+  ]
+ },
+ {
+  "name": "main FSGT vs s r1",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FSGT-vs-s-r1",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/FSGT/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/mlicm-followup/trees/head/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FSGT-vs-s-r1"
+  ]
+ },
+ {
+  "name": "main FSGT vs ns r1",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FSGT-vs-ns-r1",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/FSGT/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/head-ns/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FSGT-vs-ns-r1"
+  ]
+ },
+ {
+  "name": "main R1 vs s r1",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/R1-vs-s-r1",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/mlicm-real-pressure/trees/R1/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/mlicm-followup/trees/head/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/R1-vs-s-r1"
+  ]
+ },
+ {
+  "name": "main control vs nscopy r2",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/control-vs-nscopy-r2",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/head-ns/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/extensions/head-ns-copy/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/control-vs-nscopy-r2"
+  ]
+ },
+ {
+  "name": "main V0 vs s r2",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/V0-vs-s-r2",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/V0/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/mlicm-followup/trees/head/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/V0-vs-s-r2"
+  ]
+ },
+ {
+  "name": "main V0 vs ns r2",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/V0-vs-ns-r2",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/V0/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/head-ns/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/V0-vs-ns-r2"
+  ]
+ },
+ {
+  "name": "main FS vs s r2",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FS-vs-s-r2",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/FS/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/mlicm-followup/trees/head/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FS-vs-s-r2"
+  ]
+ },
+ {
+  "name": "main FS vs ns r2",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FS-vs-ns-r2",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/FS/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/head-ns/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FS-vs-ns-r2"
+  ]
+ },
+ {
+  "name": "main FSG vs s r2",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FSG-vs-s-r2",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/FSG/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/mlicm-followup/trees/head/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FSG-vs-s-r2"
+  ]
+ },
+ {
+  "name": "main FSG vs ns r2",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FSG-vs-ns-r2",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/FSG/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/head-ns/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FSG-vs-ns-r2"
+  ]
+ },
+ {
+  "name": "main FSGT vs s r2",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FSGT-vs-s-r2",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/FSGT/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/mlicm-followup/trees/head/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FSGT-vs-s-r2"
+  ]
+ },
+ {
+  "name": "main FSGT vs ns r2",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FSGT-vs-ns-r2",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/FSGT/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/head-ns/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FSGT-vs-ns-r2"
+  ]
+ },
+ {
+  "name": "main R1 vs s r2",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/R1-vs-s-r2",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/mlicm-real-pressure/trees/R1/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/mlicm-followup/trees/head/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/R1-vs-s-r2"
+  ]
+ },
+ {
+  "name": "main control vs nscopy r3",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/control-vs-nscopy-r3",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/head-ns/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/extensions/head-ns-copy/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/control-vs-nscopy-r3"
+  ]
+ },
+ {
+  "name": "main V0 vs s r3",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/V0-vs-s-r3",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/V0/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/mlicm-followup/trees/head/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/V0-vs-s-r3"
+  ]
+ },
+ {
+  "name": "main V0 vs ns r3",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/V0-vs-ns-r3",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/V0/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/head-ns/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/V0-vs-ns-r3"
+  ]
+ },
+ {
+  "name": "main FS vs s r3",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FS-vs-s-r3",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/FS/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/mlicm-followup/trees/head/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FS-vs-s-r3"
+  ]
+ },
+ {
+  "name": "main FS vs ns r3",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FS-vs-ns-r3",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/FS/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/head-ns/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FS-vs-ns-r3"
+  ]
+ },
+ {
+  "name": "main FSG vs s r3",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FSG-vs-s-r3",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/FSG/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/mlicm-followup/trees/head/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FSG-vs-s-r3"
+  ]
+ },
+ {
+  "name": "main FSG vs ns r3",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FSG-vs-ns-r3",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/FSG/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/head-ns/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FSG-vs-ns-r3"
+  ]
+ },
+ {
+  "name": "main FSGT vs s r3",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FSGT-vs-s-r3",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/FSGT/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/mlicm-followup/trees/head/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FSGT-vs-s-r3"
+  ]
+ },
+ {
+  "name": "main FSGT vs ns r3",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FSGT-vs-ns-r3",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/FSGT/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/head-ns/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FSGT-vs-ns-r3"
+  ]
+ },
+ {
+  "name": "main R1 vs s r3",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/R1-vs-s-r3",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/mlicm-real-pressure/trees/R1/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/mlicm-followup/trees/head/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/R1-vs-s-r3"
+  ]
+ },
+ {
+  "name": "main control vs nscopy r4",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/control-vs-nscopy-r4",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/head-ns/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/extensions/head-ns-copy/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/control-vs-nscopy-r4"
+  ]
+ },
+ {
+  "name": "main V0 vs s r4",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/V0-vs-s-r4",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/V0/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/mlicm-followup/trees/head/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/V0-vs-s-r4"
+  ]
+ },
+ {
+  "name": "main V0 vs ns r4",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/V0-vs-ns-r4",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/V0/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/head-ns/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/V0-vs-ns-r4"
+  ]
+ },
+ {
+  "name": "main FS vs s r4",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FS-vs-s-r4",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/FS/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/mlicm-followup/trees/head/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FS-vs-s-r4"
+  ]
+ },
+ {
+  "name": "main FS vs ns r4",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FS-vs-ns-r4",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/FS/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/head-ns/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FS-vs-ns-r4"
+  ]
+ },
+ {
+  "name": "main FSG vs s r4",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FSG-vs-s-r4",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/FSG/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/mlicm-followup/trees/head/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FSG-vs-s-r4"
+  ]
+ },
+ {
+  "name": "main FSG vs ns r4",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FSG-vs-ns-r4",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/FSG/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/head-ns/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FSG-vs-ns-r4"
+  ]
+ },
+ {
+  "name": "main FSGT vs s r4",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FSGT-vs-s-r4",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/FSGT/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/mlicm-followup/trees/head/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FSGT-vs-s-r4"
+  ]
+ },
+ {
+  "name": "main FSGT vs ns r4",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FSGT-vs-ns-r4",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/FSGT/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/head-ns/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FSGT-vs-ns-r4"
+  ]
+ },
+ {
+  "name": "main R1 vs s r4",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/R1-vs-s-r4",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/mlicm-real-pressure/trees/R1/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/mlicm-followup/trees/head/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/R1-vs-s-r4"
+  ]
+ },
+ {
+  "name": "main control vs nscopy r5",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/control-vs-nscopy-r5",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/head-ns/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/extensions/head-ns-copy/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/control-vs-nscopy-r5"
+  ]
+ },
+ {
+  "name": "main V0 vs s r5",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/V0-vs-s-r5",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/V0/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/mlicm-followup/trees/head/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/V0-vs-s-r5"
+  ]
+ },
+ {
+  "name": "main V0 vs ns r5",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/V0-vs-ns-r5",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/V0/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/head-ns/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/V0-vs-ns-r5"
+  ]
+ },
+ {
+  "name": "main FS vs s r5",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FS-vs-s-r5",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/FS/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/mlicm-followup/trees/head/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FS-vs-s-r5"
+  ]
+ },
+ {
+  "name": "main FS vs ns r5",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FS-vs-ns-r5",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/FS/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/head-ns/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FS-vs-ns-r5"
+  ]
+ },
+ {
+  "name": "main FSG vs s r5",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FSG-vs-s-r5",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/FSG/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/mlicm-followup/trees/head/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FSG-vs-s-r5"
+  ]
+ },
+ {
+  "name": "main FSG vs ns r5",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FSG-vs-ns-r5",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/FSG/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/head-ns/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FSG-vs-ns-r5"
+  ]
+ },
+ {
+  "name": "main FSGT vs s r5",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FSGT-vs-s-r5",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/FSGT/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/mlicm-followup/trees/head/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FSGT-vs-s-r5"
+  ]
+ },
+ {
+  "name": "main FSGT vs ns r5",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FSGT-vs-ns-r5",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/FSGT/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/trees/head-ns/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/FSGT-vs-ns-r5"
+  ]
+ },
+ {
+  "name": "main R1 vs s r5",
+  "out": "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/R1-vs-s-r5",
+  "cmd": [
+   "python",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/mlicm-real-pressure/trees/R1/benchmarks/results/hip_native/isa_match/runtime_add3_20261111/benchmark-before-after.py",
+   "--baseline-extension",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261112/mlicm-followup/trees/head/zyfa/_C.cpython-314-x86_64-linux-gnu.so",
+   "--output",
+   "/home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261113/nop-slots/timing/main/R1-vs-s-r5"
+  ]
+ }
+]

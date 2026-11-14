@@ -32,6 +32,19 @@ What remains is small: the O clear after the pass-start barrier, and epilogue
 store issue. The 16K/32K row was measured before the short-length changes,
 which affect only the pass start, the masked tail and the prologue.
 
+The non-strict build (`ZYFA_FP8_STRICT_ISA=0`, see
+[Build options](hip-fp8-reproduce.md#build-options)) gives up the exact
+instruction match for a little more speed. It is 0.66% faster than the strict
+build on average, and faster in all 12 cases
+([`dma_fill_licm_20261113`](../benchmarks/results/hip_native/isa_match/dma_fill_licm_20261113/README.md)).
+HIP / assembly, strict → non-strict, in the same runs:
+
+| Length | d128 MHA | d128 GQA4 | d192 MHA | d192 GQA4 |
+| --- | ---: | ---: | ---: | ---: |
+| 256 | 0.992 → 0.984 | 0.981 → 0.974 | 0.979 → 0.968 | 0.987 → 0.970 |
+| 1024 | 1.000 → 0.999 | 1.003 → 0.996 | 0.987 → 0.979 | 0.993 → 0.985 |
+| 8192 | 1.004 → 0.999 | 1.009 → 1.002 | 1.002 → 0.997 | 1.002 → 1.000 |
+
 The earlier 24-case comparison further down describes a much older build. It
 was 28–29% slower than assembly for d128 at 32K tokens, and 3.05–3.28× slower
 at 1K tokens.
@@ -117,7 +130,9 @@ unrelated LDS DMA.
 Loop-invariant code motion is disabled for the persistent pass loop:
 
 - **IR LICM:** `#pragma clang loop licm(disable)` turns it off for that loop.
-- **MachineLICM:** `setup.py` passes `-mllvm=-disable-machine-licm`.
+- **MachineLICM:** `setup.py` passes `-mllvm=-disable-machine-licm` for the
+  strict build. The non-strict build passes `-mllvm=-machinelicm-real-pressure`
+  instead, which hoists only what fits under the real register pressure.
 - **Why:** without this, LLVM hoists per-pass and per-use values (epilogue
   addresses, stride multiples, LDS literals) to the kernel entry, which caused
   the earlier register spills. The source already places these values the way
@@ -258,7 +273,8 @@ samples. They are tuning records; the table above is the final comparison.
 [Reproducing the native HIP FP8 results](hip-fp8-reproduce.md) covers the
 current build:
 - the LLVM branch (`lijinpei-amd/llvm-project`
-  `2026-11-10-fp8-schedule-match`, commit `72e518a3f02a`);
+  `2026-11-13-mlicm-rp-av-sreg`, commit `6eff2d896a12`; the strict build
+  needs only its ancestor `72e518a3f02a`);
 - the environment;
 - the build, check and test commands;
 - the benchmark protocols behind the current tables.

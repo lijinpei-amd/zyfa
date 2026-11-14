@@ -6,6 +6,13 @@ mnemonic counts and sequence. The whole-kernel counts and sequence still differ.
 The compiler, environment and benchmark commands for the current kernels are
 in [Reproducing the native HIP FP8 results](hip-fp8-reproduce.md).
 
+Everything below is the default strict build. The non-strict build
+(`ZYFA_FP8_STRICT_ISA=0`) trades the exact match for speed:
+[`dma_fill_licm_20261113`](../benchmarks/results/hip_native/isa_match/dma_fill_licm_20261113/README.md).
+Its steady loops are 1317/813 instructions (16/12 fewer `s_nop`, 4 selects in
+the e32 encoding); whole-kernel positive excess is 348/248, L1 1228/920 and
+exact LCS 3193/2173.
+
 ## Current capture: masked-MM interleave and prologue loads
 
 [`rest_gap_20261112`](../benchmarks/results/hip_native/isa_match/rest_gap_20261112/README.md)

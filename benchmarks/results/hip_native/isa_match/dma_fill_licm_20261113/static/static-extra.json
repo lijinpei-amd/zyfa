@@ -1,0 +1,220 @@
+{
+ "FSGT-off": {
+  "text_sha256": "f6e6b4ea0703fd368094a286181bd38e80e287204703cf07b69d93e68d3b7ed1",
+  "kernels": {
+   "d128 all": {
+    "insts": 5101,
+    "s_nop": 88,
+    "m0_nops": {
+     "entry": 5,
+     "pass start": 0,
+     "steady": 0,
+     "tails": 12,
+     "transitions": 4
+    },
+    "filled": {
+     "entry": "1/6",
+     "pass start": "12/12",
+     "steady": "16/16",
+     "tails": "12/24",
+     "transitions": "44/48"
+    },
+    "m0_nops_total": 21,
+    "copies": 348,
+    "sgpr_count": 93,
+    "vgpr_count": 244,
+    "sgpr_spill_count": 0,
+    "vgpr_spill_count": 0,
+    "private_segment_fixed_size": 0,
+    "steady_loop_insts": 1325
+   },
+   "d128 gen": {
+    "insts": 5117,
+    "s_nop": 88,
+    "m0_nops": {
+     "entry": 5,
+     "pass start": 0,
+     "steady": 0,
+     "tails": 12,
+     "transitions": 4
+    },
+    "filled": {
+     "entry": "1/6",
+     "pass start": "12/12",
+     "steady": "16/16",
+     "tails": "12/24",
+     "transitions": "44/48"
+    },
+    "m0_nops_total": 21,
+    "copies": 349,
+    "sgpr_count": 93,
+    "vgpr_count": 244,
+    "sgpr_spill_count": 0,
+    "vgpr_spill_count": 0,
+    "private_segment_fixed_size": 0,
+    "steady_loop_insts": 1325
+   },
+   "d192 all": {
+    "insts": 3465,
+    "s_nop": 67,
+    "m0_nops": {
+     "entry": 4,
+     "pass start": 0,
+     "steady": 0,
+     "tails": 6,
+     "transitions": 4
+    },
+    "filled": {
+     "entry": "1/5",
+     "pass start": "10/10",
+     "steady": "12/12",
+     "tails": "12/18",
+     "transitions": "36/40"
+    },
+    "m0_nops_total": 14,
+    "copies": 157,
+    "sgpr_count": 94,
+    "vgpr_count": 214,
+    "sgpr_spill_count": 0,
+    "vgpr_spill_count": 0,
+    "private_segment_fixed_size": 0,
+    "steady_loop_insts": 817
+   },
+   "d192 gen": {
+    "insts": 3481,
+    "s_nop": 67,
+    "m0_nops": {
+     "entry": 4,
+     "pass start": 0,
+     "steady": 0,
+     "tails": 6,
+     "transitions": 4
+    },
+    "filled": {
+     "entry": "1/5",
+     "pass start": "10/10",
+     "steady": "12/12",
+     "tails": "12/18",
+     "transitions": "36/40"
+    },
+    "m0_nops_total": 14,
+    "copies": 158,
+    "sgpr_count": 94,
+    "vgpr_count": 214,
+    "sgpr_spill_count": 0,
+    "vgpr_spill_count": 0,
+    "private_segment_fixed_size": 0,
+    "steady_loop_insts": 817
+   }
+  }
+ },
+ "FS-prod": {
+  "text_sha256": "194c66197845278a23d467a00becfcbdc1d5ae1f43d2bd67fc277b78182d1475",
+  "kernels": {
+   "d128 all": {
+    "insts": 5125,
+    "s_nop": 108,
+    "m0_nops": {
+     "entry": 5,
+     "pass start": 6,
+     "steady": 0,
+     "tails": 18,
+     "transitions": 12
+    },
+    "filled": {
+     "entry": "1/6",
+     "pass start": "6/12",
+     "steady": "16/16",
+     "tails": "6/24",
+     "transitions": "36/48"
+    },
+    "m0_nops_total": 41,
+    "copies": 348,
+    "sgpr_count": 93,
+    "vgpr_count": 244,
+    "sgpr_spill_count": 0,
+    "vgpr_spill_count": 0,
+    "private_segment_fixed_size": 0,
+    "steady_loop_insts": 1325
+   },
+   "d128 gen": {
+    "insts": 5141,
+    "s_nop": 108,
+    "m0_nops": {
+     "entry": 5,
+     "pass start": 6,
+     "steady": 0,
+     "tails": 18,
+     "transitions": 12
+    },
+    "filled": {
+     "entry": "1/6",
+     "pass start": "6/12",
+     "steady": "16/16",
+     "tails": "6/24",
+     "transitions": "36/48"
+    },
+    "m0_nops_total": 41,
+    "copies": 349,
+    "sgpr_count": 93,
+    "vgpr_count": 244,
+    "sgpr_spill_count": 0,
+    "vgpr_spill_count": 0,
+    "private_segment_fixed_size": 0,
+    "steady_loop_insts": 1325
+   },
+   "d192 all": {
+    "insts": 3499,
+    "s_nop": 93,
+    "m0_nops": {
+     "entry": 4,
+     "pass start": 6,
+     "steady": 0,
+     "tails": 18,
+     "transitions": 12
+    },
+    "filled": {
+     "entry": "1/5",
+     "pass start": "4/10",
+     "steady": "12/12",
+     "tails": "0/18",
+     "transitions": "28/40"
+    },
+    "m0_nops_total": 40,
+    "copies": 157,
+    "sgpr_count": 94,
+    "vgpr_count": 214,
+    "sgpr_spill_count": 0,
+    "vgpr_spill_count": 0,
+    "private_segment_fixed_size": 0,
+    "steady_loop_insts": 817
+   },
+   "d192 gen": {
+    "insts": 3515,
+    "s_nop": 93,
+    "m0_nops": {
+     "entry": 4,
+     "pass start": 6,
+     "steady": 0,
+     "tails": 18,
+     "transitions": 12
+    },
+    "filled": {
+     "entry": "1/5",
+     "pass start": "4/10",
+     "steady": "12/12",
+     "tails": "0/18",
+     "transitions": "28/40"
+    },
+    "m0_nops_total": 40,
+    "copies": 158,
+    "sgpr_count": 94,
+    "vgpr_count": 214,
+    "sgpr_spill_count": 0,
+    "vgpr_spill_count": 0,
+    "private_segment_fixed_size": 0,
+    "steady_loop_insts": 817
+   }
+  }
+ }
+}

@@ -1,0 +1,6 @@
+timing/*.csv -diff
+timing/*.json -diff
+timing/*.txt -diff
+tail-race/** -diff
+static/*.json -diff
+isa/*.json -diff

@@ -1,0 +1,23 @@
+date: 2026-11-14T15:58:18+08:00
+tree: /home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261114/integrate/trees/strict-rp2
+HIP_VISIBLE_DEVICES=6,7
+pinned zyfa: /home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261114/integrate/trees/strict-rp2/zyfa/__init__.py _C: /home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261114/integrate/trees/strict-rp2/zyfa/_C.cpython-314-x86_64-linux-gnu.so 26efd2c25d4b35f77578fd8b11c97f574ff3d4b689d0bbf69b403e39657363c4
+..ss.................................................................... [ 22%]
+........................................................................ [ 45%]
+........................................................................ [ 67%]
+........................................................................ [ 90%]
+...............................                                          [100%]
+============================= slowest 8 durations ==============================
+3.55s call     tests/test_fp8_hip_codegen.py::test_hip_native_launch_rejects_u24_stride_boundary
+1.94s setup    tests/test_fp8_hip_codegen.py::test_hip_raw_kernarg_alignment_matches_abi
+0.99s call     tests/test_fp8_hip.py::test_python_hip_padding[1-128]
+0.71s setup    tests/test_fp8_hip_codegen.py::test_hip_runtime_v_selection_uses_numeric_lds_addresses[128]
+0.62s call     tests/test_fp8_hip.py::test_python_hip_compile_is_deterministic[128]
+0.55s call     tests/test_fp8_hip_codegen.py::test_hip_host_argument_types_compile
+0.48s call     tests/test_fp8_hip.py::test_hip_causal_heads_tails_and_persistent_jobs[1-256-False-False-1-128]
+0.21s setup    tests/test_fp8_hip_codegen.py::test_hip_kernarg_load_sequence_matches_assembly[128-1]
+=========================== short test summary info ============================
+SKIPPED [2] tests/test_fp8_build.py:25: requires a build without the native HIP FP8 backend
+317 passed, 2 skipped in 12.22s
+pytest exit code 0 zyfa still /home/jinpli/workspace/home/jinpli/development/zyfa/build/investigations-20261114/integrate/trees/strict-rp2/zyfa/__init__.py
+exit: 0 wall seconds: 15

@@ -1,0 +1,2750 @@
+{
+ "head-ns-d128-ad-kernel": {
+  "scope": "kernel",
+  "dimension": 128,
+  "llvm_file": "build/investigations-20261113/nop-slots/trees/head-ns/inspect/disassembly.s",
+  "counts_match": false,
+  "sequence_match": false,
+  "reference_instruction_count": 5302,
+  "llvm_instruction_count": 4793,
+  "positive_excess": 342,
+  "l1": 1193,
+  "exact_lcs": 3237,
+  "count_differences": {
+   "s_add_u32": {
+    "reference": 402,
+    "llvm": 239,
+    "delta": -163
+   },
+   "s_addc_u32": {
+    "reference": 40,
+    "llvm": 35,
+    "delta": -5
+   },
+   "s_addk_i32": {
+    "reference": 0,
+    "llvm": 11,
+    "delta": 11
+   },
+   "s_and_b32": {
+    "reference": 88,
+    "llvm": 18,
+    "delta": -70
+   },
+   "s_and_b64": {
+    "reference": 0,
+    "llvm": 18,
+    "delta": 18
+   },
+   "s_bfe_u32": {
+    "reference": 0,
+    "llvm": 4,
+    "delta": 4
+   },
+   "s_branch": {
+    "reference": 31,
+    "llvm": 35,
+    "delta": 4
+   },
+   "s_cbranch_scc0": {
+    "reference": 20,
+    "llvm": 15,
+    "delta": -5
+   },
+   "s_cbranch_scc1": {
+    "reference": 78,
+    "llvm": 76,
+    "delta": -2
+   },
+   "s_cmp_eq_u32": {
+    "reference": 42,
+    "llvm": 19,
+    "delta": -23
+   },
+   "s_cmp_eq_u64": {
+    "reference": 10,
+    "llvm": 3,
+    "delta": -7
+   },
+   "s_cmp_ge_u32": {
+    "reference": 23,
+    "llvm": 29,
+    "delta": 6
+   },
+   "s_cmp_lg_u32": {
+    "reference": 0,
+    "llvm": 6,
+    "delta": 6
+   },
+   "s_cmp_lt_i32": {
+    "reference": 12,
+    "llvm": 14,
+    "delta": 2
+   },
+   "s_cmp_lt_u32": {
+    "reference": 4,
+    "llvm": 8,
+    "delta": 4
+   },
+   "s_cmpk_le_u32": {
+    "reference": 8,
+    "llvm": 0,
+    "delta": -8
+   },
+   "s_cselect_b32": {
+    "reference": 25,
+    "llvm": 22,
+    "delta": -3
+   },
+   "s_cselect_b64": {
+    "reference": 6,
+    "llvm": 16,
+    "delta": 10
+   },
+   "s_lshl_b32": {
+    "reference": 104,
+    "llvm": 63,
+    "delta": -41
+   },
+   "s_lshr_b32": {
+    "reference": 16,
+    "llvm": 9,
+    "delta": -7
+   },
+   "s_mov_b32": {
+    "reference": 30,
+    "llvm": 38,
+    "delta": 8
+   },
+   "s_movk_i32": {
+    "reference": 0,
+    "llvm": 1,
+    "delta": 1
+   },
+   "s_mul_i32": {
+    "reference": 171,
+    "llvm": 57,
+    "delta": -114
+   },
+   "s_nop": {
+    "reference": 182,
+    "llvm": 124,
+    "delta": -58
+   },
+   "s_not_b32": {
+    "reference": 0,
+    "llvm": 9,
+    "delta": 9
+   },
+   "s_or_b32": {
+    "reference": 0,
+    "llvm": 10,
+    "delta": 10
+   },
+   "s_or_b64": {
+    "reference": 0,
+    "llvm": 4,
+    "delta": 4
+   },
+   "s_sub_u32": {
+    "reference": 22,
+    "llvm": 12,
+    "delta": -10
+   },
+   "s_xor_b32": {
+    "reference": 0,
+    "llvm": 7,
+    "delta": 7
+   },
+   "v_add_u32_e32": {
+    "reference": 73,
+    "llvm": 61,
+    "delta": -12
+   },
+   "v_and_b32_e32": {
+    "reference": 32,
+    "llvm": 22,
+    "delta": -10
+   },
+   "v_and_or_b32": {
+    "reference": 0,
+    "llvm": 1,
+    "delta": 1
+   },
+   "v_bfe_u32": {
+    "reference": 31,
+    "llvm": 5,
+    "delta": -26
+   },
+   "v_cmp_gt_i32_e32": {
+    "reference": 192,
+    "llvm": 60,
+    "delta": -132
+   },
+   "v_cmp_gt_i32_e64": {
+    "reference": 0,
+    "llvm": 132,
+    "delta": 132
+   },
+   "v_cndmask_b32_e32": {
+    "reference": 0,
+    "llvm": 67,
+    "delta": 67
+   },
+   "v_cndmask_b32_e64": {
+    "reference": 199,
+    "llvm": 132,
+    "delta": -67
+   },
+   "v_lshl_add_u32": {
+    "reference": 21,
+    "llvm": 2,
+    "delta": -19
+   },
+   "v_lshl_or_b32": {
+    "reference": 4,
+    "llvm": 2,
+    "delta": -2
+   },
+   "v_mov_b32_e32": {
+    "reference": 133,
+    "llvm": 73,
+    "delta": -60
+   },
+   "v_mul_lo_u32": {
+    "reference": 9,
+    "llvm": 7,
+    "delta": -2
+   },
+   "v_or3_b32": {
+    "reference": 0,
+    "llvm": 5,
+    "delta": 5
+   },
+   "v_or_b32_e32": {
+    "reference": 0,
+    "llvm": 24,
+    "delta": 24
+   },
+   "v_readfirstlane_b32": {
+    "reference": 4,
+    "llvm": 1,
+    "delta": -3
+   },
+   "v_sub_u32_e32": {
+    "reference": 3,
+    "llvm": 12,
+    "delta": 9
+   },
+   "v_xor_b32_e32": {
+    "reference": 31,
+    "llvm": 29,
+    "delta": -2
+   }
+  }
+ },
+ "head-ns-d128-ad-loop": {
+  "scope": "loop",
+  "dimension": 128,
+  "llvm_file": "build/investigations-20261113/nop-slots/trees/head-ns/inspect/disassembly.s",
+  "counts_match": false,
+  "sequence_match": false,
+  "reference_instruction_count": 1333,
+  "llvm_instruction_count": 1333,
+  "positive_excess": 4,
+  "l1": 8,
+  "exact_lcs": 1329,
+  "count_differences": {
+   "v_cndmask_b32_e32": {
+    "reference": 0,
+    "llvm": 4,
+    "delta": 4
+   },
+   "v_cndmask_b32_e64": {
+    "reference": 4,
+    "llvm": 0,
+    "delta": -4
+   }
+  }
+ },
+ "head-ns-d128-kernel": {
+  "scope": "kernel",
+  "dimension": 128,
+  "llvm_file": "build/investigations-20261113/nop-slots/trees/head-ns/inspect/disassembly.s",
+  "counts_match": false,
+  "sequence_match": false,
+  "reference_instruction_count": 5302,
+  "llvm_instruction_count": 4808,
+  "positive_excess": 348,
+  "l1": 1190,
+  "exact_lcs": 3247,
+  "count_differences": {
+   "s_add_u32": {
+    "reference": 402,
+    "llvm": 239,
+    "delta": -163
+   },
+   "s_addc_u32": {
+    "reference": 40,
+    "llvm": 35,
+    "delta": -5
+   },
+   "s_addk_i32": {
+    "reference": 0,
+    "llvm": 11,
+    "delta": 11
+   },
+   "s_and_b32": {
+    "reference": 88,
+    "llvm": 18,
+    "delta": -70
+   },
+   "s_and_b64": {
+    "reference": 0,
+    "llvm": 18,
+    "delta": 18
+   },
+   "s_bfe_u32": {
+    "reference": 0,
+    "llvm": 4,
+    "delta": 4
+   },
+   "s_branch": {
+    "reference": 31,
+    "llvm": 36,
+    "delta": 5
+   },
+   "s_cbranch_scc0": {
+    "reference": 20,
+    "llvm": 17,
+    "delta": -3
+   },
+   "s_cbranch_scc1": {
+    "reference": 78,
+    "llvm": 79,
+    "delta": 1
+   },
+   "s_cmp_eq_u32": {
+    "reference": 42,
+    "llvm": 19,
+    "delta": -23
+   },
+   "s_cmp_eq_u64": {
+    "reference": 10,
+    "llvm": 8,
+    "delta": -2
+   },
+   "s_cmp_ge_u32": {
+    "reference": 23,
+    "llvm": 29,
+    "delta": 6
+   },
+   "s_cmp_lg_u32": {
+    "reference": 0,
+    "llvm": 6,
+    "delta": 6
+   },
+   "s_cmp_lt_i32": {
+    "reference": 12,
+    "llvm": 14,
+    "delta": 2
+   },
+   "s_cmp_lt_u32": {
+    "reference": 4,
+    "llvm": 8,
+    "delta": 4
+   },
+   "s_cmpk_le_u32": {
+    "reference": 8,
+    "llvm": 0,
+    "delta": -8
+   },
+   "s_cselect_b32": {
+    "reference": 25,
+    "llvm": 22,
+    "delta": -3
+   },
+   "s_cselect_b64": {
+    "reference": 6,
+    "llvm": 16,
+    "delta": 10
+   },
+   "s_lshl_b32": {
+    "reference": 104,
+    "llvm": 63,
+    "delta": -41
+   },
+   "s_lshr_b32": {
+    "reference": 16,
+    "llvm": 9,
+    "delta": -7
+   },
+   "s_mov_b32": {
+    "reference": 30,
+    "llvm": 40,
+    "delta": 10
+   },
+   "s_movk_i32": {
+    "reference": 0,
+    "llvm": 1,
+    "delta": 1
+   },
+   "s_mul_i32": {
+    "reference": 171,
+    "llvm": 57,
+    "delta": -114
+   },
+   "s_nop": {
+    "reference": 182,
+    "llvm": 124,
+    "delta": -58
+   },
+   "s_not_b32": {
+    "reference": 0,
+    "llvm": 9,
+    "delta": 9
+   },
+   "s_or_b32": {
+    "reference": 0,
+    "llvm": 10,
+    "delta": 10
+   },
+   "s_or_b64": {
+    "reference": 0,
+    "llvm": 4,
+    "delta": 4
+   },
+   "s_sub_u32": {
+    "reference": 22,
+    "llvm": 12,
+    "delta": -10
+   },
+   "s_waitcnt": {
+    "reference": 114,
+    "llvm": 116,
+    "delta": 2
+   },
+   "s_xor_b32": {
+    "reference": 0,
+    "llvm": 7,
+    "delta": 7
+   },
+   "v_add_u32_e32": {
+    "reference": 73,
+    "llvm": 61,
+    "delta": -12
+   },
+   "v_and_b32_e32": {
+    "reference": 32,
+    "llvm": 22,
+    "delta": -10
+   },
+   "v_and_or_b32": {
+    "reference": 0,
+    "llvm": 1,
+    "delta": 1
+   },
+   "v_bfe_u32": {
+    "reference": 31,
+    "llvm": 5,
+    "delta": -26
+   },
+   "v_cmp_gt_i32_e32": {
+    "reference": 192,
+    "llvm": 60,
+    "delta": -132
+   },
+   "v_cmp_gt_i32_e64": {
+    "reference": 0,
+    "llvm": 132,
+    "delta": 132
+   },
+   "v_cndmask_b32_e32": {
+    "reference": 0,
+    "llvm": 67,
+    "delta": 67
+   },
+   "v_cndmask_b32_e64": {
+    "reference": 199,
+    "llvm": 132,
+    "delta": -67
+   },
+   "v_lshl_add_u32": {
+    "reference": 21,
+    "llvm": 2,
+    "delta": -19
+   },
+   "v_lshl_or_b32": {
+    "reference": 4,
+    "llvm": 2,
+    "delta": -2
+   },
+   "v_mov_b32_e32": {
+    "reference": 133,
+    "llvm": 73,
+    "delta": -60
+   },
+   "v_mul_lo_u32": {
+    "reference": 9,
+    "llvm": 7,
+    "delta": -2
+   },
+   "v_or3_b32": {
+    "reference": 0,
+    "llvm": 5,
+    "delta": 5
+   },
+   "v_or_b32_e32": {
+    "reference": 0,
+    "llvm": 24,
+    "delta": 24
+   },
+   "v_readfirstlane_b32": {
+    "reference": 4,
+    "llvm": 1,
+    "delta": -3
+   },
+   "v_sub_u32_e32": {
+    "reference": 3,
+    "llvm": 12,
+    "delta": 9
+   },
+   "v_xor_b32_e32": {
+    "reference": 31,
+    "llvm": 29,
+    "delta": -2
+   }
+  }
+ },
+ "head-ns-d128-loop": {
+  "scope": "loop",
+  "dimension": 128,
+  "llvm_file": "build/investigations-20261113/nop-slots/trees/head-ns/inspect/disassembly.s",
+  "counts_match": false,
+  "sequence_match": false,
+  "reference_instruction_count": 1333,
+  "llvm_instruction_count": 1333,
+  "positive_excess": 4,
+  "l1": 8,
+  "exact_lcs": 1329,
+  "count_differences": {
+   "v_cndmask_b32_e32": {
+    "reference": 0,
+    "llvm": 4,
+    "delta": 4
+   },
+   "v_cndmask_b32_e64": {
+    "reference": 4,
+    "llvm": 0,
+    "delta": -4
+   }
+  }
+ },
+ "head-ns-d192-ad-kernel": {
+  "scope": "kernel",
+  "dimension": 192,
+  "llvm_file": "build/investigations-20261113/nop-slots/trees/head-ns/inspect/disassembly.s",
+  "counts_match": false,
+  "sequence_match": false,
+  "reference_instruction_count": 3737,
+  "llvm_instruction_count": 3354,
+  "positive_excess": 243,
+  "l1": 869,
+  "exact_lcs": 2214,
+  "count_differences": {
+   "s_add_u32": {
+    "reference": 345,
+    "llvm": 218,
+    "delta": -127
+   },
+   "s_addc_u32": {
+    "reference": 40,
+    "llvm": 35,
+    "delta": -5
+   },
+   "s_addk_i32": {
+    "reference": 0,
+    "llvm": 5,
+    "delta": 5
+   },
+   "s_and_b32": {
+    "reference": 78,
+    "llvm": 24,
+    "delta": -54
+   },
+   "s_and_b64": {
+    "reference": 0,
+    "llvm": 14,
+    "delta": 14
+   },
+   "s_bfe_u32": {
+    "reference": 0,
+    "llvm": 4,
+    "delta": 4
+   },
+   "s_branch": {
+    "reference": 25,
+    "llvm": 31,
+    "delta": 6
+   },
+   "s_cbranch_scc0": {
+    "reference": 20,
+    "llvm": 11,
+    "delta": -9
+   },
+   "s_cbranch_scc1": {
+    "reference": 66,
+    "llvm": 72,
+    "delta": 6
+   },
+   "s_cmp_eq_u32": {
+    "reference": 42,
+    "llvm": 15,
+    "delta": -27
+   },
+   "s_cmp_eq_u64": {
+    "reference": 10,
+    "llvm": 3,
+    "delta": -7
+   },
+   "s_cmp_ge_u32": {
+    "reference": 23,
+    "llvm": 29,
+    "delta": 6
+   },
+   "s_cmp_lg_u32": {
+    "reference": 0,
+    "llvm": 10,
+    "delta": 10
+   },
+   "s_cmp_lt_i32": {
+    "reference": 6,
+    "llvm": 8,
+    "delta": 2
+   },
+   "s_cmp_lt_u32": {
+    "reference": 4,
+    "llvm": 8,
+    "delta": 4
+   },
+   "s_cmpk_le_u32": {
+    "reference": 8,
+    "llvm": 0,
+    "delta": -8
+   },
+   "s_cselect_b32": {
+    "reference": 25,
+    "llvm": 22,
+    "delta": -3
+   },
+   "s_cselect_b64": {
+    "reference": 6,
+    "llvm": 8,
+    "delta": 2
+   },
+   "s_lshl_b32": {
+    "reference": 99,
+    "llvm": 76,
+    "delta": -23
+   },
+   "s_lshr_b32": {
+    "reference": 16,
+    "llvm": 9,
+    "delta": -7
+   },
+   "s_mov_b32": {
+    "reference": 39,
+    "llvm": 38,
+    "delta": -1
+   },
+   "s_mov_b64": {
+    "reference": 0,
+    "llvm": 8,
+    "delta": 8
+   },
+   "s_movk_i32": {
+    "reference": 0,
+    "llvm": 1,
+    "delta": 1
+   },
+   "s_mul_i32": {
+    "reference": 152,
+    "llvm": 53,
+    "delta": -99
+   },
+   "s_nop": {
+    "reference": 140,
+    "llvm": 105,
+    "delta": -35
+   },
+   "s_not_b32": {
+    "reference": 0,
+    "llvm": 9,
+    "delta": 9
+   },
+   "s_or_b32": {
+    "reference": 0,
+    "llvm": 16,
+    "delta": 16
+   },
+   "s_sub_u32": {
+    "reference": 22,
+    "llvm": 6,
+    "delta": -16
+   },
+   "s_waitcnt": {
+    "reference": 86,
+    "llvm": 84,
+    "delta": -2
+   },
+   "s_xor_b32": {
+    "reference": 0,
+    "llvm": 7,
+    "delta": 7
+   },
+   "v_add_lshl_u32": {
+    "reference": 0,
+    "llvm": 1,
+    "delta": 1
+   },
+   "v_add_u32_e32": {
+    "reference": 71,
+    "llvm": 45,
+    "delta": -26
+   },
+   "v_and_b32_e32": {
+    "reference": 32,
+    "llvm": 16,
+    "delta": -16
+   },
+   "v_and_or_b32": {
+    "reference": 0,
+    "llvm": 4,
+    "delta": 4
+   },
+   "v_bfe_u32": {
+    "reference": 26,
+    "llvm": 6,
+    "delta": -20
+   },
+   "v_cmp_gt_i32_e32": {
+    "reference": 96,
+    "llvm": 30,
+    "delta": -66
+   },
+   "v_cmp_gt_i32_e64": {
+    "reference": 0,
+    "llvm": 66,
+    "delta": 66
+   },
+   "v_cndmask_b32_e32": {
+    "reference": 0,
+    "llvm": 39,
+    "delta": 39
+   },
+   "v_cndmask_b32_e64": {
+    "reference": 105,
+    "llvm": 66,
+    "delta": -39
+   },
+   "v_lshl_add_u32": {
+    "reference": 19,
+    "llvm": 2,
+    "delta": -17
+   },
+   "v_lshl_or_b32": {
+    "reference": 4,
+    "llvm": 3,
+    "delta": -1
+   },
+   "v_lshrrev_b32_e32": {
+    "reference": 6,
+    "llvm": 8,
+    "delta": 2
+   },
+   "v_mov_b32_e32": {
+    "reference": 133,
+    "llvm": 121,
+    "delta": -12
+   },
+   "v_mul_lo_u32": {
+    "reference": 9,
+    "llvm": 7,
+    "delta": -2
+   },
+   "v_or3_b32": {
+    "reference": 0,
+    "llvm": 5,
+    "delta": 5
+   },
+   "v_or_b32_e32": {
+    "reference": 0,
+    "llvm": 23,
+    "delta": 23
+   },
+   "v_readfirstlane_b32": {
+    "reference": 3,
+    "llvm": 1,
+    "delta": -2
+   },
+   "v_sub_u32_e32": {
+    "reference": 5,
+    "llvm": 8,
+    "delta": 3
+   },
+   "v_xor_b32_e32": {
+    "reference": 27,
+    "llvm": 25,
+    "delta": -2
+   }
+  }
+ },
+ "head-ns-d192-ad-loop": {
+  "scope": "loop",
+  "dimension": 192,
+  "llvm_file": "build/investigations-20261113/nop-slots/trees/head-ns/inspect/disassembly.s",
+  "counts_match": false,
+  "sequence_match": false,
+  "reference_instruction_count": 825,
+  "llvm_instruction_count": 825,
+  "positive_excess": 4,
+  "l1": 8,
+  "exact_lcs": 821,
+  "count_differences": {
+   "v_cndmask_b32_e32": {
+    "reference": 0,
+    "llvm": 4,
+    "delta": 4
+   },
+   "v_cndmask_b32_e64": {
+    "reference": 4,
+    "llvm": 0,
+    "delta": -4
+   }
+  }
+ },
+ "head-ns-d192-kernel": {
+  "scope": "kernel",
+  "dimension": 192,
+  "llvm_file": "build/investigations-20261113/nop-slots/trees/head-ns/inspect/disassembly.s",
+  "counts_match": false,
+  "sequence_match": false,
+  "reference_instruction_count": 3737,
+  "llvm_instruction_count": 3369,
+  "positive_excess": 248,
+  "l1": 864,
+  "exact_lcs": 2222,
+  "count_differences": {
+   "s_add_u32": {
+    "reference": 345,
+    "llvm": 218,
+    "delta": -127
+   },
+   "s_addc_u32": {
+    "reference": 40,
+    "llvm": 35,
+    "delta": -5
+   },
+   "s_addk_i32": {
+    "reference": 0,
+    "llvm": 5,
+    "delta": 5
+   },
+   "s_and_b32": {
+    "reference": 78,
+    "llvm": 24,
+    "delta": -54
+   },
+   "s_and_b64": {
+    "reference": 0,
+    "llvm": 14,
+    "delta": 14
+   },
+   "s_bfe_u32": {
+    "reference": 0,
+    "llvm": 4,
+    "delta": 4
+   },
+   "s_branch": {
+    "reference": 25,
+    "llvm": 32,
+    "delta": 7
+   },
+   "s_cbranch_scc0": {
+    "reference": 20,
+    "llvm": 13,
+    "delta": -7
+   },
+   "s_cbranch_scc1": {
+    "reference": 66,
+    "llvm": 75,
+    "delta": 9
+   },
+   "s_cmp_eq_u32": {
+    "reference": 42,
+    "llvm": 15,
+    "delta": -27
+   },
+   "s_cmp_eq_u64": {
+    "reference": 10,
+    "llvm": 8,
+    "delta": -2
+   },
+   "s_cmp_ge_u32": {
+    "reference": 23,
+    "llvm": 29,
+    "delta": 6
+   },
+   "s_cmp_lg_u32": {
+    "reference": 0,
+    "llvm": 10,
+    "delta": 10
+   },
+   "s_cmp_lt_i32": {
+    "reference": 6,
+    "llvm": 8,
+    "delta": 2
+   },
+   "s_cmp_lt_u32": {
+    "reference": 4,
+    "llvm": 8,
+    "delta": 4
+   },
+   "s_cmpk_le_u32": {
+    "reference": 8,
+    "llvm": 0,
+    "delta": -8
+   },
+   "s_cselect_b32": {
+    "reference": 25,
+    "llvm": 22,
+    "delta": -3
+   },
+   "s_cselect_b64": {
+    "reference": 6,
+    "llvm": 8,
+    "delta": 2
+   },
+   "s_lshl_b32": {
+    "reference": 99,
+    "llvm": 76,
+    "delta": -23
+   },
+   "s_lshr_b32": {
+    "reference": 16,
+    "llvm": 9,
+    "delta": -7
+   },
+   "s_mov_b32": {
+    "reference": 39,
+    "llvm": 40,
+    "delta": 1
+   },
+   "s_mov_b64": {
+    "reference": 0,
+    "llvm": 8,
+    "delta": 8
+   },
+   "s_movk_i32": {
+    "reference": 0,
+    "llvm": 1,
+    "delta": 1
+   },
+   "s_mul_i32": {
+    "reference": 152,
+    "llvm": 53,
+    "delta": -99
+   },
+   "s_nop": {
+    "reference": 140,
+    "llvm": 105,
+    "delta": -35
+   },
+   "s_not_b32": {
+    "reference": 0,
+    "llvm": 9,
+    "delta": 9
+   },
+   "s_or_b32": {
+    "reference": 0,
+    "llvm": 16,
+    "delta": 16
+   },
+   "s_sub_u32": {
+    "reference": 22,
+    "llvm": 6,
+    "delta": -16
+   },
+   "s_xor_b32": {
+    "reference": 0,
+    "llvm": 7,
+    "delta": 7
+   },
+   "v_add_lshl_u32": {
+    "reference": 0,
+    "llvm": 1,
+    "delta": 1
+   },
+   "v_add_u32_e32": {
+    "reference": 71,
+    "llvm": 45,
+    "delta": -26
+   },
+   "v_and_b32_e32": {
+    "reference": 32,
+    "llvm": 16,
+    "delta": -16
+   },
+   "v_and_or_b32": {
+    "reference": 0,
+    "llvm": 4,
+    "delta": 4
+   },
+   "v_bfe_u32": {
+    "reference": 26,
+    "llvm": 6,
+    "delta": -20
+   },
+   "v_cmp_gt_i32_e32": {
+    "reference": 96,
+    "llvm": 30,
+    "delta": -66
+   },
+   "v_cmp_gt_i32_e64": {
+    "reference": 0,
+    "llvm": 66,
+    "delta": 66
+   },
+   "v_cndmask_b32_e32": {
+    "reference": 0,
+    "llvm": 39,
+    "delta": 39
+   },
+   "v_cndmask_b32_e64": {
+    "reference": 105,
+    "llvm": 66,
+    "delta": -39
+   },
+   "v_lshl_add_u32": {
+    "reference": 19,
+    "llvm": 2,
+    "delta": -17
+   },
+   "v_lshl_or_b32": {
+    "reference": 4,
+    "llvm": 3,
+    "delta": -1
+   },
+   "v_lshrrev_b32_e32": {
+    "reference": 6,
+    "llvm": 8,
+    "delta": 2
+   },
+   "v_mov_b32_e32": {
+    "reference": 133,
+    "llvm": 121,
+    "delta": -12
+   },
+   "v_mul_lo_u32": {
+    "reference": 9,
+    "llvm": 7,
+    "delta": -2
+   },
+   "v_or3_b32": {
+    "reference": 0,
+    "llvm": 5,
+    "delta": 5
+   },
+   "v_or_b32_e32": {
+    "reference": 0,
+    "llvm": 23,
+    "delta": 23
+   },
+   "v_readfirstlane_b32": {
+    "reference": 3,
+    "llvm": 1,
+    "delta": -2
+   },
+   "v_sub_u32_e32": {
+    "reference": 5,
+    "llvm": 8,
+    "delta": 3
+   },
+   "v_xor_b32_e32": {
+    "reference": 27,
+    "llvm": 25,
+    "delta": -2
+   }
+  }
+ },
+ "head-ns-d192-loop": {
+  "scope": "loop",
+  "dimension": 192,
+  "llvm_file": "build/investigations-20261113/nop-slots/trees/head-ns/inspect/disassembly.s",
+  "counts_match": false,
+  "sequence_match": false,
+  "reference_instruction_count": 825,
+  "llvm_instruction_count": 825,
+  "positive_excess": 4,
+  "l1": 8,
+  "exact_lcs": 821,
+  "count_differences": {
+   "v_cndmask_b32_e32": {
+    "reference": 0,
+    "llvm": 4,
+    "delta": 4
+   },
+   "v_cndmask_b32_e64": {
+    "reference": 4,
+    "llvm": 0,
+    "delta": -4
+   }
+  }
+ },
+ "ns-rp2-d128-ad-kernel": {
+  "scope": "kernel",
+  "dimension": 128,
+  "llvm_file": "build/investigations-20261114/integrate/trees/ns-rp2/inspect/disassembly.s",
+  "counts_match": false,
+  "sequence_match": false,
+  "reference_instruction_count": 5302,
+  "llvm_instruction_count": 4755,
+  "positive_excess": 342,
+  "l1": 1231,
+  "exact_lcs": 3183,
+  "count_differences": {
+   "s_add_u32": {
+    "reference": 402,
+    "llvm": 239,
+    "delta": -163
+   },
+   "s_addc_u32": {
+    "reference": 40,
+    "llvm": 35,
+    "delta": -5
+   },
+   "s_addk_i32": {
+    "reference": 0,
+    "llvm": 11,
+    "delta": 11
+   },
+   "s_and_b32": {
+    "reference": 88,
+    "llvm": 18,
+    "delta": -70
+   },
+   "s_and_b64": {
+    "reference": 0,
+    "llvm": 18,
+    "delta": 18
+   },
+   "s_bfe_u32": {
+    "reference": 0,
+    "llvm": 4,
+    "delta": 4
+   },
+   "s_branch": {
+    "reference": 31,
+    "llvm": 33,
+    "delta": 2
+   },
+   "s_cbranch_scc0": {
+    "reference": 20,
+    "llvm": 15,
+    "delta": -5
+   },
+   "s_cbranch_scc1": {
+    "reference": 78,
+    "llvm": 76,
+    "delta": -2
+   },
+   "s_cmp_eq_u32": {
+    "reference": 42,
+    "llvm": 19,
+    "delta": -23
+   },
+   "s_cmp_eq_u64": {
+    "reference": 10,
+    "llvm": 3,
+    "delta": -7
+   },
+   "s_cmp_ge_u32": {
+    "reference": 23,
+    "llvm": 29,
+    "delta": 6
+   },
+   "s_cmp_lg_u32": {
+    "reference": 0,
+    "llvm": 6,
+    "delta": 6
+   },
+   "s_cmp_lt_i32": {
+    "reference": 12,
+    "llvm": 14,
+    "delta": 2
+   },
+   "s_cmp_lt_u32": {
+    "reference": 4,
+    "llvm": 8,
+    "delta": 4
+   },
+   "s_cmpk_le_u32": {
+    "reference": 8,
+    "llvm": 0,
+    "delta": -8
+   },
+   "s_cselect_b32": {
+    "reference": 25,
+    "llvm": 22,
+    "delta": -3
+   },
+   "s_cselect_b64": {
+    "reference": 6,
+    "llvm": 16,
+    "delta": 10
+   },
+   "s_lshl_b32": {
+    "reference": 104,
+    "llvm": 61,
+    "delta": -43
+   },
+   "s_lshr_b32": {
+    "reference": 16,
+    "llvm": 9,
+    "delta": -7
+   },
+   "s_mov_b32": {
+    "reference": 30,
+    "llvm": 40,
+    "delta": 10
+   },
+   "s_movk_i32": {
+    "reference": 0,
+    "llvm": 1,
+    "delta": 1
+   },
+   "s_mul_i32": {
+    "reference": 171,
+    "llvm": 57,
+    "delta": -114
+   },
+   "s_nop": {
+    "reference": 182,
+    "llvm": 90,
+    "delta": -92
+   },
+   "s_not_b32": {
+    "reference": 0,
+    "llvm": 9,
+    "delta": 9
+   },
+   "s_or_b32": {
+    "reference": 0,
+    "llvm": 10,
+    "delta": 10
+   },
+   "s_or_b64": {
+    "reference": 0,
+    "llvm": 4,
+    "delta": 4
+   },
+   "s_sub_u32": {
+    "reference": 22,
+    "llvm": 12,
+    "delta": -10
+   },
+   "s_xor_b32": {
+    "reference": 0,
+    "llvm": 7,
+    "delta": 7
+   },
+   "v_add_u32_e32": {
+    "reference": 73,
+    "llvm": 61,
+    "delta": -12
+   },
+   "v_and_b32_e32": {
+    "reference": 32,
+    "llvm": 22,
+    "delta": -10
+   },
+   "v_and_or_b32": {
+    "reference": 0,
+    "llvm": 1,
+    "delta": 1
+   },
+   "v_bfe_u32": {
+    "reference": 31,
+    "llvm": 5,
+    "delta": -26
+   },
+   "v_cmp_gt_i32_e32": {
+    "reference": 192,
+    "llvm": 60,
+    "delta": -132
+   },
+   "v_cmp_gt_i32_e64": {
+    "reference": 0,
+    "llvm": 132,
+    "delta": 132
+   },
+   "v_cndmask_b32_e32": {
+    "reference": 0,
+    "llvm": 67,
+    "delta": 67
+   },
+   "v_cndmask_b32_e64": {
+    "reference": 199,
+    "llvm": 132,
+    "delta": -67
+   },
+   "v_lshl_add_u32": {
+    "reference": 21,
+    "llvm": 2,
+    "delta": -19
+   },
+   "v_lshl_or_b32": {
+    "reference": 4,
+    "llvm": 2,
+    "delta": -2
+   },
+   "v_lshrrev_b32_e32": {
+    "reference": 9,
+    "llvm": 7,
+    "delta": -2
+   },
+   "v_mov_b32_e32": {
+    "reference": 133,
+    "llvm": 73,
+    "delta": -60
+   },
+   "v_mul_lo_u32": {
+    "reference": 9,
+    "llvm": 7,
+    "delta": -2
+   },
+   "v_or3_b32": {
+    "reference": 0,
+    "llvm": 5,
+    "delta": 5
+   },
+   "v_or_b32_e32": {
+    "reference": 0,
+    "llvm": 24,
+    "delta": 24
+   },
+   "v_readfirstlane_b32": {
+    "reference": 4,
+    "llvm": 1,
+    "delta": -3
+   },
+   "v_sub_u32_e32": {
+    "reference": 3,
+    "llvm": 12,
+    "delta": 9
+   },
+   "v_xor_b32_e32": {
+    "reference": 31,
+    "llvm": 29,
+    "delta": -2
+   }
+  }
+ },
+ "ns-rp2-d128-ad-loop": {
+  "scope": "loop",
+  "dimension": 128,
+  "llvm_file": "build/investigations-20261114/integrate/trees/ns-rp2/inspect/disassembly.s",
+  "counts_match": false,
+  "sequence_match": false,
+  "reference_instruction_count": 1333,
+  "llvm_instruction_count": 1317,
+  "positive_excess": 4,
+  "l1": 24,
+  "exact_lcs": 1297,
+  "count_differences": {
+   "s_nop": {
+    "reference": 28,
+    "llvm": 12,
+    "delta": -16
+   },
+   "v_cndmask_b32_e32": {
+    "reference": 0,
+    "llvm": 4,
+    "delta": 4
+   },
+   "v_cndmask_b32_e64": {
+    "reference": 4,
+    "llvm": 0,
+    "delta": -4
+   }
+  }
+ },
+ "ns-rp2-d128-kernel": {
+  "scope": "kernel",
+  "dimension": 128,
+  "llvm_file": "build/investigations-20261114/integrate/trees/ns-rp2/inspect/disassembly.s",
+  "counts_match": false,
+  "sequence_match": false,
+  "reference_instruction_count": 5302,
+  "llvm_instruction_count": 4770,
+  "positive_excess": 348,
+  "l1": 1228,
+  "exact_lcs": 3193,
+  "count_differences": {
+   "s_add_u32": {
+    "reference": 402,
+    "llvm": 239,
+    "delta": -163
+   },
+   "s_addc_u32": {
+    "reference": 40,
+    "llvm": 35,
+    "delta": -5
+   },
+   "s_addk_i32": {
+    "reference": 0,
+    "llvm": 11,
+    "delta": 11
+   },
+   "s_and_b32": {
+    "reference": 88,
+    "llvm": 18,
+    "delta": -70
+   },
+   "s_and_b64": {
+    "reference": 0,
+    "llvm": 18,
+    "delta": 18
+   },
+   "s_bfe_u32": {
+    "reference": 0,
+    "llvm": 4,
+    "delta": 4
+   },
+   "s_branch": {
+    "reference": 31,
+    "llvm": 34,
+    "delta": 3
+   },
+   "s_cbranch_scc0": {
+    "reference": 20,
+    "llvm": 17,
+    "delta": -3
+   },
+   "s_cbranch_scc1": {
+    "reference": 78,
+    "llvm": 79,
+    "delta": 1
+   },
+   "s_cmp_eq_u32": {
+    "reference": 42,
+    "llvm": 19,
+    "delta": -23
+   },
+   "s_cmp_eq_u64": {
+    "reference": 10,
+    "llvm": 8,
+    "delta": -2
+   },
+   "s_cmp_ge_u32": {
+    "reference": 23,
+    "llvm": 29,
+    "delta": 6
+   },
+   "s_cmp_lg_u32": {
+    "reference": 0,
+    "llvm": 6,
+    "delta": 6
+   },
+   "s_cmp_lt_i32": {
+    "reference": 12,
+    "llvm": 14,
+    "delta": 2
+   },
+   "s_cmp_lt_u32": {
+    "reference": 4,
+    "llvm": 8,
+    "delta": 4
+   },
+   "s_cmpk_le_u32": {
+    "reference": 8,
+    "llvm": 0,
+    "delta": -8
+   },
+   "s_cselect_b32": {
+    "reference": 25,
+    "llvm": 22,
+    "delta": -3
+   },
+   "s_cselect_b64": {
+    "reference": 6,
+    "llvm": 16,
+    "delta": 10
+   },
+   "s_lshl_b32": {
+    "reference": 104,
+    "llvm": 61,
+    "delta": -43
+   },
+   "s_lshr_b32": {
+    "reference": 16,
+    "llvm": 9,
+    "delta": -7
+   },
+   "s_mov_b32": {
+    "reference": 30,
+    "llvm": 42,
+    "delta": 12
+   },
+   "s_movk_i32": {
+    "reference": 0,
+    "llvm": 1,
+    "delta": 1
+   },
+   "s_mul_i32": {
+    "reference": 171,
+    "llvm": 57,
+    "delta": -114
+   },
+   "s_nop": {
+    "reference": 182,
+    "llvm": 90,
+    "delta": -92
+   },
+   "s_not_b32": {
+    "reference": 0,
+    "llvm": 9,
+    "delta": 9
+   },
+   "s_or_b32": {
+    "reference": 0,
+    "llvm": 10,
+    "delta": 10
+   },
+   "s_or_b64": {
+    "reference": 0,
+    "llvm": 4,
+    "delta": 4
+   },
+   "s_sub_u32": {
+    "reference": 22,
+    "llvm": 12,
+    "delta": -10
+   },
+   "s_waitcnt": {
+    "reference": 114,
+    "llvm": 116,
+    "delta": 2
+   },
+   "s_xor_b32": {
+    "reference": 0,
+    "llvm": 7,
+    "delta": 7
+   },
+   "v_add_u32_e32": {
+    "reference": 73,
+    "llvm": 61,
+    "delta": -12
+   },
+   "v_and_b32_e32": {
+    "reference": 32,
+    "llvm": 22,
+    "delta": -10
+   },
+   "v_and_or_b32": {
+    "reference": 0,
+    "llvm": 1,
+    "delta": 1
+   },
+   "v_bfe_u32": {
+    "reference": 31,
+    "llvm": 5,
+    "delta": -26
+   },
+   "v_cmp_gt_i32_e32": {
+    "reference": 192,
+    "llvm": 60,
+    "delta": -132
+   },
+   "v_cmp_gt_i32_e64": {
+    "reference": 0,
+    "llvm": 132,
+    "delta": 132
+   },
+   "v_cndmask_b32_e32": {
+    "reference": 0,
+    "llvm": 67,
+    "delta": 67
+   },
+   "v_cndmask_b32_e64": {
+    "reference": 199,
+    "llvm": 132,
+    "delta": -67
+   },
+   "v_lshl_add_u32": {
+    "reference": 21,
+    "llvm": 2,
+    "delta": -19
+   },
+   "v_lshl_or_b32": {
+    "reference": 4,
+    "llvm": 2,
+    "delta": -2
+   },
+   "v_lshrrev_b32_e32": {
+    "reference": 9,
+    "llvm": 7,
+    "delta": -2
+   },
+   "v_mov_b32_e32": {
+    "reference": 133,
+    "llvm": 73,
+    "delta": -60
+   },
+   "v_mul_lo_u32": {
+    "reference": 9,
+    "llvm": 7,
+    "delta": -2
+   },
+   "v_or3_b32": {
+    "reference": 0,
+    "llvm": 5,
+    "delta": 5
+   },
+   "v_or_b32_e32": {
+    "reference": 0,
+    "llvm": 24,
+    "delta": 24
+   },
+   "v_readfirstlane_b32": {
+    "reference": 4,
+    "llvm": 1,
+    "delta": -3
+   },
+   "v_sub_u32_e32": {
+    "reference": 3,
+    "llvm": 12,
+    "delta": 9
+   },
+   "v_xor_b32_e32": {
+    "reference": 31,
+    "llvm": 29,
+    "delta": -2
+   }
+  }
+ },
+ "ns-rp2-d128-loop": {
+  "scope": "loop",
+  "dimension": 128,
+  "llvm_file": "build/investigations-20261114/integrate/trees/ns-rp2/inspect/disassembly.s",
+  "counts_match": false,
+  "sequence_match": false,
+  "reference_instruction_count": 1333,
+  "llvm_instruction_count": 1317,
+  "positive_excess": 4,
+  "l1": 24,
+  "exact_lcs": 1297,
+  "count_differences": {
+   "s_nop": {
+    "reference": 28,
+    "llvm": 12,
+    "delta": -16
+   },
+   "v_cndmask_b32_e32": {
+    "reference": 0,
+    "llvm": 4,
+    "delta": 4
+   },
+   "v_cndmask_b32_e64": {
+    "reference": 4,
+    "llvm": 0,
+    "delta": -4
+   }
+  }
+ },
+ "ns-rp2-d192-ad-kernel": {
+  "scope": "kernel",
+  "dimension": 192,
+  "llvm_file": "build/investigations-20261114/integrate/trees/ns-rp2/inspect/disassembly.s",
+  "counts_match": false,
+  "sequence_match": false,
+  "reference_instruction_count": 3737,
+  "llvm_instruction_count": 3298,
+  "positive_excess": 242,
+  "l1": 923,
+  "exact_lcs": 2166,
+  "count_differences": {
+   "s_add_u32": {
+    "reference": 345,
+    "llvm": 218,
+    "delta": -127
+   },
+   "s_addc_u32": {
+    "reference": 40,
+    "llvm": 35,
+    "delta": -5
+   },
+   "s_addk_i32": {
+    "reference": 0,
+    "llvm": 5,
+    "delta": 5
+   },
+   "s_and_b32": {
+    "reference": 78,
+    "llvm": 24,
+    "delta": -54
+   },
+   "s_and_b64": {
+    "reference": 0,
+    "llvm": 14,
+    "delta": 14
+   },
+   "s_bfe_u32": {
+    "reference": 0,
+    "llvm": 4,
+    "delta": 4
+   },
+   "s_branch": {
+    "reference": 25,
+    "llvm": 31,
+    "delta": 6
+   },
+   "s_cbranch_scc0": {
+    "reference": 20,
+    "llvm": 11,
+    "delta": -9
+   },
+   "s_cbranch_scc1": {
+    "reference": 66,
+    "llvm": 72,
+    "delta": 6
+   },
+   "s_cmp_eq_u32": {
+    "reference": 42,
+    "llvm": 15,
+    "delta": -27
+   },
+   "s_cmp_eq_u64": {
+    "reference": 10,
+    "llvm": 3,
+    "delta": -7
+   },
+   "s_cmp_ge_u32": {
+    "reference": 23,
+    "llvm": 29,
+    "delta": 6
+   },
+   "s_cmp_lg_u32": {
+    "reference": 0,
+    "llvm": 10,
+    "delta": 10
+   },
+   "s_cmp_lt_i32": {
+    "reference": 6,
+    "llvm": 8,
+    "delta": 2
+   },
+   "s_cmp_lt_u32": {
+    "reference": 4,
+    "llvm": 8,
+    "delta": 4
+   },
+   "s_cmpk_le_u32": {
+    "reference": 8,
+    "llvm": 0,
+    "delta": -8
+   },
+   "s_cselect_b32": {
+    "reference": 25,
+    "llvm": 22,
+    "delta": -3
+   },
+   "s_cselect_b64": {
+    "reference": 6,
+    "llvm": 8,
+    "delta": 2
+   },
+   "s_lshl_b32": {
+    "reference": 99,
+    "llvm": 69,
+    "delta": -30
+   },
+   "s_lshr_b32": {
+    "reference": 16,
+    "llvm": 9,
+    "delta": -7
+   },
+   "s_mov_b64": {
+    "reference": 0,
+    "llvm": 8,
+    "delta": 8
+   },
+   "s_movk_i32": {
+    "reference": 0,
+    "llvm": 1,
+    "delta": 1
+   },
+   "s_mul_i32": {
+    "reference": 152,
+    "llvm": 53,
+    "delta": -99
+   },
+   "s_nop": {
+    "reference": 140,
+    "llvm": 67,
+    "delta": -73
+   },
+   "s_not_b32": {
+    "reference": 0,
+    "llvm": 9,
+    "delta": 9
+   },
+   "s_or_b32": {
+    "reference": 0,
+    "llvm": 16,
+    "delta": 16
+   },
+   "s_sub_u32": {
+    "reference": 22,
+    "llvm": 6,
+    "delta": -16
+   },
+   "s_waitcnt": {
+    "reference": 86,
+    "llvm": 84,
+    "delta": -2
+   },
+   "s_xor_b32": {
+    "reference": 0,
+    "llvm": 7,
+    "delta": 7
+   },
+   "v_add_lshl_u32": {
+    "reference": 0,
+    "llvm": 1,
+    "delta": 1
+   },
+   "v_add_u32_e32": {
+    "reference": 71,
+    "llvm": 45,
+    "delta": -26
+   },
+   "v_and_b32_e32": {
+    "reference": 32,
+    "llvm": 10,
+    "delta": -22
+   },
+   "v_and_or_b32": {
+    "reference": 0,
+    "llvm": 4,
+    "delta": 4
+   },
+   "v_bfe_u32": {
+    "reference": 26,
+    "llvm": 6,
+    "delta": -20
+   },
+   "v_cmp_gt_i32_e32": {
+    "reference": 96,
+    "llvm": 30,
+    "delta": -66
+   },
+   "v_cmp_gt_i32_e64": {
+    "reference": 0,
+    "llvm": 66,
+    "delta": 66
+   },
+   "v_cndmask_b32_e32": {
+    "reference": 0,
+    "llvm": 39,
+    "delta": 39
+   },
+   "v_cndmask_b32_e64": {
+    "reference": 105,
+    "llvm": 66,
+    "delta": -39
+   },
+   "v_lshl_add_u32": {
+    "reference": 19,
+    "llvm": 2,
+    "delta": -17
+   },
+   "v_lshl_or_b32": {
+    "reference": 4,
+    "llvm": 3,
+    "delta": -1
+   },
+   "v_lshlrev_b32_e32": {
+    "reference": 29,
+    "llvm": 26,
+    "delta": -3
+   },
+   "v_lshrrev_b32_e32": {
+    "reference": 6,
+    "llvm": 7,
+    "delta": 1
+   },
+   "v_mov_b32_e32": {
+    "reference": 133,
+    "llvm": 121,
+    "delta": -12
+   },
+   "v_mul_lo_u32": {
+    "reference": 9,
+    "llvm": 7,
+    "delta": -2
+   },
+   "v_or3_b32": {
+    "reference": 0,
+    "llvm": 5,
+    "delta": 5
+   },
+   "v_or_b32_e32": {
+    "reference": 0,
+    "llvm": 23,
+    "delta": 23
+   },
+   "v_readfirstlane_b32": {
+    "reference": 3,
+    "llvm": 1,
+    "delta": -2
+   },
+   "v_sub_u32_e32": {
+    "reference": 5,
+    "llvm": 8,
+    "delta": 3
+   },
+   "v_xor_b32_e32": {
+    "reference": 27,
+    "llvm": 23,
+    "delta": -4
+   }
+  }
+ },
+ "ns-rp2-d192-ad-loop": {
+  "scope": "loop",
+  "dimension": 192,
+  "llvm_file": "build/investigations-20261114/integrate/trees/ns-rp2/inspect/disassembly.s",
+  "counts_match": false,
+  "sequence_match": false,
+  "reference_instruction_count": 825,
+  "llvm_instruction_count": 813,
+  "positive_excess": 4,
+  "l1": 20,
+  "exact_lcs": 797,
+  "count_differences": {
+   "s_nop": {
+    "reference": 24,
+    "llvm": 12,
+    "delta": -12
+   },
+   "v_cndmask_b32_e32": {
+    "reference": 0,
+    "llvm": 4,
+    "delta": 4
+   },
+   "v_cndmask_b32_e64": {
+    "reference": 4,
+    "llvm": 0,
+    "delta": -4
+   }
+  }
+ },
+ "ns-rp2-d192-kernel": {
+  "scope": "kernel",
+  "dimension": 192,
+  "llvm_file": "build/investigations-20261114/integrate/trees/ns-rp2/inspect/disassembly.s",
+  "counts_match": false,
+  "sequence_match": false,
+  "reference_instruction_count": 3737,
+  "llvm_instruction_count": 3313,
+  "positive_excess": 248,
+  "l1": 920,
+  "exact_lcs": 2173,
+  "count_differences": {
+   "s_add_u32": {
+    "reference": 345,
+    "llvm": 218,
+    "delta": -127
+   },
+   "s_addc_u32": {
+    "reference": 40,
+    "llvm": 35,
+    "delta": -5
+   },
+   "s_addk_i32": {
+    "reference": 0,
+    "llvm": 5,
+    "delta": 5
+   },
+   "s_and_b32": {
+    "reference": 78,
+    "llvm": 24,
+    "delta": -54
+   },
+   "s_and_b64": {
+    "reference": 0,
+    "llvm": 14,
+    "delta": 14
+   },
+   "s_bfe_u32": {
+    "reference": 0,
+    "llvm": 4,
+    "delta": 4
+   },
+   "s_branch": {
+    "reference": 25,
+    "llvm": 32,
+    "delta": 7
+   },
+   "s_cbranch_scc0": {
+    "reference": 20,
+    "llvm": 13,
+    "delta": -7
+   },
+   "s_cbranch_scc1": {
+    "reference": 66,
+    "llvm": 75,
+    "delta": 9
+   },
+   "s_cmp_eq_u32": {
+    "reference": 42,
+    "llvm": 15,
+    "delta": -27
+   },
+   "s_cmp_eq_u64": {
+    "reference": 10,
+    "llvm": 8,
+    "delta": -2
+   },
+   "s_cmp_ge_u32": {
+    "reference": 23,
+    "llvm": 29,
+    "delta": 6
+   },
+   "s_cmp_lg_u32": {
+    "reference": 0,
+    "llvm": 10,
+    "delta": 10
+   },
+   "s_cmp_lt_i32": {
+    "reference": 6,
+    "llvm": 8,
+    "delta": 2
+   },
+   "s_cmp_lt_u32": {
+    "reference": 4,
+    "llvm": 8,
+    "delta": 4
+   },
+   "s_cmpk_le_u32": {
+    "reference": 8,
+    "llvm": 0,
+    "delta": -8
+   },
+   "s_cselect_b32": {
+    "reference": 25,
+    "llvm": 22,
+    "delta": -3
+   },
+   "s_cselect_b64": {
+    "reference": 6,
+    "llvm": 8,
+    "delta": 2
+   },
+   "s_lshl_b32": {
+    "reference": 99,
+    "llvm": 69,
+    "delta": -30
+   },
+   "s_lshr_b32": {
+    "reference": 16,
+    "llvm": 9,
+    "delta": -7
+   },
+   "s_mov_b32": {
+    "reference": 39,
+    "llvm": 41,
+    "delta": 2
+   },
+   "s_mov_b64": {
+    "reference": 0,
+    "llvm": 8,
+    "delta": 8
+   },
+   "s_movk_i32": {
+    "reference": 0,
+    "llvm": 1,
+    "delta": 1
+   },
+   "s_mul_i32": {
+    "reference": 152,
+    "llvm": 53,
+    "delta": -99
+   },
+   "s_nop": {
+    "reference": 140,
+    "llvm": 67,
+    "delta": -73
+   },
+   "s_not_b32": {
+    "reference": 0,
+    "llvm": 9,
+    "delta": 9
+   },
+   "s_or_b32": {
+    "reference": 0,
+    "llvm": 16,
+    "delta": 16
+   },
+   "s_sub_u32": {
+    "reference": 22,
+    "llvm": 6,
+    "delta": -16
+   },
+   "s_xor_b32": {
+    "reference": 0,
+    "llvm": 7,
+    "delta": 7
+   },
+   "v_add_lshl_u32": {
+    "reference": 0,
+    "llvm": 1,
+    "delta": 1
+   },
+   "v_add_u32_e32": {
+    "reference": 71,
+    "llvm": 45,
+    "delta": -26
+   },
+   "v_and_b32_e32": {
+    "reference": 32,
+    "llvm": 10,
+    "delta": -22
+   },
+   "v_and_or_b32": {
+    "reference": 0,
+    "llvm": 4,
+    "delta": 4
+   },
+   "v_bfe_u32": {
+    "reference": 26,
+    "llvm": 6,
+    "delta": -20
+   },
+   "v_cmp_gt_i32_e32": {
+    "reference": 96,
+    "llvm": 30,
+    "delta": -66
+   },
+   "v_cmp_gt_i32_e64": {
+    "reference": 0,
+    "llvm": 66,
+    "delta": 66
+   },
+   "v_cndmask_b32_e32": {
+    "reference": 0,
+    "llvm": 39,
+    "delta": 39
+   },
+   "v_cndmask_b32_e64": {
+    "reference": 105,
+    "llvm": 66,
+    "delta": -39
+   },
+   "v_lshl_add_u32": {
+    "reference": 19,
+    "llvm": 2,
+    "delta": -17
+   },
+   "v_lshl_or_b32": {
+    "reference": 4,
+    "llvm": 3,
+    "delta": -1
+   },
+   "v_lshlrev_b32_e32": {
+    "reference": 29,
+    "llvm": 26,
+    "delta": -3
+   },
+   "v_lshrrev_b32_e32": {
+    "reference": 6,
+    "llvm": 7,
+    "delta": 1
+   },
+   "v_mov_b32_e32": {
+    "reference": 133,
+    "llvm": 121,
+    "delta": -12
+   },
+   "v_mul_lo_u32": {
+    "reference": 9,
+    "llvm": 7,
+    "delta": -2
+   },
+   "v_or3_b32": {
+    "reference": 0,
+    "llvm": 5,
+    "delta": 5
+   },
+   "v_or_b32_e32": {
+    "reference": 0,
+    "llvm": 23,
+    "delta": 23
+   },
+   "v_readfirstlane_b32": {
+    "reference": 3,
+    "llvm": 1,
+    "delta": -2
+   },
+   "v_sub_u32_e32": {
+    "reference": 5,
+    "llvm": 8,
+    "delta": 3
+   },
+   "v_xor_b32_e32": {
+    "reference": 27,
+    "llvm": 23,
+    "delta": -4
+   }
+  }
+ },
+ "ns-rp2-d192-loop": {
+  "scope": "loop",
+  "dimension": 192,
+  "llvm_file": "build/investigations-20261114/integrate/trees/ns-rp2/inspect/disassembly.s",
+  "counts_match": false,
+  "sequence_match": false,
+  "reference_instruction_count": 825,
+  "llvm_instruction_count": 813,
+  "positive_excess": 4,
+  "l1": 20,
+  "exact_lcs": 797,
+  "count_differences": {
+   "s_nop": {
+    "reference": 24,
+    "llvm": 12,
+    "delta": -12
+   },
+   "v_cndmask_b32_e32": {
+    "reference": 0,
+    "llvm": 4,
+    "delta": 4
+   },
+   "v_cndmask_b32_e64": {
+    "reference": 4,
+    "llvm": 0,
+    "delta": -4
+   }
+  }
+ },
+ "strict-rp2-d128-kernel": {
+  "scope": "kernel",
+  "dimension": 128,
+  "llvm_file": "build/investigations-20261114/integrate/trees/strict-rp2/inspect/disassembly.s",
+  "counts_match": false,
+  "sequence_match": false,
+  "reference_instruction_count": 5302,
+  "llvm_instruction_count": 4964,
+  "positive_excess": 248,
+  "l1": 834,
+  "exact_lcs": 3434,
+  "count_differences": {
+   "s_add_u32": {
+    "reference": 402,
+    "llvm": 239,
+    "delta": -163
+   },
+   "s_addc_u32": {
+    "reference": 40,
+    "llvm": 35,
+    "delta": -5
+   },
+   "s_addk_i32": {
+    "reference": 0,
+    "llvm": 11,
+    "delta": 11
+   },
+   "s_and_b32": {
+    "reference": 88,
+    "llvm": 18,
+    "delta": -70
+   },
+   "s_and_b64": {
+    "reference": 0,
+    "llvm": 18,
+    "delta": 18
+   },
+   "s_bfe_u32": {
+    "reference": 0,
+    "llvm": 4,
+    "delta": 4
+   },
+   "s_branch": {
+    "reference": 31,
+    "llvm": 36,
+    "delta": 5
+   },
+   "s_cbranch_scc0": {
+    "reference": 20,
+    "llvm": 17,
+    "delta": -3
+   },
+   "s_cbranch_scc1": {
+    "reference": 78,
+    "llvm": 79,
+    "delta": 1
+   },
+   "s_cmp_eq_u32": {
+    "reference": 42,
+    "llvm": 19,
+    "delta": -23
+   },
+   "s_cmp_eq_u64": {
+    "reference": 10,
+    "llvm": 8,
+    "delta": -2
+   },
+   "s_cmp_ge_u32": {
+    "reference": 23,
+    "llvm": 29,
+    "delta": 6
+   },
+   "s_cmp_lg_u32": {
+    "reference": 0,
+    "llvm": 6,
+    "delta": 6
+   },
+   "s_cmp_lt_i32": {
+    "reference": 12,
+    "llvm": 14,
+    "delta": 2
+   },
+   "s_cmp_lt_u32": {
+    "reference": 4,
+    "llvm": 8,
+    "delta": 4
+   },
+   "s_cmpk_le_u32": {
+    "reference": 8,
+    "llvm": 0,
+    "delta": -8
+   },
+   "s_cselect_b32": {
+    "reference": 25,
+    "llvm": 22,
+    "delta": -3
+   },
+   "s_cselect_b64": {
+    "reference": 6,
+    "llvm": 16,
+    "delta": 10
+   },
+   "s_lshl_b32": {
+    "reference": 104,
+    "llvm": 63,
+    "delta": -41
+   },
+   "s_lshr_b32": {
+    "reference": 16,
+    "llvm": 9,
+    "delta": -7
+   },
+   "s_mov_b32": {
+    "reference": 30,
+    "llvm": 41,
+    "delta": 11
+   },
+   "s_movk_i32": {
+    "reference": 0,
+    "llvm": 1,
+    "delta": 1
+   },
+   "s_mul_i32": {
+    "reference": 171,
+    "llvm": 57,
+    "delta": -114
+   },
+   "s_nop": {
+    "reference": 182,
+    "llvm": 281,
+    "delta": 99
+   },
+   "s_not_b32": {
+    "reference": 0,
+    "llvm": 9,
+    "delta": 9
+   },
+   "s_or_b32": {
+    "reference": 0,
+    "llvm": 10,
+    "delta": 10
+   },
+   "s_or_b64": {
+    "reference": 0,
+    "llvm": 4,
+    "delta": 4
+   },
+   "s_sub_u32": {
+    "reference": 22,
+    "llvm": 12,
+    "delta": -10
+   },
+   "s_xor_b32": {
+    "reference": 0,
+    "llvm": 7,
+    "delta": 7
+   },
+   "v_add_u32_e32": {
+    "reference": 73,
+    "llvm": 61,
+    "delta": -12
+   },
+   "v_and_b32_e32": {
+    "reference": 32,
+    "llvm": 22,
+    "delta": -10
+   },
+   "v_and_or_b32": {
+    "reference": 0,
+    "llvm": 1,
+    "delta": 1
+   },
+   "v_bfe_u32": {
+    "reference": 31,
+    "llvm": 5,
+    "delta": -26
+   },
+   "v_cndmask_b32_e32": {
+    "reference": 0,
+    "llvm": 1,
+    "delta": 1
+   },
+   "v_cndmask_b32_e64": {
+    "reference": 199,
+    "llvm": 198,
+    "delta": -1
+   },
+   "v_lshl_add_u32": {
+    "reference": 21,
+    "llvm": 2,
+    "delta": -19
+   },
+   "v_lshl_or_b32": {
+    "reference": 4,
+    "llvm": 2,
+    "delta": -2
+   },
+   "v_mov_b32_e32": {
+    "reference": 133,
+    "llvm": 73,
+    "delta": -60
+   },
+   "v_mul_lo_u32": {
+    "reference": 9,
+    "llvm": 7,
+    "delta": -2
+   },
+   "v_or3_b32": {
+    "reference": 0,
+    "llvm": 5,
+    "delta": 5
+   },
+   "v_or_b32_e32": {
+    "reference": 0,
+    "llvm": 24,
+    "delta": 24
+   },
+   "v_readfirstlane_b32": {
+    "reference": 4,
+    "llvm": 1,
+    "delta": -3
+   },
+   "v_sub_u32_e32": {
+    "reference": 3,
+    "llvm": 12,
+    "delta": 9
+   },
+   "v_xor_b32_e32": {
+    "reference": 31,
+    "llvm": 29,
+    "delta": -2
+   }
+  }
+ },
+ "strict-rp2-d128-loop": {
+  "scope": "loop",
+  "dimension": 128,
+  "llvm_file": "build/investigations-20261114/integrate/trees/strict-rp2/inspect/disassembly.s",
+  "counts_match": true,
+  "sequence_match": true,
+  "reference_instruction_count": 1333,
+  "llvm_instruction_count": 1333,
+  "positive_excess": 0,
+  "l1": 0,
+  "exact_lcs": 1333,
+  "count_differences": {}
+ },
+ "strict-rp2-d192-kernel": {
+  "scope": "kernel",
+  "dimension": 192,
+  "llvm_file": "build/investigations-20261114/integrate/trees/strict-rp2/inspect/disassembly.s",
+  "counts_match": false,
+  "sequence_match": false,
+  "reference_instruction_count": 3737,
+  "llvm_instruction_count": 3446,
+  "positive_excess": 190,
+  "l1": 671,
+  "exact_lcs": 2321,
+  "count_differences": {
+   "s_add_u32": {
+    "reference": 345,
+    "llvm": 218,
+    "delta": -127
+   },
+   "s_addc_u32": {
+    "reference": 40,
+    "llvm": 35,
+    "delta": -5
+   },
+   "s_addk_i32": {
+    "reference": 0,
+    "llvm": 5,
+    "delta": 5
+   },
+   "s_and_b32": {
+    "reference": 78,
+    "llvm": 24,
+    "delta": -54
+   },
+   "s_and_b64": {
+    "reference": 0,
+    "llvm": 14,
+    "delta": 14
+   },
+   "s_bfe_u32": {
+    "reference": 0,
+    "llvm": 4,
+    "delta": 4
+   },
+   "s_branch": {
+    "reference": 25,
+    "llvm": 32,
+    "delta": 7
+   },
+   "s_cbranch_scc0": {
+    "reference": 20,
+    "llvm": 13,
+    "delta": -7
+   },
+   "s_cbranch_scc1": {
+    "reference": 66,
+    "llvm": 75,
+    "delta": 9
+   },
+   "s_cmp_eq_u32": {
+    "reference": 42,
+    "llvm": 15,
+    "delta": -27
+   },
+   "s_cmp_eq_u64": {
+    "reference": 10,
+    "llvm": 8,
+    "delta": -2
+   },
+   "s_cmp_ge_u32": {
+    "reference": 23,
+    "llvm": 29,
+    "delta": 6
+   },
+   "s_cmp_lg_u32": {
+    "reference": 0,
+    "llvm": 10,
+    "delta": 10
+   },
+   "s_cmp_lt_i32": {
+    "reference": 6,
+    "llvm": 8,
+    "delta": 2
+   },
+   "s_cmp_lt_u32": {
+    "reference": 4,
+    "llvm": 8,
+    "delta": 4
+   },
+   "s_cmpk_le_u32": {
+    "reference": 8,
+    "llvm": 0,
+    "delta": -8
+   },
+   "s_cselect_b32": {
+    "reference": 25,
+    "llvm": 22,
+    "delta": -3
+   },
+   "s_cselect_b64": {
+    "reference": 6,
+    "llvm": 8,
+    "delta": 2
+   },
+   "s_lshl_b32": {
+    "reference": 99,
+    "llvm": 76,
+    "delta": -23
+   },
+   "s_lshr_b32": {
+    "reference": 16,
+    "llvm": 9,
+    "delta": -7
+   },
+   "s_mov_b32": {
+    "reference": 39,
+    "llvm": 41,
+    "delta": 2
+   },
+   "s_mov_b64": {
+    "reference": 0,
+    "llvm": 8,
+    "delta": 8
+   },
+   "s_movk_i32": {
+    "reference": 0,
+    "llvm": 1,
+    "delta": 1
+   },
+   "s_mul_i32": {
+    "reference": 152,
+    "llvm": 53,
+    "delta": -99
+   },
+   "s_nop": {
+    "reference": 140,
+    "llvm": 183,
+    "delta": 43
+   },
+   "s_not_b32": {
+    "reference": 0,
+    "llvm": 9,
+    "delta": 9
+   },
+   "s_or_b32": {
+    "reference": 0,
+    "llvm": 16,
+    "delta": 16
+   },
+   "s_sub_u32": {
+    "reference": 22,
+    "llvm": 6,
+    "delta": -16
+   },
+   "s_waitcnt": {
+    "reference": 86,
+    "llvm": 84,
+    "delta": -2
+   },
+   "s_xor_b32": {
+    "reference": 0,
+    "llvm": 7,
+    "delta": 7
+   },
+   "v_add_lshl_u32": {
+    "reference": 0,
+    "llvm": 1,
+    "delta": 1
+   },
+   "v_add_u32_e32": {
+    "reference": 71,
+    "llvm": 45,
+    "delta": -26
+   },
+   "v_and_b32_e32": {
+    "reference": 32,
+    "llvm": 16,
+    "delta": -16
+   },
+   "v_and_or_b32": {
+    "reference": 0,
+    "llvm": 4,
+    "delta": 4
+   },
+   "v_bfe_u32": {
+    "reference": 26,
+    "llvm": 6,
+    "delta": -20
+   },
+   "v_cndmask_b32_e32": {
+    "reference": 0,
+    "llvm": 3,
+    "delta": 3
+   },
+   "v_cndmask_b32_e64": {
+    "reference": 105,
+    "llvm": 102,
+    "delta": -3
+   },
+   "v_lshl_add_u32": {
+    "reference": 19,
+    "llvm": 2,
+    "delta": -17
+   },
+   "v_lshl_or_b32": {
+    "reference": 4,
+    "llvm": 3,
+    "delta": -1
+   },
+   "v_lshrrev_b32_e32": {
+    "reference": 6,
+    "llvm": 8,
+    "delta": 2
+   },
+   "v_mov_b32_e32": {
+    "reference": 133,
+    "llvm": 121,
+    "delta": -12
+   },
+   "v_mul_lo_u32": {
+    "reference": 9,
+    "llvm": 7,
+    "delta": -2
+   },
+   "v_or3_b32": {
+    "reference": 0,
+    "llvm": 5,
+    "delta": 5
+   },
+   "v_or_b32_e32": {
+    "reference": 0,
+    "llvm": 23,
+    "delta": 23
+   },
+   "v_readfirstlane_b32": {
+    "reference": 3,
+    "llvm": 1,
+    "delta": -2
+   },
+   "v_sub_u32_e32": {
+    "reference": 5,
+    "llvm": 8,
+    "delta": 3
+   },
+   "v_xor_b32_e32": {
+    "reference": 27,
+    "llvm": 25,
+    "delta": -2
+   }
+  }
+ },
+ "strict-rp2-d192-loop": {
+  "scope": "loop",
+  "dimension": 192,
+  "llvm_file": "build/investigations-20261114/integrate/trees/strict-rp2/inspect/disassembly.s",
+  "counts_match": true,
+  "sequence_match": true,
+  "reference_instruction_count": 825,
+  "llvm_instruction_count": 825,
+  "positive_excess": 0,
+  "l1": 0,
+  "exact_lcs": 825,
+  "count_differences": {}
+ }
+}
