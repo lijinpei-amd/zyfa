@@ -29,12 +29,15 @@ hip_flags = ["-O3", "-std=c++20", "-ffast-math", "-fgpu-flush-denormals-to-zero"
              "-Wno-nan-infinity-disabled", "-DKITTENS_CDNA4", "-U__HIP_NO_HALF_CONVERSIONS__",
              "-U__HIP_NO_HALF_OPERATORS__"]
 native_define = ["-DZYFA_ENABLE_NATIVE_FP8=1"] if NATIVE_LLVM_ROOT else []
-# ZYFA_FP8_STRICT_ISA=0 trades the exact assembly instruction sequence for slightly faster native
-# wave-mask selects; see csrc/fp8_native.hip. Unset keeps the source default (strict).
+# ZYFA_FP8_STRICT_ISA=0 trades the exact assembly instruction sequence for slightly faster code;
+# see csrc/fp8_native.hip. Unset keeps the source default (strict).
 STRICT_ISA = os.environ.get("ZYFA_FP8_STRICT_ISA")
 if STRICT_ISA not in (None, "0", "1"):
     sys.exit("ZYFA_FP8_STRICT_ISA must be 0 or 1")
-# Non-strict only: which M0 -> LDS DMA hazard slots the source fills (see csrc/fp8_native.hip).
+# The non-strict build needs the LLVM branch 2026-11-13-mlicm-rp-av-sreg (docs/hip-fp8-reproduce.md):
+# it turns MachineLICM back on with the real-register-pressure model instead of disabling it.
+# Non-strict only: which M0 -> LDS DMA hazard slots the source fills (see csrc/fp8_native.hip);
+# the source default for the non-strict build is 7.
 DMA_FILL = os.environ.get("ZYFA_FP8_DMA_FILL")
 if DMA_FILL is not None and DMA_FILL not in [str(n) for n in range(8)]:
     sys.exit("ZYFA_FP8_DMA_FILL must be 0 to 7")
@@ -68,9 +71,11 @@ class BuildExt(BuildExtension):
                             "-Xarch_device", "-mllvm=-amdgpu-shrink-late-compare-mask",
                             "-Xarch_device", "-mllvm=-amdgpu-prefer-unsigned-add",
                             "-Xarch_device", "-mllvm=-amdgpu-prefer-ge-scalar-bounds",
-                            # The source defines loop constants once at entry; keep
-                            # MachineLICM from hoisting per-pass values to entry.
-                            "-Xarch_device", "-mllvm=-disable-machine-licm"]
+                            # Strict: the source defines loop constants once at entry; keep
+                            # MachineLICM from hoisting per-pass values to entry. Non-strict:
+                            # MachineLICM decides on real register pressure instead.
+                            "-Xarch_device", ("-mllvm=-machinelicm-real-pressure" if STRICT_ISA == "0"
+                                              else "-mllvm=-disable-machine-licm")]
             subprocess.run([str(compiler), *native_flags, "-c", str(ROOT / "csrc/fp8_native.hip"),
                             "-o", str(NATIVE_OBJECT)], check=True)
         super().run()

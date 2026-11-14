@@ -97,11 +97,14 @@ struct Params {
     uint32_t rescale;
 };
 
-// ZYFA_FP8_STRICT_ISA chooses between matching the assembly and two small speedups.
+// ZYFA_FP8_STRICT_ISA chooses between matching the assembly and a few small speedups.
 //   1 (default): one inline-asm v_cndmask_b32_e64 per wave-mask select, and one kernel per head
 //     dimension, attend<D>. Each compare stays immediately before its select, as in the assembly
 //     kernels, so the strict steady loops match the assembly's instruction sequence exactly.
-//   0: two changes.
+//   0: the changes below, plus ZYFA_FP8_DMA_FILL (default 7, see there). setup.py also turns
+//     MachineLICM back on with its real-register-pressure model for this build (SGPRs 100/101).
+//     MachineLICM alone cost 0.5% at d192 L256; with the fills the build is neutral against the
+//     MachineLICM-off non-strict build and 0.66% faster than the strict one on average.
 //     - Wave-mask selects are __builtin_amdgcn_inverse_ballot_w64 plus a select. LLVM then groups
 //       a block's compares ahead of its selects, writing each mask to its own SGPR pair. That
 //       drops the VCC hazard s_nops and was 0.2-1.1% faster in the measured shapes. The cost: the
@@ -192,9 +195,10 @@ __device__ __forceinline__ uint32_t scalar_mul_imm(uint32_t a) {
 // whose source puts scalar work there instead: 1 steady loop, 2 group 0's whole-tile rounds, 4 the
 // two-chunk tile loads of the masked MM and tails. 2 and 4 use s_mul_i32 / s_lshl_b32 inline asm,
 // which the hazard recognizer counts only when LLVM expands it into an instruction (as it does
-// s_min_u32 and s_add_u32); otherwise the s_nop stays. The default, 0, keeps the code unchanged.
+// s_min_u32 and s_add_u32); otherwise the s_nop stays. The non-strict default is 7 (all three),
+// which needs the LLVM branch named in docs/hip-fp8-reproduce.md; the strict build is always 0.
 #ifndef ZYFA_FP8_DMA_FILL
-#define ZYFA_FP8_DMA_FILL 0
+#define ZYFA_FP8_DMA_FILL (ZYFA_FP8_STRICT_ISA ? 0 : 7)
 #endif
 #if ZYFA_FP8_STRICT_ISA && ZYFA_FP8_DMA_FILL
 #error "ZYFA_FP8_DMA_FILL needs ZYFA_FP8_STRICT_ISA=0"
